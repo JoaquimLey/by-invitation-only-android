@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         // UI
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_current_talks).setOnClickListener(this);
-        findViewById(R.id.btn_favorite_talks).setOnClickListener(this);
+        findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
     }
 
@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 // TODO: repopulate list view with Current Talks
                 break;
 
-            case R.id.btn_favorite_talks:
+            case R.id.btn_favourite_talks:
                 // TODO: repopulate list view with Favourite Talks
                 break;
 

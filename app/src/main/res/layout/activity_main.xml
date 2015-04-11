@@ -1,5 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -17,49 +19,76 @@
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@drawable/bio_logo"/>
+        android:src="@drawable/bio_logo"
+        android:contentDescription="@string/app_name"/>
 
-    <Button
-        android:id="@+id/btn_favorite_talks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Favorites"
-        android:layout_below="@+id/iv_bio_logo"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:id="@+id/btn_current_talks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Conferences"
-        android:layout_alignTop="@+id/btn_favorite_talks"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_favorite_talks"
-        android:layout_above="@+id/btn_register">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/list"
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/btn_favourite_talks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="10dp"
+                fancy:defaultColor="#007ee5"
+                fancy:focusColor="#313131"
+                fancy:iconResource="@drawable/ic_star"
+                fancy:radius="30dp">
+            </mehdi.sakout.fancybuttons.FancyButton>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_current_talks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="false" />
-    </com.baoyz.widget.PullRefreshLayout>
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            fancy:defaultColor="#007ee5"
+            fancy:focusColor="#313131"
+            fancy:iconResource="@drawable/ic_keynote"
+            fancy:radius="30dp">
+        </mehdi.sakout.fancybuttons.FancyButton>
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_register"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_favourite_talks"
+            android:layout_above="@+id/btn_register">
 
-</RelativeLayout>
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="false" />
+        </com.baoyz.widget.PullRefreshLayout>
+
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:paddingBottom="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            fancy:borderColor="#ffa800"
+            fancy:borderWidth="1dp"
+            fancy:defaultColor="#ffa800"
+            fancy:focusColor="#313131"
+            fancy:radius="30dp"
+            fancy:text="@string/action_register"
+            fancy:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>
