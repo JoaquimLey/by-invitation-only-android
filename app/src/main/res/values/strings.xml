@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Common -->
+    <string name="app_name">By Invitation Only</string>
+    <string name="action_settings">Settings</string>
+    <string name="firebase_url">https://b-i-o.firebaseio.com/</string>
+
+    <!--Settings-->
+    <string name="prefs_key_name">Contact Name</string>
+    <string name="prefs_key_email">Contact Email</string>
+    <string name="prefs_title_name">Nome</string>
+    <string name="prefs_title_email">Email</string>
+    <string name="prefs_summary_name">@string/prefs_title_name</string>
+    <string name="prefs_summary_email">@string/prefs_title_email</string>
+    <string name="error_no_internet">No network connection</string>
+    <string name="action_register">Register</string>
+    <string name="current_conferences">Current Conferences</string>
+    <string name="user_invisible">You are now INVISIBLE to other participants</string>
+    <string name="user_visible">You are now VISIBLE to other participants</string>
+    <string name="action_checkin">Check-In</string>
+</resources>

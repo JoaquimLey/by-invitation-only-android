@@ -1,0 +1,23 @@
+# Eclipse
+bin/
+gen/
+out/
+.settings/
+AndroidManifest.out.xml
+/res/values/com_crashlytics_export_strings.xml
+
+# IntelliJ IDEA
+*.idea
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+
+# Gradle
+.gradle
+build
+
+# Other
+tmp
+.DS_Store
+Thumbs.com.joaquimley.myapplication.db
