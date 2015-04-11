@@ -1,7 +1,9 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,27 +13,34 @@ import android.widget.ListView;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
+import com.joaquimley.byinvitationonly.model.Contact;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private static Firebase mContactsChildRef;
-    private static Firebase mConferencesChildRef;
+    private Firebase mContactsChildRef;
+    private Firebase mTalksChildRef;
+    private Contact mMyContact;
+    private SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     /**
      * Initialize Firebase references UI elements, listeners
      */
     private void init(){
+//        mMyContact =
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
-        mConferencesChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
+        mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
         // UI
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_current_talks).setOnClickListener(this);
@@ -57,7 +66,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         switch(v.getId()){
 
             case R.id.btn_register:
-                // TODO: intent to register/settings activity
+                // TODO: intent to register/mSharedPreferences activity
                 break;
 
             case R.id.btn_current_talks:
@@ -68,13 +77,31 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 // TODO: repopulate list view with Favourite Talks
                 break;
 
+            case R.id.action_checkin:
+                FirebaseHelper.changeAvailabilityState(this, mMyContact, mContactsChildRef);
+                break;
             default:
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create conference details (getItemAtPoistion(position))
+        // TODO: Create conference details (getItemAtPosition(position))
     }
 
+    public Firebase getContactsChildRef() {
+        return mContactsChildRef;
+    }
+
+    public void setContactsChildRef(Firebase contactsChildRef) {
+        mContactsChildRef = contactsChildRef;
+    }
+
+    public Firebase getTalksChildRef() {
+        return mTalksChildRef;
+    }
+
+    public void setTalksChildRef(Firebase talksChildRef) {
+        mTalksChildRef = talksChildRef;
+    }
 }
