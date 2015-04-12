@@ -37,12 +37,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
      */
     private void init(){
 //        mMyContact =
+        findViewById(R.id.swipeRefreshLayout).isInEditMode();
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
         mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
         // UI
-        findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_current_talks).setOnClickListener(this);
         findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
@@ -64,10 +64,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-
-            case R.id.btn_register:
-                // TODO: intent to register/mSharedPreferences activity
-                break;
 
             case R.id.btn_current_talks:
                 // TODO: repopulate list view with Current Talks
