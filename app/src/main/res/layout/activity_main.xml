@@ -60,19 +60,6 @@
                 fancy:radius="30dp">
             </mehdi.sakout.fancybuttons.FancyButton>
 
-            <!--<mehdi.sakout.fancybuttons.FancyButton-->
-                <!--android:id="@+id/btn_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="0"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:padding="10dp"-->
-                <!--fancy:defaultColor="#007ee5"-->
-                <!--fancy:focusColor="#313131"-->
-                <!--fancy:iconResource="@drawable/ic_star"-->
-                <!--fancy:radius="30dp">-->
-            <!--</mehdi.sakout.fancybuttons.FancyButton>-->
-
         </LinearLayout>
 
         <com.baoyz.widget.PullRefreshLayout

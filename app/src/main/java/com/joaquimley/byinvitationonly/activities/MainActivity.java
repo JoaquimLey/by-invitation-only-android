@@ -10,24 +10,42 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.Contact;
+import com.joaquimley.byinvitationonly.model.Talk;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
-public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener, PullRefreshLayout.OnRefreshListener {
 
     private Firebase mContactsChildRef;
     private Firebase mTalksChildRef;
     private Contact mMyContact;
+    private ListView mList;
     private SharedPreferences mSharedPreferences;
+    private PullRefreshLayout mPullRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+//
+        ArrayList<Talk> dummyItems = new ArrayList<>();
+
+        dummyItems.add(new Talk("Title example numero uno", "Bill Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Talk("Title example numero dois", "Bill Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Talk("Title example numero tres", "Bill Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Talk("Title example numero 4", "Bill Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+
+        CustomListAdapter dummyAdapter = new CustomListAdapter(MainActivity.this, dummyItems);
+        mList.setAdapter(dummyAdapter);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
@@ -36,8 +54,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
      * Initialize Firebase references UI elements, listeners
      */
     private void init(){
-//        mMyContact =
-        findViewById(R.id.swipeRefreshLayout).isInEditMode();
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
@@ -45,7 +61,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         // UI
         findViewById(R.id.btn_current_talks).setOnClickListener(this);
         findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
-        ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
+        // List
+        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mPullRefreshLayout.isInEditMode();
+        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        mPullRefreshLayout.setOnRefreshListener(this);
+        mList = (ListView) findViewById(R.id.list);
+        mList.setOnItemClickListener(this);
     }
 
     @Override
@@ -82,7 +104,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create conference details (getItemAtPosition(position))
+        // TODO: Create Talk activity with item details (getItemAtPosition(position))
     }
 
     public Firebase getContactsChildRef() {
@@ -99,5 +121,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     public void setTalksChildRef(Firebase talksChildRef) {
         mTalksChildRef = talksChildRef;
+    }
+
+    @Override
+    public void onRefresh() {
+        // TODO: See what type of list is and update according
     }
 }
