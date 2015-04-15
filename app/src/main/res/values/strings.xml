@@ -18,4 +18,6 @@
     <string name="user_invisible">You are now INVISIBLE to other participants</string>
     <string name="user_visible">You are now VISIBLE to other participants</string>
     <string name="action_checkin">Check-In</string>
+    <string name="text_contact">Contact</string>
+    <string name="error_no_dialer">Device has no dialing capabilities</string>
 </resources>

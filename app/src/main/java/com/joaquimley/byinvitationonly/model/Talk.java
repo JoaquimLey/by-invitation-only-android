@@ -1,13 +1,23 @@
+/*
+ * Copyright (c) 2015 Joaquim Ley
+ * All rights reserved.
+ *
+ * Redistribution, modification or use of source and binary forms are NOT allowed
+ * without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+ * to endorse products derived without previous authorization.
+ * THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
 package com.joaquimley.byinvitationonly.model;
 
-import com.joaquimley.byinvitationonly.util.DateTransform;
-
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Model for Talk
  */
+
 public class Talk  {
 
     private String mTitle;
@@ -22,13 +32,6 @@ public class Talk  {
         mDescription = description;
         mImageUrl = imageUrl;
         mDate = date;
-    }
-
-    public String getListDay(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(mDate);
-        return cal.get(Calendar.HOUR_OF_DAY) + "h - " + cal.get(Calendar.DAY_OF_MONTH) + "/" +
-                DateTransform.getMonthName(cal.get(Calendar.MONTH));
     }
 
    @Override

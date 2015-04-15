@@ -70,4 +70,4 @@ Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
     SOFTWARE.`
 
 ## IMPORTANT
-This is a under development academic project, if you are going to use any part of it, please DO READ the MIT License guidelines.
+This is a under development academic project, if you are going to use any part of it, please DO READ the MIT License and follow it's guidelines guidelines.

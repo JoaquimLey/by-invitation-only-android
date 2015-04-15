@@ -1,3 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+~ Copyright (c) 2015 Joaquim Ley
+~ All rights reserved.
+~
+~ Redistribution, modification or use of source and binary forms are NOT allowed
+~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+~ to endorse products derived without previous authorization.
+~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+-->
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,14 +27,13 @@
     android:weightSum="1">
 
     <ImageView
-        android:id="@+id/iv_bio_logo"
+        android:id="@+id/iv_intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@drawable/bio_logo"
         android:contentDescription="@string/app_name"
         android:layout_gravity="center_horizontal" />
 
@@ -39,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:layout_marginRight="10dp"
-                android:padding="10dp"
+                android:padding="2dp"
                 fancy:defaultColor="#007ee5"
                 fancy:focusColor="#313131"
                 fancy:iconResource="@drawable/ic_keynote"
@@ -53,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:layout_marginRight="10dp"
-                android:padding="10dp"
+                android:padding="2dp"
                 fancy:defaultColor="#007ee5"
                 fancy:focusColor="#313131"
                 fancy:iconResource="@drawable/ic_star"
@@ -66,13 +78,14 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2">
+            android:layout_marginTop="3dp" >
 
             <ListView
                 android:id="@+id/list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawSelectorOnTop="false"/>
+
         </com.baoyz.widget.PullRefreshLayout>
 
 </LinearLayout>

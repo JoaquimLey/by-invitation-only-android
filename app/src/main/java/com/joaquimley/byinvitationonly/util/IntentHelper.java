@@ -10,7 +10,7 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package com.joaquimley.sal15.util;
+package com.joaquimley.byinvitationonly.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
-import com.joaquimley.sal15.R;
+import com.joaquimley.byinvitationonly.R;
 
 /**
  * Helper class designed for Intent calls
@@ -28,7 +28,7 @@ import com.joaquimley.sal15.R;
 public class IntentHelper {
 
     /**
-     * Starts a email send Intent
+     * Create and start a email/share send Intent
      *
      * @param activity self explanatory
      * @param destinationEmail self explanatory
@@ -38,11 +38,11 @@ public class IntentHelper {
         emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{destinationEmail});
-        activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.text_contactar)));
+        activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.text_contact)));
     }
 
     /**
-     * Creates & Start a dialer Intent with given number by @param
+     * Create and start a dialer Intent with given number by @param
      *
      * @param context self explanatory
      * @param phoneNumber self explanatory

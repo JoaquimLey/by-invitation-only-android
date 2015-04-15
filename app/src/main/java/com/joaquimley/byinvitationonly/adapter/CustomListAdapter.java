@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2015 Joaquim Ley
  * All rights reserved.
@@ -24,12 +23,14 @@ import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Talk;
+import com.joaquimley.byinvitationonly.util.DateTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * Adapter to populate list
+ * Custom Adapter to populate list
+ * Image + Title + Subtitle + Description + Date
  */
 
 public class CustomListAdapter extends BaseAdapter {
@@ -92,7 +93,7 @@ public class CustomListAdapter extends BaseAdapter {
         // Speaker
         holder.listTitle.setText(talk.getSpeaker());
         // Date
-        holder.listDate.setText(String.valueOf(talk.getDate()));
+        holder.listDate.setText(DateTransform.getListDay(talk.getDate()));
         // Bio
         holder.listDescription.setText(talk.getDescription());
         // Image

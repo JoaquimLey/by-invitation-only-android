@@ -12,6 +12,9 @@
 
 package com.joaquimley.byinvitationonly.util;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Helper class to return minutes, hours, days, years from the Date.class and Month names
  */
@@ -39,6 +42,25 @@ public class DateTransform {
 //        return Math.round(timeInLong / YEARS);
 //    }
 
+    /**
+     * Transforms a Date object into a string to be shown on a List
+     *
+     * @param date self explanatory
+     * @return date with the following format HHh - dd/MOT
+     */
+    public static String getListDay(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.HOUR_OF_DAY) + "h - " + cal.get(Calendar.DAY_OF_MONTH) + "/" +
+                DateTransform.getMonthName(cal.get(Calendar.MONTH));
+    }
+
+    /**
+     * Converts a month number into a 3-Letter Format
+     *
+     * @param month number
+     * @return the month name (abbreviated)
+     */
     public static String getMonthName(int month){
         String[] monthNames = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         return monthNames[month];
