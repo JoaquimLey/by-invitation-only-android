@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2015 Joaquim Ley
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
   ~ All rights reserved.
   ~
   ~ Redistribution, modification or use of source and binary forms are NOT allowed
@@ -14,9 +14,13 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Smaller custom margins -->
+    <dimen name="activity_smaller_horizontal_margin">8dp</dimen>
+    <dimen name="activity_smaller_vertical_margin">5dp</dimen>
     <!-- List Row -->
-    <dimen name="name">16dp</dimen>
+    <dimen name="title">14sp</dimen>
+    <dimen name="speaker">12sp</dimen>
     <dimen name="date">12dp</dimen>
-    <dimen name="description">12dp</dimen>
+    <dimen name="description">11sp</dimen>
 
 </resources>

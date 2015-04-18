@@ -10,4 +10,25 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-include ':app'
+package com.joaquimley.byinvitationonly.model;
+
+import java.util.ArrayList;
+
+/**
+ * Model for Favorites
+ */
+
+public class Favorite {
+
+    private ArrayList<Talk> mFavorites;
+
+    // TODO: create method to get the most recent favourite
+
+    public ArrayList<Talk> getFavorites() {
+        return mFavorites;
+    }
+
+    public void setFavorites(ArrayList<Talk> favorites) {
+        mFavorites = favorites;
+    }
+}

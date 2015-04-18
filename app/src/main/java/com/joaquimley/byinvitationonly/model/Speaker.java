@@ -12,36 +12,40 @@
 
 package com.joaquimley.byinvitationonly.model;
 
-import java.util.Date;
-
 /**
- * Model for Talk
+ * Model for Speaker
  */
 
-public class Talk  {
+public class Speaker {
 
+    private String mName;
     private String mTitle;
-    private Speaker mSpeaker;
     private String mDescription;
     private String mImageUrl;
-    private Date mDate;
 
-    public Talk(String title, Speaker speaker, String description, String imageUrl, Date date) {
+    public Speaker(String name, String title, String description, String imageUrl) {
+        mName = name;
         mTitle = title;
-        mSpeaker = speaker;
         mDescription = description;
         mImageUrl = imageUrl;
-        mDate = date;
     }
 
-   @Override
+    @Override
     public String toString() {
         return "Talk{" +
-                "Name" + mTitle + '\'' +
-                "Speaker='" + mSpeaker + '\'' +
+                "Name" + mName + '\'' +
+                "Title='" + mTitle + '\'' +
                 "Description='" + mDescription + '\'' +
-                "Date='" + mDate + '\'' +
                 '}';
+    }
+
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
     }
 
     public String getTitle() {
@@ -52,28 +56,12 @@ public class Talk  {
         mTitle = title;
     }
 
-    public Speaker getSpeaker() {
-        return mSpeaker;
-    }
-
-    public void setSpeaker(Speaker speaker) {
-        mSpeaker = speaker;
-    }
-
     public String getDescription() {
         return mDescription;
     }
 
     public void setDescription(String description) {
         mDescription = description;
-    }
-
-    public Date getDate() {
-        return mDate;
-    }
-
-    public void setDate(Date date) {
-        mDate = date;
     }
 
     public String getImageUrl() {

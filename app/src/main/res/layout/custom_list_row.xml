@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-~ Copyright (c) 2015 Joaquim Ley
-~ All rights reserved.
-~
-~ Redistribution, modification or use of source and binary forms are NOT allowed
-~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
-~ to endorse products derived without previous authorization.
-~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
-~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
-~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
--->
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/list_row_selector"
-    android:padding="4dp" >
+    android:padding="0dp" >
 
     <!-- Image -->
     <ImageView
@@ -32,22 +32,11 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/image"
         android:layout_alignTop="@+id/image"
-        android:textSize="@dimen/name"
+        android:textSize="@dimen/title"
         android:text="Title example"
         android:textStyle="bold"
         android:paddingBottom="7dp" />
 
-    <!-- Speaker -->
-    <TextView
-        android:id="@+id/speaker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/name"
-        android:text="Speaker Example"
-        android:textStyle="bold"
-        android:paddingBottom="7dp"
-        android:layout_below="@+id/title"
-        android:layout_toEndOf="@+id/image" />
 
     <!-- Date -->
     <TextView
@@ -60,6 +49,31 @@
         android:layout_alignTop="@+id/title"
         android:layout_alignEnd="@+id/description" />
 
+    <!-- Speaker -->
+    <TextView
+        android:id="@+id/speaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/speaker"
+        android:text="Speaker Example"
+        android:textStyle="bold"
+        android:paddingBottom="1dp"
+        android:layout_alignBaseline="@+id/favorite"
+        android:layout_alignBottom="@+id/favorite"
+        android:layout_toEndOf="@+id/image" />
+
+
+    <!-- Favorite -->
+    <CheckBox
+        style="@style/CustomRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_favorite_checkbox_default"
+        android:id="@+id/favorite"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/date"
+        android:layout_alignParentEnd="true" />
+
     <!-- Description -->
     <TextView
         android:id="@+id/description"
@@ -67,8 +81,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/description"
-        android:layout_below="@+id/speaker"
+        android:layout_alignBottom="@+id/image"
         android:layout_toEndOf="@+id/image"
-        android:layout_alignBottom="@+id/image" />
+        android:layout_below="@+id/favorite" />
 
 </RelativeLayout>

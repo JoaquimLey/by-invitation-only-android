@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2015 Joaquim Ley
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
   ~ All rights reserved.
   ~
   ~ Redistribution, modification or use of source and binary forms are NOT allowed
@@ -12,9 +12,10 @@
   -->
 
 <resources>
-    <color name="list_divider">#d9d9d9</color>
-    <color name="list_row_start_color">#ffffff</color>
-    <color name="list_row_end_color">#ffffff</color>
-    <color name="list_row_hover_start_color">#ebeef0</color>
-    <color name="list_row_hover_end_color">#ebeef0</color>
+    <!-- List -->
+    <color name="list_divider">#495f88</color>
+    <color name="list_row_start_color">#bcd2fb</color>
+    <color name="list_row_end_color">#a2acc0</color>
+    <color name="list_row_hover_start_color">#bcd2fb</color>
+    <color name="list_row_hover_end_color">#808897</color>
 </resources>

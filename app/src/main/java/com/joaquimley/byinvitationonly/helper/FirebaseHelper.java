@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Joaquim Ley
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
  * All rights reserved.
  *
  * Redistribution, modification or use of source and binary forms are NOT allowed
@@ -25,11 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Handles all firebase communications
+ * Helper class, handles all Firebase communications
  */
 
 public class FirebaseHelper {
-
 
     private static final String TAG = FirebaseHelper.class.getSimpleName();
 

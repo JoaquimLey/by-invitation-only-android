@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+ * All rights reserved.
+ *
+ * Redistribution, modification or use of source and binary forms are NOT allowed
+ * without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+ * to endorse products derived without previous authorization.
+ * THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
 apply plugin: 'com.android.application'
 
 android {
@@ -36,8 +48,13 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
     compile 'com.firebase:firebase-client-android:2.2.3+'
+    // UI
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     compile 'com.baoyz.pullrefreshlayout:library:1.0.1'
     compile 'com.github.medyo:fancybuttons:1.0@aar'
+    // ORMLite
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'com.j256.ormlite:ormlite-jdbc:4.48'
+    compile 'com.j256.ormlite:ormlite-core:4.48'
 }

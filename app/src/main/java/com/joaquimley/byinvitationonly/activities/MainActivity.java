@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+ * All rights reserved.
+ *
+ * Redistribution, modification or use of source and binary forms are NOT allowed
+ * without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+ * to endorse products derived without previous authorization.
+ * THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
 package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
@@ -8,26 +20,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
-import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
+import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.Contact;
-import com.joaquimley.byinvitationonly.model.Talk;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.Date;
+import com.joaquimley.byinvitationonly.util.CustomUi;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private Firebase mContactsChildRef;
     private Firebase mTalksChildRef;
+    private Firebase mSpeakersRef;
     private Contact mMyContact;
     private ListView mList;
     private SharedPreferences mSharedPreferences;
@@ -37,33 +45,27 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
-//
-        ArrayList<Talk> dummyItems = new ArrayList<>();
-
-        dummyItems.add(new Talk("Title example numero uno", "Bill Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero dois", "Ze Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero tres", "John Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero 4", "Marry Gates", "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-
-        CustomListAdapter dummyAdapter = new CustomListAdapter(MainActivity.this, dummyItems);
-        mList.setAdapter(dummyAdapter);
-
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // Firebase
+        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mSpeakersRef = FirebaseHelper.getChildRef(firebaseRef, "speakers");
+        mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
+        mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
+
+        init();
+
+        DatabaseHelper.createDummyEntries(MainActivity.this, mList);
     }
 
     /**
      * Initialize Firebase references, UI elements, listeners
      */
-    private void init(){
-        // Firebase
-        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
-        mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
-        mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
+    private void init() {
         // UI
-        Picasso.with(MainActivity.this).load(R.drawable.ic_intro).into((ImageView) findViewById(R.id.iv_intro));
-        findViewById(R.id.btn_current_talks).setOnClickListener(this);
-        findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
+        CustomUi.setSimpleActionBar(getActionBar(), R.drawable.action_bar_app);
+//        Picasso.with(MainActivity.this).load(R.drawable.ic_intro).into((ImageView) findViewById(R.id.iv_intro));
+//        findViewById(R.id.btn_current_talks).setOnClickListener(this);
+//        findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
         // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
@@ -86,15 +88,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
 
-            case R.id.btn_current_talks:
-                // TODO: repopulate list view with Current Talks
-                break;
+//            case R.id.btn_current_talks:
+//                 TODO: repopulate list view with Current Talks
+//                break;
 
-            case R.id.btn_favourite_talks:
-                // TODO: repopulate list view with Favourite Talks
-                break;
+//            case R.id.btn_favourite_talks:
+//                // TODO: repopulate list view with Favourite Talks
+//                break;
 
             case R.id.action_checkin:
                 FirebaseHelper.changeAvailabilityState(this, mMyContact, mContactsChildRef);
@@ -103,10 +105,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
         }
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        // TODO: Create Talk activity with item details (getItemAtPosition(position))
-//    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO: Create Talk activity with item details (getItemAtPosition(position))
+    }
 
     public Firebase getContactsChildRef() {
         return mContactsChildRef;
@@ -129,8 +131,4 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
         // TODO: See what type of list is and update according
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Joaquim Ley
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
  * All rights reserved.
  *
  * Redistribution, modification or use of source and binary forms are NOT allowed
@@ -12,35 +12,34 @@
 
 package com.joaquimley.byinvitationonly.util;
 
+import android.app.ActionBar;
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Helper class to return minutes, hours, days, years from the Date.class and Month names
+ * Simple UI modifications util class
  */
 
-public class DateTransform {
+public class CustomUi {
 
-//    public static final int MINUTES = 1000 * 60;
-//    public static final int HOURS = MINUTES * 60;
-//    public static final int DAYS = HOURS * 24;
-//    public static final int YEARS = DAYS * 365;
-//
-//    public static int getMinutes(long timeInLong){
-//        return Math.round(timeInLong / MINUTES);
-//    }
-//
-//    public static int getHours(long timeInLong){
-//        return Math.round(timeInLong / HOURS);
-//    }
-//
-//    public static int getDays(long timeInLong){
-//        return Math.round(timeInLong / DAYS);
-//    }
-//
-//    public static int getYears(long timeInLong){
-//        return Math.round(timeInLong / YEARS);
-//    }
+    private static final String TAG = CustomUi.class.getSimpleName();
+
+    /**
+     * Clears the action bar label and sets a custom icon
+     *
+     * @param actionBar self explanatory
+     * @param iconId self explanatory
+     */
+    public static void setSimpleActionBar(ActionBar actionBar, int iconId){
+        if(actionBar == null){
+            Log.e(TAG, "setSimpleActionBar(): Action bar is null");
+            return;
+        }
+        actionBar.setTitle("");
+        actionBar.setIcon(iconId);
+    }
 
     /**
      * Transforms a Date object into a string to be shown on a List
@@ -52,11 +51,11 @@ public class DateTransform {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.HOUR_OF_DAY) + "h - " + cal.get(Calendar.DAY_OF_MONTH) + "/" +
-                DateTransform.getMonthName(cal.get(Calendar.MONTH));
+                getMonthName(cal.get(Calendar.MONTH));
     }
 
     /**
-     * Converts a month number into a 3-Letter Format
+     * Converts a month number into a 3-Letter format/name
      *
      * @param month number
      * @return the month name (abbreviated)
@@ -65,5 +64,4 @@ public class DateTransform {
         String[] monthNames = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         return monthNames[month];
     }
-
 }

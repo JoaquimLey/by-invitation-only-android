@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Joaquim Ley
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
  * All rights reserved.
  *
  * Redistribution, modification or use of source and binary forms are NOT allowed
@@ -18,19 +18,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Talk;
-import com.joaquimley.byinvitationonly.util.DateTransform;
+import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * Custom Adapter to populate list
- * Image + Title + Subtitle + Description + Date
+ * Custom Adapter to populate list with:
+ * Image; Title; Subtitle; Description; Date;
  */
 
 public class CustomListAdapter extends BaseAdapter {
@@ -47,7 +48,7 @@ public class CustomListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(mItems == null){
+        if (mItems == null) {
             return 0;
         }
         return mItems.size();
@@ -68,7 +69,7 @@ public class CustomListAdapter extends BaseAdapter {
 
         CustomHolder holder;
 
-        if (convertView == null){
+        if (convertView == null) {
 
             LayoutInflater inflater = mActivity.getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_list_row, parent, false);
@@ -80,6 +81,7 @@ public class CustomListAdapter extends BaseAdapter {
             holder.listDate = (TextView) convertView.findViewById(R.id.date);
             holder.listDescription = (TextView) convertView.findViewById(R.id.description);
             holder.listImage = (ImageView) convertView.findViewById(R.id.image);
+            holder.favorite = (CheckBox) convertView.findViewById(R.id.favorite);
 
             convertView.setTag(holder);
         } else {
@@ -91,13 +93,13 @@ public class CustomListAdapter extends BaseAdapter {
         // Title
         holder.listTitle.setText(talk.getTitle());
         // Speaker
-        holder.listTitle.setText(talk.getSpeaker());
+        holder.listTitle.setText(talk.getSpeaker().getName());
         // Date
-        holder.listDate.setText(DateTransform.getListDay(talk.getDate()));
+        holder.listDate.setText(CustomUi.getListDay(talk.getDate()));
         // Bio
         holder.listDescription.setText(talk.getDescription());
         // Image
-        if(talk.getImageUrl() == null || talk.getImageUrl().isEmpty()){
+        if (talk.getImageUrl() == null || talk.getImageUrl().isEmpty()) {
             Picasso.with(mActivity).load(R.drawable.image_placeholder).into(holder.listImage);
             return convertView;
         }
@@ -106,7 +108,12 @@ public class CustomListAdapter extends BaseAdapter {
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder_error)
                 .into(holder.listImage);
-
+        // Favorite
+        if (!holder.favorite.isChecked()) {
+            holder.favorite.setBackgroundResource(R.drawable.ic_favorite_checkbox_default);
+        } else {
+            holder.favorite.setBackgroundResource(R.drawable.ic_favorite_checkbox_selected);
+        }
         return convertView;
     }
 
@@ -119,6 +126,7 @@ public class CustomListAdapter extends BaseAdapter {
         TextView listSubtitle;
         TextView listDescription;
         TextView listDate;
+        CheckBox favorite;
     }
 
 

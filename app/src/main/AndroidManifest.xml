@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.joaquimley.byinvitationonly" >
 
@@ -10,12 +22,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_name_acronym"
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

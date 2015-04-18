@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Joaquim Ley
+ * Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
  * All rights reserved.
  *
  * Redistribution, modification or use of source and binary forms are NOT allowed

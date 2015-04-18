@@ -1,11 +1,35 @@
+<!--
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_checkin"
         android:title="@string/action_checkin"
-        android:orderInCategory="100"
+        android:orderInCategory="98"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_person"/>
+
+    <item android:id="@+id/action_favorite"
+        android:title="@string/title_favorite"
+        android:orderInCategory="99"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_favorite_checkbox_selected"/>
+
+    <item android:id="@+id/action_keynote"
+        android:title="@string/title_keynote"
+        android:orderInCategory="99"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_keynote"/>
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
