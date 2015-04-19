@@ -21,17 +21,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
 import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
+import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Contact;
+import com.joaquimley.byinvitationonly.model.Talk;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 
 
-public class MainActivity extends Activity implements View.OnClickListener, PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private Firebase mContactsChildRef;
     private Firebase mTalksChildRef;
@@ -40,6 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
     private ListView mList;
     private SharedPreferences mSharedPreferences;
     private PullRefreshLayout mPullRefreshLayout;
+    private CustomListAdapter mCustomAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,23 +61,21 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
 
         init();
 
-        DatabaseHelper.createDummyEntries(MainActivity.this, mList);
+        mCustomAdapter = new CustomListAdapter(MainActivity.this, DatabaseHelper.createDummyEntries(MainActivity.this), this);
+        mList.setAdapter(mCustomAdapter);
+
     }
 
     /**
      * Initialize Firebase references, UI elements, listeners
      */
     private void init() {
-        // UI
         CustomUi.setSimpleActionBar(getActionBar(), R.drawable.action_bar_app);
-//        Picasso.with(MainActivity.this).load(R.drawable.ic_intro).into((ImageView) findViewById(R.id.iv_intro));
-//        findViewById(R.id.btn_current_talks).setOnClickListener(this);
-//        findViewById(R.id.btn_favourite_talks).setOnClickListener(this);
-        // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
         mList = (ListView) findViewById(R.id.list);
         mList.setOnItemClickListener(this);
+        mList.setItemsCanFocus(true);
     }
 
     @Override
@@ -87,27 +92,24 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-//            case R.id.btn_current_talks:
-//                 TODO: repopulate list view with Current Talks
-//                break;
-
-//            case R.id.btn_favourite_talks:
-//                // TODO: repopulate list view with Favourite Talks
-//                break;
-
-            case R.id.action_checkin:
-                FirebaseHelper.changeAvailabilityState(this, mMyContact, mContactsChildRef);
-                break;
-            default:
-        }
+    public void onCheckBoxClick(int position, Talk talk) {
+        talk.setBookmarked(!talk.isBookmarked());
+        mCustomAdapter.getItems().set(position, talk);
+        mCustomAdapter.notifyDataSetChanged();
+        Toast.makeText(MainActivity.this, "CheckBox Click + Talk: " + position + ", " + talk.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO: Create Talk activity with item details (getItemAtPosition(position))
+        Toast.makeText(MainActivity.this, "List Click", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    @Override
+    public void onRefresh() {
+        // TODO: See what type of list is and update according
     }
 
     public Firebase getContactsChildRef() {
@@ -125,10 +127,4 @@ public class MainActivity extends Activity implements View.OnClickListener, Pull
     public void setTalksChildRef(Firebase talksChildRef) {
         mTalksChildRef = talksChildRef;
     }
-
-    @Override
-    public void onRefresh() {
-        // TODO: See what type of list is and update according
-    }
-
 }

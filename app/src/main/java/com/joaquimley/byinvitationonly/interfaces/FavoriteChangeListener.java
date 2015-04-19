@@ -12,13 +12,12 @@
 
 package com.joaquimley.byinvitationonly.interfaces;
 
+import com.joaquimley.byinvitationonly.model.Talk;
+
 /**
- * Simple interface to handle server response
+ * Simple interface to handle checkbox (list) clicks
  */
 
-public interface ServerResponseListener {
-
-    public void serverResponseSuccess();
-    public void serverResponseFailure();
-
+public interface FavoriteChangeListener {
+    void onCheckBoxClick(int position, Talk talk);
 }

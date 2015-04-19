@@ -15,7 +15,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -23,7 +22,6 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.joaquimley.byinvitationonly.BioApp;
-import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
 import com.joaquimley.byinvitationonly.model.Contact;
 import com.joaquimley.byinvitationonly.model.Favorite;
 import com.joaquimley.byinvitationonly.model.Speaker;
@@ -172,18 +170,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * DEBUG: Method to create dummy entries in the database for testing purposes
      * @param activity self explanatory
-     * @param list self explanatory
+     * @return list with with dummy "Talk" items
      */
-    public static void createDummyEntries(Activity activity, ListView list) {
+    public static ArrayList<Talk> createDummyEntries(Activity activity) {
         ArrayList<Talk> dummyItems = new ArrayList<>();
 
-        dummyItems.add(new Talk("Title example numero uno", new Speaker("Bill Gates", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero dois", new Speaker("Steve Jobs", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero tres", new Speaker("Romain Guy", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-        dummyItems.add(new Talk("Title example numero 4", new Speaker("Zecas", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
-
-        CustomListAdapter dummyAdapter = new CustomListAdapter(activity, dummyItems);
-        list.setAdapter(dummyAdapter);
+        dummyItems.add(new Talk("Title example numero uno", new Speaker("Bill Gates", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
+        dummyItems.add(new Talk("Title example numero dois", new Speaker("Steve Jobs", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
+        dummyItems.add(new Talk("Title example numero tres", new Speaker("Romain Guy", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
+        dummyItems.add(new Talk("Title example numero 4", new Speaker("Zecas", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), true));
+        return dummyItems;
     }
 
     /**

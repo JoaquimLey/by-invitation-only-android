@@ -23,8 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Talk;
 import com.joaquimley.byinvitationonly.util.CustomUi;
+import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -39,10 +41,13 @@ public class CustomListAdapter extends BaseAdapter {
     private Activity mActivity;
     private LayoutInflater mInflater;
     private List<Talk> mItems;
+    private final FavoriteChangeListener mListner;
 
-    public CustomListAdapter(Activity activity, List<Talk> items) {
+
+    public CustomListAdapter(Activity activity, List<Talk> items, FavoriteChangeListener listner) {
         mActivity = activity;
         mItems = items;
+        mListner = listner;
         mInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -55,7 +60,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int location) {
+    public Talk getItem(int location) {
         return mItems.get(location);
     }
 
@@ -65,7 +70,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         CustomHolder holder;
 
@@ -73,7 +78,6 @@ public class CustomListAdapter extends BaseAdapter {
 
             LayoutInflater inflater = mActivity.getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_list_row, parent, false);
-//            convertView = mInflater.inflate(R.layout.custom_list_row, null);
 
             holder = new CustomHolder();
             holder.listTitle = (TextView) convertView.findViewById(R.id.title);
@@ -84,6 +88,7 @@ public class CustomListAdapter extends BaseAdapter {
             holder.favorite = (CheckBox) convertView.findViewById(R.id.favorite);
 
             convertView.setTag(holder);
+
         } else {
             holder = (CustomHolder) convertView.getTag();
         }
@@ -93,7 +98,7 @@ public class CustomListAdapter extends BaseAdapter {
         // Title
         holder.listTitle.setText(talk.getTitle());
         // Speaker
-        holder.listTitle.setText(talk.getSpeaker().getName());
+        holder.listSubtitle.setText(talk.getSpeaker().getName());
         // Date
         holder.listDate.setText(CustomUi.getListDay(talk.getDate()));
         // Bio
@@ -101,19 +106,29 @@ public class CustomListAdapter extends BaseAdapter {
         // Image
         if (talk.getImageUrl() == null || talk.getImageUrl().isEmpty()) {
             Picasso.with(mActivity).load(R.drawable.image_placeholder).into(holder.listImage);
-            return convertView;
+        } else {
+            Picasso.with(mActivity).load(talk.getImageUrl())
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder_error)
+                    .transform(new ImageCircleTransform())
+                    .into(holder.listImage);
         }
 
-        Picasso.with(mActivity).load(talk.getImageUrl())
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder_error)
-                .into(holder.listImage);
+        holder.favorite.setTag(talk);
         // Favorite
-        if (!holder.favorite.isChecked()) {
-            holder.favorite.setBackgroundResource(R.drawable.ic_favorite_checkbox_default);
+        if (!talk.isBookmarked()) {
+            holder.favorite.setChecked(false);
         } else {
-            holder.favorite.setBackgroundResource(R.drawable.ic_favorite_checkbox_selected);
+            holder.favorite.setChecked(true);
         }
+
+        holder.favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListner.onCheckBoxClick(position, (Talk) v.getTag());
+            }
+        });
+
         return convertView;
     }
 
@@ -146,7 +161,7 @@ public class CustomListAdapter extends BaseAdapter {
         mInflater = inflater;
     }
 
-    public List<Talk> getArtistItems() {
+    public List<Talk> getItems() {
         return mItems;
     }
 

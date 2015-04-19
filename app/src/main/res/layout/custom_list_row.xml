@@ -46,8 +46,8 @@
         android:textSize="@dimen/date"
         android:text="28/05/2015"
         android:layout_marginRight="5dp"
-        android:layout_alignTop="@+id/title"
-        android:layout_alignEnd="@+id/description" />
+        android:layout_alignBottom="@+id/image"
+        android:layout_alignEnd="@+id/favorite" />
 
     <!-- Speaker -->
     <TextView
@@ -57,22 +57,23 @@
         android:textSize="@dimen/speaker"
         android:text="Speaker Example"
         android:textStyle="bold"
+        android:paddingTop="1dp"
         android:paddingBottom="1dp"
-        android:layout_alignBaseline="@+id/favorite"
-        android:layout_alignBottom="@+id/favorite"
+        android:layout_below="@+id/favorite"
         android:layout_toEndOf="@+id/image" />
 
 
     <!-- Favorite -->
     <CheckBox
-        style="@style/CustomRadioButton"
+        android:button="@drawable/checkbox_selector"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_favorite_checkbox_default"
         android:id="@+id/favorite"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/date"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginEnd="5dp"
+        android:layout_alignBottom="@+id/title"
+        android:layout_alignEnd="@+id/description" />
 
     <!-- Description -->
     <TextView
@@ -81,8 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/description"
-        android:layout_alignBottom="@+id/image"
-        android:layout_toEndOf="@+id/image"
-        android:layout_below="@+id/favorite" />
+        android:layout_below="@+id/speaker"
+        android:layout_toEndOf="@+id/image" />
 
 </RelativeLayout>

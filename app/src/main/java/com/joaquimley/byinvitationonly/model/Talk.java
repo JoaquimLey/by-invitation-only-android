@@ -25,13 +25,15 @@ public class Talk  {
     private String mDescription;
     private String mImageUrl;
     private Date mDate;
+    private boolean mIsBookmark;
 
-    public Talk(String title, Speaker speaker, String description, String imageUrl, Date date) {
+    public Talk(String title, Speaker speaker, String description, String imageUrl, Date date, boolean isBookmark) {
         mTitle = title;
         mSpeaker = speaker;
         mDescription = description;
         mImageUrl = imageUrl;
         mDate = date;
+        mIsBookmark = isBookmark;
     }
 
    @Override
@@ -41,6 +43,7 @@ public class Talk  {
                 "Speaker='" + mSpeaker + '\'' +
                 "Description='" + mDescription + '\'' +
                 "Date='" + mDate + '\'' +
+                "Bookmarked='" + mIsBookmark + '\'' +
                 '}';
     }
 
@@ -82,5 +85,13 @@ public class Talk  {
 
     public void setImageUrl(String imageUrl) {
         mImageUrl = imageUrl;
+    }
+
+    public boolean isBookmarked() {
+        return mIsBookmark;
+    }
+
+    public void setBookmarked(boolean isBookmarked) {
+        mIsBookmark = isBookmarked;
     }
 }
