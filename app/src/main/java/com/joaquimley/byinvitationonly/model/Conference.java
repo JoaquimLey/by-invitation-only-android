@@ -15,10 +15,10 @@ package com.joaquimley.byinvitationonly.model;
 import java.util.Date;
 
 /**
- * Model for Talk
+ * Model for Conference
  */
 
-public class Talk  {
+public class Conference {
 
     private String mTitle;
     private Speaker mSpeaker;
@@ -27,18 +27,19 @@ public class Talk  {
     private Date mDate;
     private boolean mIsBookmark;
 
-    public Talk(String title, Speaker speaker, String description, String imageUrl, Date date, boolean isBookmark) {
+    public Conference(String title, Speaker speaker, String description, String imageUrl, Date date) {
         mTitle = title;
         mSpeaker = speaker;
         mDescription = description;
         mImageUrl = imageUrl;
         mDate = date;
-        mIsBookmark = isBookmark;
+
+        mIsBookmark = false;
     }
 
    @Override
     public String toString() {
-        return "Talk{" +
+        return "Conference{" +
                 "Name" + mTitle + '\'' +
                 "Speaker='" + mSpeaker + '\'' +
                 "Description='" + mDescription + '\'' +

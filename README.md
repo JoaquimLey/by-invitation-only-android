@@ -42,7 +42,7 @@ Contribution guidelines
 
 Joaquim Ley - <me@joaquimley.com>
 
-### Who do I talk to? ###
+### Who do I conference to? ###
 
 Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
 

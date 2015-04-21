@@ -32,7 +32,7 @@ public class Speaker {
 
     @Override
     public String toString() {
-        return "Talk{" +
+        return "Conference{" +
                 "Name" + mName + '\'' +
                 "Title='" + mTitle + '\'' +
                 "Description='" + mDescription + '\'' +

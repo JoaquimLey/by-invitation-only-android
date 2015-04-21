@@ -18,8 +18,16 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.joaquimley.byinvitationonly.db.DatabaseHelper;
+import com.joaquimley.byinvitationonly.model.Conference;
+import com.joaquimley.byinvitationonly.model.Speaker;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Singleton class with application shared data
@@ -91,6 +99,64 @@ public class BioApp extends Activity {
 
     public void setDb(DatabaseHelper dataBase) {
         sDatabase = dataBase;
+    }
+
+    //********************************** Debug/Dummy methods **********************************//
+    // TODO: Delete or comment before going to production, ensure there are 0 (ZERO) usages
+
+    /**
+     * DEBUG: Method to create dummy entries in the database for testing purposes
+     * @param activity self explanatory
+     * @return list with with dummy "Conference" items
+     */
+    public static ArrayList<Conference> createDummyEntries(Activity activity) {
+        ArrayList<Conference> dummyItems = new ArrayList<>();
+
+        dummyItems.add(new Conference("Title example numero uno", new Speaker("Bill Gates", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Conference("Title example numero dois", new Speaker("Steve Jobs", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Conference("Title example numero tres", new Speaker("Romain Guy", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        dummyItems.add(new Conference("Title example numero 4", new Speaker("Zecas", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis())));
+        return dummyItems;
+    }
+
+
+    /**
+     * Create dummy entries to be inserted on Firebase Cloud
+     *
+     * @param firebaseChildRef reference for child
+     */
+    public static void createDummyTalkEntries(Firebase firebaseChildRef){
+        Map<String, Conference> talks = new HashMap<>();
+        Conference t1 = new Conference("This is my dummy Title t1", new Speaker("Bill Gates", null, null,
+                "http://feelgrafix.com/data_images/out/18/926083-bill-gates.jpg"),
+                "This is a dummy desp, Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
+                        " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                "http://www.showmetech.com.br/wp-content/uploads/2013/03/windows-phone-logo.jpg", new Date(System.currentTimeMillis()));
+
+        Conference t2 = new Conference("This is my dummy Title t2", new Speaker("Bill Gates", null, null,
+                "http://feelgrafix.com/data_images/out/18/926083-bill-gates.jpg"),
+                "This is a dummy desp, Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
+                        " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                "http://www.showmetech.com.br/wp-content/uploads/2013/03/windows-phone-logo.jpg", new Date(System.currentTimeMillis()));
+
+        Conference t3 = new Conference("This is my dummy Title t3", new Speaker("Bill Gates", null, null,
+                "http://feelgrafix.com/data_images/out/18/926083-bill-gates.jpg"),
+                "This is a dummy desp, Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
+                        " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                "http://www.showmetech.com.br/wp-content/uploads/2013/03/windows-phone-logo.jpg", new Date(System.currentTimeMillis()));
+
+        Conference t4 = new Conference("This is my dummy Title t4", new Speaker("Bill Gates", null, null,
+                "http://feelgrafix.com/data_images/out/18/926083-bill-gates.jpg"),
+                "This is a dummy desp, Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
+                        " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                "http://www.showmetech.com.br/wp-content/uploads/2013/03/windows-phone-logo.jpg", new Date(System.currentTimeMillis()));
+
+
+        talks.put(t1.getTitle(), t2);
+        talks.put(t2.getTitle(), t2);
+        talks.put(t3.getTitle(), t3);
+        talks.put(t4.getTitle(), t4);
+        firebaseChildRef.setValue(talks);
     }
 
 }

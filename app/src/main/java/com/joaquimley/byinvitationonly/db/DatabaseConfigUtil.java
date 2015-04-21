@@ -13,10 +13,10 @@
 package com.joaquimley.byinvitationonly.db;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
+import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Contact;
 import com.joaquimley.byinvitationonly.model.Favorite;
 import com.joaquimley.byinvitationonly.model.Speaker;
-import com.joaquimley.byinvitationonly.model.Talk;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.sql.SQLException;
 
 public class DatabaseConfigUtil extends OrmLiteConfigUtil{
 
-    private static final Class[] classes = new Class[]{Talk.class, Speaker.class, Contact.class, Favorite.class};
+    private static final Class[] classes = new Class[]{Conference.class, Speaker.class, Contact.class, Favorite.class};
 
     /**
      * This must be called as a stand alone app by a JRE instance and NOT by android.

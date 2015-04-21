@@ -40,5 +40,7 @@
     <string name="user_invisible">You are now INVISIBLE to other participants</string>
     <string name="user_visible">You are now VISIBLE to other participants</string>
     <string name="app_name_acronym">BIO</string>
+    <string name="file_conference_data">ConferenceData.csv</string>
+    <string name="file_sessions_data">SessionsData.csv</string>
 
 </resources>

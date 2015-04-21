@@ -11,7 +11,6 @@
  */
 package com.joaquimley.byinvitationonly.db;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -22,6 +21,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.joaquimley.byinvitationonly.BioApp;
+import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Contact;
 import com.joaquimley.byinvitationonly.model.Favorite;
 import com.joaquimley.byinvitationonly.model.Speaker;
@@ -29,7 +29,6 @@ import com.joaquimley.byinvitationonly.model.Talk;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,8 +48,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static RuntimeExceptionDao<Favorite, Integer> mFavoriteRuntimeDao = null;
     private static Dao<Speaker, Integer> mSpeakerDao = null;
     private static RuntimeExceptionDao<Speaker, Integer> mSpeakerRuntimeDao = null;
-    private static Dao<Talk, Integer> mTalkDao = null;
-    private static RuntimeExceptionDao<Talk, Integer> mTalkRuntimeDao = null;
+    private static Dao<Conference, Integer> mTalkDao = null;
+    private static RuntimeExceptionDao<Conference, Integer> mTalkRuntimeDao = null;
 
     /**
      * Constructor for DatabaseHelper ORMLite
@@ -88,7 +87,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(source, Contact.class);
             TableUtils.createTable(source, Favorite.class);
             TableUtils.createTable(source, Speaker.class);
-            TableUtils.createTable(source, Talk.class);
+            TableUtils.createTable(source, Conference.class);
         } catch (SQLException ex){
             Log.e(TAG, "[SQLException] Unable to create database", ex);
             throw new RuntimeException(ex);
@@ -155,31 +154,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * @param talkDao self explanatory
      * @param newElements self explanatory
      */
-    public void updateTalksTable(Dao<Talk, Integer> talkDao, List<Talk> newElements){
+    public void updateTalksTable(Dao<Conference, Integer> talkDao, List<Conference> newElements){
         try {
-            TableUtils.createTableIfNotExists(getConnectionSource(), Talk.class);
-            TableUtils.clearTable(getConnectionSource(), Talk.class);
-            for(Talk talk : newElements){
-                talkDao.createIfNotExists(talk);
+            TableUtils.createTableIfNotExists(getConnectionSource(), Conference.class);
+            TableUtils.clearTable(getConnectionSource(), Conference.class);
+            for(Conference conference : newElements){
+                talkDao.createIfNotExists(conference);
             }
         } catch (SQLException e) {
             Log.e(TAG, "Couldn't update talk table");
         }
-    }
-
-    /**
-     * DEBUG: Method to create dummy entries in the database for testing purposes
-     * @param activity self explanatory
-     * @return list with with dummy "Talk" items
-     */
-    public static ArrayList<Talk> createDummyEntries(Activity activity) {
-        ArrayList<Talk> dummyItems = new ArrayList<>();
-
-        dummyItems.add(new Talk("Title example numero uno", new Speaker("Bill Gates", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
-        dummyItems.add(new Talk("Title example numero dois", new Speaker("Steve Jobs", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
-        dummyItems.add(new Talk("Title example numero tres", new Speaker("Romain Guy", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), false));
-        dummyItems.add(new Talk("Title example numero 4", new Speaker("Zecas", null, null, null), "boa cena lorem ipsoidum feaefoajefapfjaeofa", "https://lh4.ggpht.com/C_B6YXyEaPxC1KYRARAU7xqrMDFf38DC4AKpazbrP4hgfNft1afvdET2Bffk8ZVayXrG=w170", new Date(System.currentTimeMillis()), true));
-        return dummyItems;
     }
 
     /**
@@ -190,11 +174,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public static void testDatabaseReadability(Context context) {
         Log.i(TAG, "testDatabaseReadability()");
         try {
-            Dao<Talk, Integer> talkDao = BioApp.getInstance().getDb(context).getTalkDao();
+            Dao<Conference, Integer> talkDao = BioApp.getInstance().getDb(context).getTalkDao();
             Log.i(TAG, "Getting DAO");
 
-            ArrayList<Talk> talks = (ArrayList<Talk>) talkDao.queryForAll();
-            System.out.println(talks);
+            ArrayList<Conference> conferences = (ArrayList<Conference>) talkDao.queryForAll();
+            System.out.println(conferences);
         } catch (SQLException ex) {
             Log.e(TAG, "[SQLException] Unable to retrieve DAO", ex);
         }
@@ -216,7 +200,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(source, Contact.class, true);
             TableUtils.dropTable(source, Favorite.class, true);
             TableUtils.dropTable(source, Speaker.class, true);
-            TableUtils.dropTable(source, Talk.class, true);
+            TableUtils.dropTable(source, Conference.class, true);
             Log.i(TAG, "onUpgrade(): Dropping Tables");
             // Calling onCreate method to "re-create" the Database
             onCreate(db, source);
@@ -301,7 +285,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /**
-     * Returns the Database Access Object (DAO) for our Talk class.
+     * Returns the Database Access Object (DAO) for our Conference class.
      * Creates or just give the cached value.
      * Note: Using RuntimeExceptionDao will ignore all exceptions.
      *
@@ -343,29 +327,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /**
-     * Returns the Database Access Object (DAO) for our Talk class.
+     * Returns the Database Access Object (DAO) for our Conference class.
      * Creates or just give the cached value.
      *
      * @return mTalkDao
      * @throws SQLException
      */
-    public Dao<Talk, Integer> getTalkDao() throws SQLException{
+    public Dao<Conference, Integer> getTalkDao() throws SQLException{
         if(mTalkDao == null){
-            mTalkDao = getDao(Talk.class);
+            mTalkDao = getDao(Conference.class);
         }
         return mTalkDao;
     }
 
     /**
-     * Returns the Database Access Object (DAO) for our Talk class.
+     * Returns the Database Access Object (DAO) for our Conference class.
      * Creates or just give the cached value.
      * Note: Using RuntimeExceptionDao will ignore all exceptions.
      *
      * @return mUserRuntimeDoo
      */
-    public RuntimeExceptionDao<Talk, Integer> getTalkRuntimeDao(){
+    public RuntimeExceptionDao<Conference, Integer> getTalkRuntimeDao(){
         if(mTalkRuntimeDao == null){
-            mTalkRuntimeDao = getRuntimeExceptionDao(Talk.class);
+            mTalkRuntimeDao = getRuntimeExceptionDao(Conference.class);
         }
         return mTalkRuntimeDao;
     }

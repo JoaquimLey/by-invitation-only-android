@@ -20,15 +20,15 @@ import java.util.ArrayList;
 
 public class Favorite {
 
-    private ArrayList<Talk> mFavorites;
+    private ArrayList<Conference> mFavorites;
 
     // TODO: create method to get the most recent favourite
 
-    public ArrayList<Talk> getFavorites() {
+    public ArrayList<Conference> getFavorites() {
         return mFavorites;
     }
 
-    public void setFavorites(ArrayList<Talk> favorites) {
+    public void setFavorites(ArrayList<Conference> favorites) {
         mFavorites = favorites;
     }
 }

@@ -25,13 +25,13 @@ import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.Firebase;
+import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
-import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
+import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Contact;
-import com.joaquimley.byinvitationonly.model.Talk;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 
 
@@ -59,9 +59,11 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
         mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
 
+        BioApp.createDummyTalkEntries(mTalksChildRef);
+
         init();
 
-        mCustomAdapter = new CustomListAdapter(MainActivity.this, DatabaseHelper.createDummyEntries(MainActivity.this), this);
+        mCustomAdapter = new CustomListAdapter(MainActivity.this, BioApp.createDummyEntries(MainActivity.this), this);
         mList.setAdapter(mCustomAdapter);
 
     }
@@ -92,16 +94,16 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     }
 
     @Override
-    public void onCheckBoxClick(int position, Talk talk) {
-        talk.setBookmarked(!talk.isBookmarked());
-        mCustomAdapter.getItems().set(position, talk);
+    public void onCheckBoxClick(int position, Conference conference) {
+        conference.setBookmarked(!conference.isBookmarked());
+        mCustomAdapter.getItems().set(position, conference);
         mCustomAdapter.notifyDataSetChanged();
-        Toast.makeText(MainActivity.this, "CheckBox Click + Talk: " + position + ", " + talk.getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "CheckBox Click + Conference: " + position + ", " + conference.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create Talk activity with item details (getItemAtPosition(position))
+        // TODO: Create Conference activity with item details (getItemAtPosition(position))
         Toast.makeText(MainActivity.this, "List Click", Toast.LENGTH_SHORT).show();
 
     }

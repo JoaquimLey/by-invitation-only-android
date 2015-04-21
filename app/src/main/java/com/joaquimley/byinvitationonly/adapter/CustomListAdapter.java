@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
-import com.joaquimley.byinvitationonly.model.Talk;
+import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
@@ -40,11 +40,11 @@ public class CustomListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private LayoutInflater mInflater;
-    private List<Talk> mItems;
+    private List<Conference> mItems;
     private final FavoriteChangeListener mListner;
 
 
-    public CustomListAdapter(Activity activity, List<Talk> items, FavoriteChangeListener listner) {
+    public CustomListAdapter(Activity activity, List<Conference> items, FavoriteChangeListener listner) {
         mActivity = activity;
         mItems = items;
         mListner = listner;
@@ -60,7 +60,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Talk getItem(int location) {
+    public Conference getItem(int location) {
         return mItems.get(location);
     }
 
@@ -94,29 +94,29 @@ public class CustomListAdapter extends BaseAdapter {
         }
 
         // Getting artist data for row
-        Talk talk = mItems.get(position);
+        Conference conference = mItems.get(position);
         // Title
-        holder.listTitle.setText(talk.getTitle());
+        holder.listTitle.setText(conference.getTitle());
         // Speaker
-        holder.listSubtitle.setText(talk.getSpeaker().getName());
+        holder.listSubtitle.setText(conference.getSpeaker().getName());
         // Date
-        holder.listDate.setText(CustomUi.getListDay(talk.getDate()));
+        holder.listDate.setText(CustomUi.getListDay(conference.getDate()));
         // Bio
-        holder.listDescription.setText(talk.getDescription());
+        holder.listDescription.setText(conference.getDescription());
         // Image
-        if (talk.getImageUrl() == null || talk.getImageUrl().isEmpty()) {
+        if (conference.getImageUrl() == null || conference.getImageUrl().isEmpty()) {
             Picasso.with(mActivity).load(R.drawable.image_placeholder).into(holder.listImage);
         } else {
-            Picasso.with(mActivity).load(talk.getImageUrl())
+            Picasso.with(mActivity).load(conference.getImageUrl())
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
                     .transform(new ImageCircleTransform())
                     .into(holder.listImage);
         }
 
-        holder.favorite.setTag(talk);
+        holder.favorite.setTag(conference);
         // Favorite
-        if (!talk.isBookmarked()) {
+        if (!conference.isBookmarked()) {
             holder.favorite.setChecked(false);
         } else {
             holder.favorite.setChecked(true);
@@ -125,7 +125,7 @@ public class CustomListAdapter extends BaseAdapter {
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListner.onCheckBoxClick(position, (Talk) v.getTag());
+                mListner.onCheckBoxClick(position, (Conference) v.getTag());
             }
         });
 
@@ -161,11 +161,11 @@ public class CustomListAdapter extends BaseAdapter {
         mInflater = inflater;
     }
 
-    public List<Talk> getItems() {
+    public List<Conference> getItems() {
         return mItems;
     }
 
-    public void setArtistItems(List<Talk> items) {
+    public void setArtistItems(List<Conference> items) {
         mItems = items;
     }
 }
