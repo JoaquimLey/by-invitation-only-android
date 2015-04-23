@@ -38,16 +38,16 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
         CustomUi.simplifyActionBay(getActionBar(), "Edit your details", R.drawable.action_bar_app);
         Bundle data = getIntent().getExtras();
         mUser = data.getParcelable("user");
-        if(mUser == null){
+        if (mUser == null) {
             CustomUi.createAlertDialog(this, "No user!", "There was a error getting user details");
         }
         init();
     }
 
     private void init() {
-        mEtName = ((EditText) findViewById(R.id.et_user_details_name));
-        mEtDescription = ((EditText) findViewById(R.id.et_user_details_description));
-        mEtEmail = ((EditText) findViewById(R.id.et_user_details_email));
+        mEtName = ((EditText) findViewById(R.id.et_edit_user_details_name));
+        mEtEmail = ((EditText) findViewById(R.id.et_edit_user_details_email));
+        mEtDescription = ((EditText) findViewById(R.id.et_edit_user_details_description));
 
         mEtName.setText(mUser.getName());
         mEtEmail.setText(mUser.getEmail());
@@ -81,7 +81,7 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_save:
                 mUser.setName(String.valueOf(mEtName.getText()));
                 mUser.setEmail(String.valueOf(mEtEmail.getText()));

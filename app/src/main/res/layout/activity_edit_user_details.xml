@@ -28,43 +28,43 @@
     android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/et_user_details_name"
+        android:id="@+id/et_edit_user_details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
         android:layout_below="@+id/tv_details_name"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/et_user_details_description" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/tv_details_email"
         android:text="@string/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_user_details_name"
+        android:layout_below="@+id/et_edit_user_details_name"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/et_user_details_description"
+        android:id="@+id/et_edit_user_details_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:layout_below="@+id/tv_details_email"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/et_user_details_email" />
+        android:layout_alignEnd="@+id/et_edit_user_details_name" />
 
     <TextView
         android:id="@+id/tv_details_description"
         android:text="@string/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_user_details_description"
+        android:layout_below="@+id/et_edit_user_details_email"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/et_user_details_email"
+        android:id="@+id/et_edit_user_details_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"

@@ -84,6 +84,9 @@ public class CustomUserListAdapter extends BaseAdapter {
 
         // Getting user data for row
         User user = mItems.get(position);
+        if(user == null){
+            return convertView;
+        }
         // Title
         holder.listName.setText(user.getName());
         // Email

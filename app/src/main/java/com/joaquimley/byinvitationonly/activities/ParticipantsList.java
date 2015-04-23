@@ -51,14 +51,14 @@ public class ParticipantsList extends Activity {
     }
 
     private void init() {
-        ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
-        ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
-        ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
+        ((TextView) findViewById(R.id.tv_participant_name)).setText(mUser.getName());
+        ((TextView) findViewById(R.id.tv_participant_email)).setText(mUser.getEmail());
+        ((TextView) findViewById(R.id.tv_participant_description)).setText(mUser.getDescription());
         Picasso.with(this).load(mUser.getPhotoUrl())
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder_error)
                 .transform(new ImageCircleTransform())
-                .into((ImageView) findViewById(R.id.iv_user_pic));
+                .into((ImageView) findViewById(R.id.iv_participant_pic));
 
         ((ListView) findViewById(R.id.list)).setAdapter(new CustomUserListAdapter(this, mUsersList));
     }

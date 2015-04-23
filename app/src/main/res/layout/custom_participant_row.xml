@@ -32,6 +32,7 @@
         android:id="@+id/tv_participant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="need some dummy text"
         android:layout_toRightOf="@+id/iv_participant_pic"
         android:layout_alignTop="@+id/iv_participant_pic"
         android:textSize="@dimen/title"
@@ -43,6 +44,7 @@
         android:id="@+id/tv_participant_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="need some dummy text"
         android:textSize="@dimen/speaker"
         android:textStyle="bold"
         android:paddingTop="1dp"
@@ -56,8 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/description"
+        android:text="need some dummy text"
         android:layout_below="@+id/tv_participant_email"
-        android:layout_toEndOf="@+id/iv_participant_pic"
-        android:layout_marginTop="13dp" />
+        android:layout_toEndOf="@+id/iv_participant_pic" />
 
 </RelativeLayout>

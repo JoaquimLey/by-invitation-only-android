@@ -62,16 +62,23 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bundle data = getIntent().getExtras();
-        if(data != null){
-            mUser = data.getParcelable("user");
-        } else {
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(savedInstanceState == null){
             mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer",
                     "https://graph.facebook.com/1254180865/picture?type=normal");
+        } else {
+            Bundle data = getIntent().getExtras();
+            if(data != null){
+                mUser = data.getParcelable("user");
+            } else {
+                mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer",
+                        "https://graph.facebook.com/1254180865/picture?type=normal");
+            }
         }
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         init();
+//        BioApp.pushDummyUsersToFirebase(this, mUsersRef, mUser);
 
         // FIXME: Get sessions from CsvFile
 //        Log.i(TAG, "Before size: " + BioApp.getInstance().getSessionList().size());
@@ -80,7 +87,6 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 //        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
 //        Log.i(TAG, "After size: " + BioApp.getInstance().getSessionList().size());
 
-        BioApp.pushDummyUsersToFirebase(this, mUsersRef, mUser);
 //        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.getInstance().getSessionList(), this);
     }
 
@@ -93,7 +99,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         mBtnEdit.setOnClickListener(this);
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
-        changeStatusIcon();
+        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
@@ -185,19 +191,8 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         }
 
         mUser.setVisible(!mUser.isVisible());
-        changeStatusIcon();
+        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
     }
-
-    private void changeStatusIcon() {
-        if(mUser.isVisible()){
-            Toast.makeText(this, getString(R.string.user_visible), Toast.LENGTH_LONG).show();
-            mBtnStatus.setBackgroundResource(R.drawable.ic_status_green);
-            return;
-        }
-        mBtnStatus.setBackgroundResource(R.drawable.ic_status_red);
-        Toast.makeText(this, getString(R.string.user_invisible), Toast.LENGTH_LONG).show();
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -235,5 +230,13 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
     public void setTalksChildRef(Firebase talksChildRef) {
         mSessionsRef = talksChildRef;
+    }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        mUser = user;
     }
 }
