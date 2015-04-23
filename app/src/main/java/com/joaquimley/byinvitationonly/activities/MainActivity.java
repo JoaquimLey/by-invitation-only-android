@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +29,11 @@ import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomListAdapter;
+import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
-import com.joaquimley.byinvitationonly.model.Conference;
-import com.joaquimley.byinvitationonly.model.Contact;
+import com.joaquimley.byinvitationonly.model.Session;
+import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 
 
@@ -40,9 +42,8 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Firebase mContactsChildRef;
-    private Firebase mTalksChildRef;
-    private Firebase mSpeakersRef;
-    private Contact mMyContact;
+    private Firebase mSessionRef;
+    private User mMyUser;
     private ListView mList;
     private SharedPreferences mSharedPreferences;
     private PullRefreshLayout mPullRefreshLayout;
@@ -53,31 +54,38 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // Firebase
-        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
-        mSpeakersRef = FirebaseHelper.getChildRef(firebaseRef, "speakers");
-        mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, "contacts");
-        mTalksChildRef = FirebaseHelper.getChildRef(firebaseRef, "talks");
-
-        BioApp.createDummyTalkEntries(mTalksChildRef);
-
         init();
+        // FIXME:
+        Log.i(TAG, "Before size: " + BioApp.getInstance().getSessionList().size());
+        FileHelper.importSessionDataFromFile(MainActivity.this, BioApp.getInstance().getSessionList(), 1);
+        Log.i(TAG, "After size: " + BioApp.getInstance().getSessionList().size());
 
-        mCustomAdapter = new CustomListAdapter(MainActivity.this, BioApp.createDummyEntries(MainActivity.this), this);
+
+//        Conference conf = FileHelper.importConferenceDataFromFile(this);
+//        Log.i(TAG, "Conference: " + conf.getFullName());
+
+
+        mCustomAdapter = new CustomListAdapter(MainActivity.this, BioApp.getInstance().getSessionList(), this);
         mList.setAdapter(mCustomAdapter);
-
     }
 
     /**
      * Initialize Firebase references, UI elements, listeners
      */
     private void init() {
-        CustomUi.setSimpleActionBar(getActionBar(), R.drawable.action_bar_app);
+        // Firebase
+        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mContactsChildRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_contacts));
+        mSessionRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
+
+        CustomUi.simplifyActionBay(getActionBar(), R.drawable.action_bar_app);
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
+
         mList = (ListView) findViewById(R.id.list);
         mList.setOnItemClickListener(this);
         mList.setItemsCanFocus(true);
+        mList.setAdapter(mCustomAdapter);
     }
 
     @Override
@@ -94,16 +102,16 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     }
 
     @Override
-    public void onCheckBoxClick(int position, Conference conference) {
-        conference.setBookmarked(!conference.isBookmarked());
-        mCustomAdapter.getItems().set(position, conference);
+    public void onCheckBoxClick(int position, Session session) {
+        session.setBookmarked(!session.isBookmarked());
+        mCustomAdapter.getItems().set(position, session);
         mCustomAdapter.notifyDataSetChanged();
-        Toast.makeText(MainActivity.this, "CheckBox Click + Conference: " + position + ", " + conference.getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "CheckBox Click + Session: " + position + ", " + session.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create Conference activity with item details (getItemAtPosition(position))
+        // TODO: Create Session activity with item details (getItemAtPosition(position))
         Toast.makeText(MainActivity.this, "List Click", Toast.LENGTH_SHORT).show();
 
     }
@@ -123,10 +131,10 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     }
 
     public Firebase getTalksChildRef() {
-        return mTalksChildRef;
+        return mSessionRef;
     }
 
     public void setTalksChildRef(Firebase talksChildRef) {
-        mTalksChildRef = talksChildRef;
+        mSessionRef = talksChildRef;
     }
 }

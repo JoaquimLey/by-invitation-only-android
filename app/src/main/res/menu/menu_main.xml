@@ -14,7 +14,7 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_checkin"
-        android:title="@string/action_checkin"
+        android:title="@string/action_check_in"
         android:orderInCategory="98"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_person"/>

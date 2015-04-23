@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
-import com.joaquimley.byinvitationonly.model.Conference;
+import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
@@ -40,14 +40,14 @@ public class CustomListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private LayoutInflater mInflater;
-    private List<Conference> mItems;
-    private final FavoriteChangeListener mListner;
+    private List<Session> mItems;
+    private final FavoriteChangeListener mListener;
 
 
-    public CustomListAdapter(Activity activity, List<Conference> items, FavoriteChangeListener listner) {
+    public CustomListAdapter(Activity activity, List<Session> items, FavoriteChangeListener listener) {
         mActivity = activity;
         mItems = items;
-        mListner = listner;
+        mListener = listener;
         mInflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -60,7 +60,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Conference getItem(int location) {
+    public Session getItem(int location) {
         return mItems.get(location);
     }
 
@@ -73,7 +73,6 @@ public class CustomListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         CustomHolder holder;
-
         if (convertView == null) {
 
             LayoutInflater inflater = mActivity.getLayoutInflater();
@@ -94,29 +93,28 @@ public class CustomListAdapter extends BaseAdapter {
         }
 
         // Getting artist data for row
-        Conference conference = mItems.get(position);
+        Session session = mItems.get(position);
         // Title
-        holder.listTitle.setText(conference.getTitle());
+        holder.listTitle.setText(session.getTitle());
         // Speaker
-        holder.listSubtitle.setText(conference.getSpeaker().getName());
+        holder.listSubtitle.setText(session.getPresenter());
         // Date
-        holder.listDate.setText(CustomUi.getListDay(conference.getDate()));
+        holder.listDate.setText(CustomUi.getSessionListDay(session));
         // Bio
-        holder.listDescription.setText(conference.getDescription());
+        holder.listDescription.setText(session.getAbstract());
         // Image
-        if (conference.getImageUrl() == null || conference.getImageUrl().isEmpty()) {
+        if (session.getImageUrl() == null || session.getImageUrl().isEmpty()) {
             Picasso.with(mActivity).load(R.drawable.image_placeholder).into(holder.listImage);
         } else {
-            Picasso.with(mActivity).load(conference.getImageUrl())
+            Picasso.with(mActivity).load(session.getImageUrl())
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
                     .transform(new ImageCircleTransform())
                     .into(holder.listImage);
         }
-
-        holder.favorite.setTag(conference);
+        holder.favorite.setTag(session);
         // Favorite
-        if (!conference.isBookmarked()) {
+        if (!session.isBookmarked()) {
             holder.favorite.setChecked(false);
         } else {
             holder.favorite.setChecked(true);
@@ -125,7 +123,7 @@ public class CustomListAdapter extends BaseAdapter {
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListner.onCheckBoxClick(position, (Conference) v.getTag());
+                mListener.onCheckBoxClick(position, (Session) v.getTag());
             }
         });
 
@@ -161,11 +159,11 @@ public class CustomListAdapter extends BaseAdapter {
         mInflater = inflater;
     }
 
-    public List<Conference> getItems() {
+    public List<Session> getItems() {
         return mItems;
     }
 
-    public void setArtistItems(List<Conference> items) {
+    public void setArtistItems(List<Session> items) {
         mItems = items;
     }
 }

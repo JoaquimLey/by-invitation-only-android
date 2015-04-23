@@ -12,12 +12,12 @@
 
 package com.joaquimley.byinvitationonly.interfaces;
 
-import com.joaquimley.byinvitationonly.model.Conference;
+import com.joaquimley.byinvitationonly.model.Session;
 
 /**
  * Simple interface to handle checkbox (list) clicks
  */
 
 public interface FavoriteChangeListener {
-    void onCheckBoxClick(int position, Conference conference);
+    void onCheckBoxClick(int position, Session session);
 }

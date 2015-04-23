@@ -20,7 +20,7 @@
     <!-- List Row -->
     <dimen name="title">14sp</dimen>
     <dimen name="speaker">12sp</dimen>
-    <dimen name="date">12dp</dimen>
+    <dimen name="date">12sp</dimen>
     <dimen name="description">11sp</dimen>
 
 </resources>

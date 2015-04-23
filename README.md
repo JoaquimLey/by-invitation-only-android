@@ -6,10 +6,12 @@
 ### Briefing
 Academic project for my Computer Science course. Simple Android app where the users can see all the info related to an event. The app is foucused on the networking aspect of these type of events.
 
-###Used Techonology
+###Used Technology
 * [Firebase](https://www.firebase.com/)
 * [SQLite/ORMLite](http://ormlite.com/)
 * [Robotium Automated Tests](https://code.google.com/p/robotium/)
+
+###Libraries
 
 ###Features
 * Talks Schedule
@@ -42,7 +44,7 @@ Contribution guidelines
 
 Joaquim Ley - <me@joaquimley.com>
 
-### Who do I conference to? ###
+### Who do I session to? ###
 
 Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
 

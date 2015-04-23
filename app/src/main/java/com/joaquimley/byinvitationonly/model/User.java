@@ -13,20 +13,23 @@
 package com.joaquimley.byinvitationonly.model;
 
 /**
- * Model for contact/person
+ * Model for user/participant
  */
-public class Contact {
+
+public class User {
 
     private String mName;
     private String mEmail;
+    private String mPhotoUrl;
 
-    public Contact(){
+    public User(){
         // No args constructor
     }
 
-    public Contact(String name, String email) {
+    public User(String name, String email, String photoUrl) {
         mName = name;
         mEmail = email;
+        mPhotoUrl = photoUrl;
     }
 
     public String getName() {
@@ -45,9 +48,17 @@ public class Contact {
         mEmail = mEmail;
     }
 
+    public String getPhotoUrl() {
+        return mPhotoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        mPhotoUrl = photoUrl;
+    }
+
     @Override
     public String toString() {
-        return "Contact{" +
+        return "User{" +
                 "Name" + mName + '\'' +
                 "Email='" + mEmail + '\'' +
                 '}';

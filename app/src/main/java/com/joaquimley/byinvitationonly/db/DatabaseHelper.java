@@ -21,11 +21,8 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.joaquimley.byinvitationonly.BioApp;
-import com.joaquimley.byinvitationonly.model.Conference;
-import com.joaquimley.byinvitationonly.model.Contact;
-import com.joaquimley.byinvitationonly.model.Favorite;
-import com.joaquimley.byinvitationonly.model.Speaker;
-import com.joaquimley.byinvitationonly.model.Talk;
+import com.joaquimley.byinvitationonly.model.Session;
+import com.joaquimley.byinvitationonly.model.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,21 +39,22 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // DAOs
-    private static Dao<Contact, Integer> mContactDao = null;
-    private static RuntimeExceptionDao<Contact, Integer> mContactRuntimeDao = null;
-    private static Dao<Favorite, Integer> mFavoriteDao = null;
-    private static RuntimeExceptionDao<Favorite, Integer> mFavoriteRuntimeDao = null;
-    private static Dao<Speaker, Integer> mSpeakerDao = null;
-    private static RuntimeExceptionDao<Speaker, Integer> mSpeakerRuntimeDao = null;
-    private static Dao<Conference, Integer> mTalkDao = null;
-    private static RuntimeExceptionDao<Conference, Integer> mTalkRuntimeDao = null;
+    private static Dao<User, Integer> mContactDao = null;
+    private static RuntimeExceptionDao<User, Integer> mContactRuntimeDao = null;
+    //    private static Dao<Favorite, Integer> mFavoriteDao = null;
+//    private static RuntimeExceptionDao<Favorite, Integer> mFavoriteRuntimeDao = null;
+//    private static Dao<Speaker, Integer> mSpeakerDao = null;
+//    private static RuntimeExceptionDao<Speaker, Integer> mSpeakerRuntimeDao = null;
+    private static Dao<Session, Integer> mTalkDao = null;
+    private static RuntimeExceptionDao<Session, Integer> mTalkRuntimeDao = null;
+    private List<Session> sessions;
 
     /**
      * Constructor for DatabaseHelper ORMLite
      *
      * @param context self explanatory
      */
-    public DatabaseHelper(Context context){
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 //        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
     }
@@ -66,7 +64,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * call createTable statements here to create the tables that will store
      * your data.
      *
-     * @param db self explanatory
+     * @param db     self explanatory
      * @param source connection source
      */
     @Override
@@ -84,11 +82,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         try {
             // Add all necessary tables inside this try/catch clause:
-            TableUtils.createTable(source, Contact.class);
-            TableUtils.createTable(source, Favorite.class);
-            TableUtils.createTable(source, Speaker.class);
-            TableUtils.createTable(source, Conference.class);
-        } catch (SQLException ex){
+            TableUtils.createTable(source, User.class);
+//            TableUtils.createTable(source, Favorite.class);
+//            TableUtils.createTable(source, Speaker.class);
+            TableUtils.createTable(source, Session.class);
+        } catch (SQLException ex) {
             Log.e(TAG, "[SQLException] Unable to create database", ex);
             throw new RuntimeException(ex);
         }
@@ -97,69 +95,69 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * Clears table and adds new items from @param
      *
-     * @param contactDao self explanatory
+     * @param contactDao  self explanatory
      * @param newElements self explanatory
      */
-    public void updateContactsTable(Dao<Contact, Integer> contactDao, List<Contact> newElements){
+    public void updateContactsTable(Dao<User, Integer> contactDao, List<User> newElements) {
         try {
-            TableUtils.createTableIfNotExists(getConnectionSource(), Contact.class);
-            TableUtils.clearTable(getConnectionSource(), Contact.class);
-            for(Contact contact : newElements){
-                contactDao.createIfNotExists(contact);
+            TableUtils.createTableIfNotExists(getConnectionSource(), User.class);
+            TableUtils.clearTable(getConnectionSource(), User.class);
+            for (User user : newElements) {
+                contactDao.createIfNotExists(user);
             }
         } catch (SQLException e) {
             Log.e(TAG, "Couldn't update contact table");
         }
     }
 
-    /**
-     * Clears table and adds new items from @param
-     *
-     * @param favoriteDao self explanatory
-     * @param newElements self explanatory
-     */
-    public void updateFavoriteTable(Dao<Favorite, Integer> favoriteDao, List<Favorite> newElements){
-        try {
-            TableUtils.createTableIfNotExists(getConnectionSource(), Favorite.class);
-            TableUtils.clearTable(getConnectionSource(), Favorite.class);
-            for(Favorite favorite : newElements){
-                favoriteDao.createIfNotExists(favorite);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "Couldn't update favorite table");
-        }
-    }
+//    /**
+//     * Clears table and adds new items from @param
+//     *
+//     * @param favoriteDao self explanatory
+//     * @param newElements self explanatory
+//     */
+//    public void updateFavoriteTable(Dao<Favorite, Integer> favoriteDao, List<Favorite> newElements){
+//        try {
+//            TableUtils.createTableIfNotExists(getConnectionSource(), Favorite.class);
+//            TableUtils.clearTable(getConnectionSource(), Favorite.class);
+//            for(Favorite favorite : newElements){
+//                favoriteDao.createIfNotExists(favorite);
+//            }
+//        } catch (SQLException e) {
+//            Log.e(TAG, "Couldn't update favorite table");
+//        }
+//    }
+
+//    /**
+//     * Clears table and adds new items from @param
+//     *
+//     * @param speakerDao  self explanatory
+//     * @param newElements self explanatory
+//     */
+//    public void updateSpeakersTable(Dao<Speaker, Integer> speakerDao, List<Speaker> newElements) {
+//        try {
+//            TableUtils.createTableIfNotExists(getConnectionSource(), Speaker.class);
+//            TableUtils.clearTable(getConnectionSource(), Speaker.class);
+//            for (Speaker speaker : newElements) {
+//                speakerDao.createIfNotExists(speaker);
+//            }
+//        } catch (SQLException e) {
+//            Log.e(TAG, "Couldn't update speaker table");
+//        }
+//    }
 
     /**
      * Clears table and adds new items from @param
      *
-     * @param speakerDao self explanatory
+     * @param talkDao     self explanatory
      * @param newElements self explanatory
      */
-    public void updateSpeakersTable(Dao<Speaker, Integer> speakerDao, List<Speaker> newElements){
+    public void updateSessionsTable(Dao<Session, Integer> talkDao, List<Session> newElements) {
         try {
-            TableUtils.createTableIfNotExists(getConnectionSource(), Speaker.class);
-            TableUtils.clearTable(getConnectionSource(), Speaker.class);
-            for(Speaker speaker : newElements){
-                speakerDao.createIfNotExists(speaker);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "Couldn't update speaker table");
-        }
-    }
-
-    /**
-     * Clears table and adds new items from @param
-     *
-     * @param talkDao self explanatory
-     * @param newElements self explanatory
-     */
-    public void updateTalksTable(Dao<Conference, Integer> talkDao, List<Conference> newElements){
-        try {
-            TableUtils.createTableIfNotExists(getConnectionSource(), Conference.class);
-            TableUtils.clearTable(getConnectionSource(), Conference.class);
-            for(Conference conference : newElements){
-                talkDao.createIfNotExists(conference);
+            TableUtils.createTableIfNotExists(getConnectionSource(), Session.class);
+            TableUtils.clearTable(getConnectionSource(), Session.class);
+            for (Session session : newElements) {
+                talkDao.createIfNotExists(session);
             }
         } catch (SQLException e) {
             Log.e(TAG, "Couldn't update talk table");
@@ -174,11 +172,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public static void testDatabaseReadability(Context context) {
         Log.i(TAG, "testDatabaseReadability()");
         try {
-            Dao<Conference, Integer> talkDao = BioApp.getInstance().getDb(context).getTalkDao();
+            Dao<Session, Integer> talkDao = BioApp.getInstance().getDb(context).getTalkDao();
             Log.i(TAG, "Getting DAO");
 
-            ArrayList<Conference> conferences = (ArrayList<Conference>) talkDao.queryForAll();
-            System.out.println(conferences);
+            ArrayList<Session> sessions = (ArrayList<Session>) talkDao.queryForAll();
+            System.out.println(sessions);
         } catch (SQLException ex) {
             Log.e(TAG, "[SQLException] Unable to retrieve DAO", ex);
         }
@@ -188,7 +186,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * Overrides onUpgrade to overwrite the existing tables in db
      * Increments DataBase Version.
      *
-     * @param db DataBase
+     * @param db         DataBase
      * @param oldVersion self explanatory
      * @param newVersion The new Version of the DataBase (after upgrade)
      * @throws RuntimeException
@@ -197,10 +195,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, ConnectionSource source, int oldVersion, int newVersion) {
 
         try {
-            TableUtils.dropTable(source, Contact.class, true);
-            TableUtils.dropTable(source, Favorite.class, true);
-            TableUtils.dropTable(source, Speaker.class, true);
-            TableUtils.dropTable(source, Conference.class, true);
+            TableUtils.dropTable(source, User.class, true);
+//            TableUtils.dropTable(source, Favorite.class, true);
+//            TableUtils.dropTable(source, Speaker.class, true);
+            TableUtils.dropTable(source, Session.class, true);
             Log.i(TAG, "onUpgrade(): Dropping Tables");
             // Calling onCreate method to "re-create" the Database
             onCreate(db, source);
@@ -221,10 +219,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         mContactRuntimeDao = null;
         mTalkDao = null;
         mTalkRuntimeDao = null;
-        mSpeakerDao = null;
-        mSpeakerRuntimeDao = null;
-        mFavoriteDao = null;
-        mFavoriteRuntimeDao = null;
+//        mSpeakerDao = null;
+//        mSpeakerRuntimeDao = null;
+//        mFavoriteDao = null;
+//        mFavoriteRuntimeDao = null;
         Log.i(TAG, "Closing Database");
     }
 
@@ -240,15 +238,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     //********************************** DAO Factory **********************************//
 
     /**
-     * Returns the Database Access Object (DAO) for our Contact class.
+     * Returns the Database Access Object (DAO) for our User class.
      * Creates or just give the cached value.
      *
      * @return mContactDao
      */
-    public Dao<Contact, Integer> getContactDao() {
-        if(mContactDao == null){
+    public Dao<User, Integer> getContactDao() {
+        if (mContactDao == null) {
             try {
-                mContactDao = getDao(Contact.class);
+                mContactDao = getDao(User.class);
             } catch (SQLException e) {
                 Log.e(TAG, "Couldn't get artistDao");
             }
@@ -257,100 +255,104 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /**
-     * Returns the Database Access Object (DAO) for our Contact class.
+     * Returns the Database Access Object (DAO) for our User class.
      * Creates or just give the cached value.
      * Note: Using RuntimeExceptionDao will ignore all exceptions.
      *
      * @return mContactRuntimeDao
      */
-    public RuntimeExceptionDao<Contact, Integer> getContactRuntimeDao(){
-        if(mContactRuntimeDao == null){
-            mContactRuntimeDao = getRuntimeExceptionDao(Contact.class);
+    public RuntimeExceptionDao<User, Integer> getContactRuntimeDao() {
+        if (mContactRuntimeDao == null) {
+            mContactRuntimeDao = getRuntimeExceptionDao(User.class);
         }
         return mContactRuntimeDao;
     }
 
-    /**
-     * Returns the Database Access Object (DAO) for our Favorite class.
-     * Creates or just give the cached value.
-     *
-     * @return mFavoriteDao
-     * @throws SQLException
-     */
-    public Dao<Favorite, Integer> getFavoriteDao() throws SQLException{
-        if(mFavoriteDao == null){
-            mFavoriteDao = getDao(Favorite.class);
-        }
-        return mFavoriteDao;
-    }
+//    /**
+//     * Returns the Database Access Object (DAO) for our Favorite class.
+//     * Creates or just give the cached value.
+//     *
+//     * @return mFavoriteDao
+//     * @throws SQLException
+//     */
+//    public Dao<Favorite, Integer> getFavoriteDao() throws SQLException{
+//        if(mFavoriteDao == null){
+//            mFavoriteDao = getDao(Favorite.class);
+//        }
+//        return mFavoriteDao;
+//    }
+//
+//    /**
+//     * Returns the Database Access Object (DAO) for our Session class.
+//     * Creates or just give the cached value.
+//     * Note: Using RuntimeExceptionDao will ignore all exceptions.
+//     *
+//     * @return mFavoriteRuntimeDao
+//     */
+//    public RuntimeExceptionDao<Favorite, Integer> getFavoriteRuntimeDao(){
+//        if(mFavoriteRuntimeDao == null){
+//            mFavoriteRuntimeDao = getRuntimeExceptionDao(Favorite.class);
+//        }
+//        return mFavoriteRuntimeDao;
+//    }
+
+//    /**
+//     * Returns the Database Access Object (DAO) for our Speaker class.
+//     * Creates or just give the cached value.
+//     *
+//     * @return mSpeakerDao
+//     * @throws SQLException
+//     */
+//    public Dao<Speaker, Integer> getSpeakerDao() throws SQLException {
+//        if (mSpeakerDao == null) {
+//            mSpeakerDao = getDao(Speaker.class);
+//        }
+//        return mSpeakerDao;
+//    }
+//
+//    /**
+//     * Returns the Database Access Object (DAO) for our Speaker class.
+//     * Creates or just give the cached value.
+//     * Note: Using RuntimeExceptionDao will ignore all exceptions.
+//     *
+//     * @return mSpeakerRuntimeDao
+//     */
+//    public RuntimeExceptionDao<Speaker, Integer> getSpeakereRuntimeDao() {
+//        if (mSpeakerRuntimeDao == null) {
+//            mSpeakerRuntimeDao = getRuntimeExceptionDao(Speaker.class);
+//        }
+//        return mSpeakerRuntimeDao;
+//    }
 
     /**
-     * Returns the Database Access Object (DAO) for our Conference class.
-     * Creates or just give the cached value.
-     * Note: Using RuntimeExceptionDao will ignore all exceptions.
-     *
-     * @return mFavoriteRuntimeDao
-     */
-    public RuntimeExceptionDao<Favorite, Integer> getFavoriteRuntimeDao(){
-        if(mFavoriteRuntimeDao == null){
-            mFavoriteRuntimeDao = getRuntimeExceptionDao(Favorite.class);
-        }
-        return mFavoriteRuntimeDao;
-    }
-
-    /**
-     * Returns the Database Access Object (DAO) for our Speaker class.
-     * Creates or just give the cached value.
-     *
-     * @return mSpeakerDao
-     * @throws SQLException
-     */
-    public Dao<Speaker, Integer> getSpeakerDao() throws SQLException{
-        if(mSpeakerDao == null){
-            mSpeakerDao = getDao(Speaker.class);
-        }
-        return mSpeakerDao;
-    }
-
-    /**
-     * Returns the Database Access Object (DAO) for our Speaker class.
-     * Creates or just give the cached value.
-     * Note: Using RuntimeExceptionDao will ignore all exceptions.
-     *
-     * @return mSpeakerRuntimeDao
-     */
-    public RuntimeExceptionDao<Speaker, Integer> getSpeakereRuntimeDao(){
-        if(mSpeakerRuntimeDao == null){
-            mSpeakerRuntimeDao = getRuntimeExceptionDao(Speaker.class);
-        }
-        return mSpeakerRuntimeDao;
-    }
-
-    /**
-     * Returns the Database Access Object (DAO) for our Conference class.
+     * Returns the Database Access Object (DAO) for our Session class.
      * Creates or just give the cached value.
      *
      * @return mTalkDao
      * @throws SQLException
      */
-    public Dao<Conference, Integer> getTalkDao() throws SQLException{
-        if(mTalkDao == null){
-            mTalkDao = getDao(Conference.class);
+    public Dao<Session, Integer> getTalkDao() throws SQLException {
+        if (mTalkDao == null) {
+            mTalkDao = getDao(Session.class);
         }
         return mTalkDao;
     }
 
     /**
-     * Returns the Database Access Object (DAO) for our Conference class.
+     * Returns the Database Access Object (DAO) for our Session class.
      * Creates or just give the cached value.
      * Note: Using RuntimeExceptionDao will ignore all exceptions.
      *
      * @return mUserRuntimeDoo
      */
-    public RuntimeExceptionDao<Conference, Integer> getTalkRuntimeDao(){
-        if(mTalkRuntimeDao == null){
-            mTalkRuntimeDao = getRuntimeExceptionDao(Conference.class);
+    public RuntimeExceptionDao<Session, Integer> getTalkRuntimeDao() {
+        if (mTalkRuntimeDao == null) {
+            mTalkRuntimeDao = getRuntimeExceptionDao(Session.class);
         }
         return mTalkRuntimeDao;
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
     }
 }

@@ -18,4 +18,5 @@
     <color name="list_row_end_color">#a2acc0</color>
     <color name="list_row_hover_start_color">#bcd2fb</color>
     <color name="list_row_hover_end_color">#808897</color>
+    <color name="list_row_date_color">#a2acc0</color>
 </resources>

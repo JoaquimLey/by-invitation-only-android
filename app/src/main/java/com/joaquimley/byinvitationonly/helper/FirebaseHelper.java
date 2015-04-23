@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
-import com.joaquimley.byinvitationonly.model.Contact;
+import com.joaquimley.byinvitationonly.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,22 +52,22 @@ public class FirebaseHelper {
      * Change user availability on database Im Here/Invisible
      *
      * @param context self explanatory
-     * @param contact self explanatory
+     * @param user self explanatory
      * @param childRef self explanatory
      * @return true if change was successful
      */
-    public static boolean changeAvailabilityState(Context context, Contact contact, Firebase childRef){
+    public static boolean changeAvailabilityState(Context context, User user, Firebase childRef){
         if(!BioApp.isOnline(context)){
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(childRef.child(contact.getEmail()) != null){
-            childRef.child(contact.getEmail()).removeValue();
+        if(childRef.child(user.getEmail()) != null){
+            childRef.child(user.getEmail()).removeValue();
             Toast.makeText(context, context.getString(R.string.user_invisible), Toast.LENGTH_LONG).show();
         } else {
-            Map<String, Contact> contacts = new HashMap<>();
-            contacts.put(contact.getEmail(), contact);
+            Map<String, User> contacts = new HashMap<>();
+            contacts.put(user.getEmail(), user);
             childRef.setValue(contacts);
             Toast.makeText(context, context.getString(R.string.user_visible), Toast.LENGTH_LONG).show();
         }
@@ -75,7 +75,7 @@ public class FirebaseHelper {
     }
 
     /**
-     * Creates a child reference from a root reference
+     * Retrieve or Create a child reference from root reference
      *
      * @param firebaseRef self explanatory
      * @param childName self explanatory

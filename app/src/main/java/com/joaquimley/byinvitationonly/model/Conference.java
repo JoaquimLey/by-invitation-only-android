@@ -12,87 +12,89 @@
 
 package com.joaquimley.byinvitationonly.model;
 
-import java.util.Date;
-
 /**
  * Model for Conference
  */
-
 public class Conference {
 
-    private String mTitle;
-    private Speaker mSpeaker;
-    private String mDescription;
-    private String mImageUrl;
-    private Date mDate;
-    private boolean mIsBookmark;
+    private String mAcronym;
+    private String mFullName;
+    private String mLocation;
+    private String mDates;
+    private String mLogoUrl;
+    private String mWebsite;
+    private String mCallForPapers;
 
-    public Conference(String title, Speaker speaker, String description, String imageUrl, Date date) {
-        mTitle = title;
-        mSpeaker = speaker;
-        mDescription = description;
-        mImageUrl = imageUrl;
-        mDate = date;
-
-        mIsBookmark = false;
+    public Conference() {
+        // No args constructor
     }
 
-   @Override
-    public String toString() {
-        return "Conference{" +
-                "Name" + mTitle + '\'' +
-                "Speaker='" + mSpeaker + '\'' +
-                "Description='" + mDescription + '\'' +
-                "Date='" + mDate + '\'' +
-                "Bookmarked='" + mIsBookmark + '\'' +
-                '}';
+    public Conference(String acronym, String fullName,  String location, String dates, String logoUrl,
+                      String website, String callForPapers) {
+
+        mAcronym = acronym;
+        mFullName = fullName;
+        mLocation = location;
+        mDates = dates;
+        mLogoUrl = logoUrl;
+        mWebsite = website;
+        mCallForPapers = callForPapers;
+
     }
 
-    public String getTitle() {
-        return mTitle;
+    public String getAcronym() {
+        return mAcronym;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
+    public void setAcronym(String acronym) {
+        mAcronym = acronym;
     }
 
-    public Speaker getSpeaker() {
-        return mSpeaker;
+    public String getFullName() {
+        return mFullName;
     }
 
-    public void setSpeaker(Speaker speaker) {
-        mSpeaker = speaker;
+    public void setFullName(String fullName) {
+        mFullName = fullName;
     }
 
-    public String getDescription() {
-        return mDescription;
+    public String getLocation() {
+        return mLocation;
     }
 
-    public void setDescription(String description) {
-        mDescription = description;
+    public void setLocation(String location) {
+        mLocation = location;
     }
 
-    public Date getDate() {
-        return mDate;
+    public String getDates() {
+        return mDates;
     }
 
-    public void setDate(Date date) {
-        mDate = date;
+    public void setDates(String dates) {
+        mDates = dates;
     }
 
-    public String getImageUrl() {
-        return mImageUrl;
+    public String getLogoUrl() {
+        return mLogoUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        mImageUrl = imageUrl;
+    public void setLogoUrl(String logoUrl) {
+        mLogoUrl = logoUrl;
     }
 
-    public boolean isBookmarked() {
-        return mIsBookmark;
+    public String getWebsite() {
+        return mWebsite;
     }
 
-    public void setBookmarked(boolean isBookmarked) {
-        mIsBookmark = isBookmarked;
+    public void setWebsite(String website) {
+        mWebsite = website;
+    }
+
+    public String getCallForPapers() {
+        return mCallForPapers;
+    }
+
+    public void setCallForPapers(String callForPapers) {
+        mCallForPapers = callForPapers;
     }
 }
