@@ -12,24 +12,32 @@
 
 package com.joaquimley.byinvitationonly.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Model for user/participant
  */
 
-public class User {
+public class User implements Parcelable {
 
     private String mName;
     private String mEmail;
+    private String mDescription;
     private String mPhotoUrl;
+    private boolean mIsVisible;
 
     public User(){
         // No args constructor
     }
 
-    public User(String name, String email, String photoUrl) {
+    public User(String name, String email, String description, String photoUrl) {
         mName = name;
         mEmail = email;
+        mDescription = description;
         mPhotoUrl = photoUrl;
+
+        mIsVisible = false;
     }
 
     public String getName() {
@@ -48,6 +56,14 @@ public class User {
         mEmail = mEmail;
     }
 
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+    }
+
     public String getPhotoUrl() {
         return mPhotoUrl;
     }
@@ -56,11 +72,53 @@ public class User {
         mPhotoUrl = photoUrl;
     }
 
+    public boolean isVisible() {
+        return mIsVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        mIsVisible = visible;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "Name" + mName + '\'' +
                 "Email='" + mEmail + '\'' +
+                "Description='" + mDescription + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mName);
+        dest.writeString(this.mEmail);
+        dest.writeString(this.mDescription);
+        dest.writeString(this.mPhotoUrl);
+        dest.writeByte(mIsVisible ? (byte) 1 : (byte) 0);
+    }
+
+    private User(Parcel in) {
+        this.mName = in.readString();
+        this.mEmail = in.readString();
+        this.mDescription = in.readString();
+        this.mPhotoUrl = in.readString();
+        this.mIsVisible = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

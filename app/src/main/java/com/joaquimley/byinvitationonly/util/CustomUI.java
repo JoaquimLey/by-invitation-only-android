@@ -13,6 +13,9 @@
 package com.joaquimley.byinvitationonly.util;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.joaquimley.byinvitationonly.model.Session;
@@ -29,14 +32,15 @@ public class CustomUi {
      * Clears the action bar label and sets a custom icon
      *
      * @param actionBar self explanatory
+     * @param title self explanatory
      * @param iconId self explanatory
      */
-    public static void simplifyActionBay(ActionBar actionBar, int iconId){
+    public static void simplifyActionBay(ActionBar actionBar, String title, int iconId){
         if(actionBar == null){
             Log.e(TAG, "simplifyActionBay(): Action bar is null");
             return;
         }
-        actionBar.setTitle("");
+        actionBar.setTitle(title);
         actionBar.setIcon(iconId);
     }
 
@@ -135,6 +139,26 @@ public class CustomUi {
 //            mActionMenu.close(true);
 //        }
 //    }
+
+    public static void createAlertDialog(final Activity activity, String title, String message){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+
+        // set title
+        alertDialogBuilder.setTitle(title);
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        dialog.cancel();
+                        activity.finish();
+                    }
+                });
+    }
 
     /**
      * Transforms a Date object into a string to be shown on a List

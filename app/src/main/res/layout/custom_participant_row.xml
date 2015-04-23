@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_row_selector"
+    android:padding="0dp" >
+
+    <!-- Image -->
+    <ImageView
+        android:id="@+id/iv_participant_pic"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="Picture" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tv_participant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_participant_pic"
+        android:layout_alignTop="@+id/iv_participant_pic"
+        android:textSize="@dimen/title"
+        android:textStyle="bold"
+        android:paddingBottom="7dp" />
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/tv_participant_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/speaker"
+        android:textStyle="bold"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:layout_below="@+id/tv_participant_name"
+        android:layout_toEndOf="@+id/iv_participant_pic" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tv_participant_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/description"
+        android:layout_below="@+id/tv_participant_email"
+        android:layout_toEndOf="@+id/iv_participant_pic"
+        android:layout_marginTop="13dp" />
+
+</RelativeLayout>

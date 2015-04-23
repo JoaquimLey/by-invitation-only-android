@@ -24,7 +24,7 @@
     <string name="error_no_dialer">Device has no telephony capabilities</string>
     <!-- Firebase -->
     <string name="firebase_url">https://b-i-o.firebaseio.com/</string>
-    <string name="firebase_child_contacts">contacts</string>
+    <string name="firebase_child_users">users</string>
     <string name="firebase_child_sessions">sessions</string>
     <!-- Main Activity -->
     <string name="text_contact">Contact</string>
@@ -43,9 +43,23 @@
     <string name="title_keynote">@string/text_session</string>
     <string name="title_favorite">@string/text_favorite</string>
     <!-- Main Activity -->
-    <string name="current_conferences">Current Conferences</string>
+    <string name="text_welcome_message">Welcome</string>
+    <string name="text_up_coming_sessions">Upcoming sessions</string>
+    <string name="user_invisible">You are INVISIBLE to other participants</string>
+    <string name="user_visible">You are VISIBLE to other participants</string>
+    <string name="error_user_must_be_visible">You must be VISIBLE</string>
     <!-- Participant List -->
-    <string name="user_invisible">You are now INVISIBLE to other participants</string>
-    <string name="user_visible">You are now VISIBLE to other participants</string>
+    <string name="participants_list">Participants List</string>
+    <!-- Edit User Details Activity -->
+    <string name="title_activity_edit_user_details">Edit Your Details</string>
+    <string name="text_name">Name:</string>
+    <string name="email">Email:</string>
+    <string name="description">Description</string>
+    <string name="text_save">Save</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="title_activity_participants_list">Participants List</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="text_participants_list">Participants List</string>
 
 </resources>

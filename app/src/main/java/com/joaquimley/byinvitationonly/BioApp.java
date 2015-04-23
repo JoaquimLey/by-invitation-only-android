@@ -24,6 +24,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
+import com.joaquimley.byinvitationonly.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,22 +140,56 @@ public class BioApp extends Activity {
      * Push sessions into Firebase cloud
      *
      * @param context self explanatory
-     * @param firebaseChildRef self explanatory
-     * @param sessionList      self explanatory
+     * @param sessionsRef self explanatory
      */
-    public static void pushSessionsToFirebase(Context context, Firebase firebaseChildRef,
-                                              ArrayList<Session> sessionList) {
-        if(isOnline(context)){
+    public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
+        if(!isOnline(context)){
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
+
+        ArrayList<Session> sessionList = new ArrayList<>();
+
+//        sessionList.add(new Session("Keynote: " + "On the State of Software Engineering", "Dr. James T. Kirk", ))
+
+
         Map<String, Session> sessions = new HashMap<>();
         sessions.put(sessionList.get(0).getTitle(), sessionList.get(0));
         sessions.put(sessionList.get(1).getTitle(), sessionList.get(1));
         sessions.put(sessionList.get(2).getTitle(), sessionList.get(2));
         sessions.put(sessionList.get(3).getTitle(), sessionList.get(3));
 
-        firebaseChildRef.setValue(sessions);
+        sessionsRef.setValue(sessions);
     }
 
+    public static void pushDummyUsersToFirebase(Context context, Firebase usersRef, User myUser){
+
+        if(!isOnline(context)){
+            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<User> users = createDummyUsers();
+        users.add(myUser);
+
+        Map<String, User> usersMap = new HashMap<>();
+        usersMap.put(users.get(0).getName(), users.get(0));
+        usersMap.put(users.get(1).getName(), users.get(1));
+        usersMap.put(users.get(2).getName(), users.get(2));
+        usersMap.put(users.get(3).getName(), users.get(3));
+        usersMap.put(users.get(4).getName(), users.get(4));
+        usersMap.put(users.get(5).getName(), users.get(5));
+
+        usersRef.setValue(usersMap);
+    }
+
+    public static ArrayList<User> createDummyUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://datingtheweb.com/wp-content/uploads/2014/01/la-belle-emma-watson.jpg"));
+        users.add(new User("Mark Zuckerberg", "mark@facebook.com", "CEO", "https://pbs.twimg.com/profile_images/1146014416/mark-zuckerberg.jpg"));
+        users.add(new User("Tom Anderson", "friend@myspace.com", "Rich has-been", "http://www.techyville.com/wp-content/uploads/2012/12/tom-myspace.jpg"));
+        users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg"));
+        users.add(new User("Legolas", "internet@middleearth.com", "Orc slayer", "http://img3.wikia.nocookie.net/__cb20130604231140/lotr/images/9/95/Legolask.jpg"));
+        return users;
+    }
 }

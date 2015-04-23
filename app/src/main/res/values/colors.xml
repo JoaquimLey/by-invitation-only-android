@@ -12,11 +12,26 @@
   -->
 
 <resources>
+    <color name="action_bar_color">#495f88</color>
     <!-- List -->
     <color name="list_divider">#495f88</color>
-    <color name="list_row_start_color">#bcd2fb</color>
-    <color name="list_row_end_color">#a2acc0</color>
+    <color name="list_row_start_color">#2ca1cc</color>
+    <color name="list_row_end_color">#33B5E5</color>
+    <!--<color name="list_row_start_color">#33B5E5</color>-->
+    <!--<color name="list_row_end_color">#b4d4e0</color>-->
     <color name="list_row_hover_start_color">#bcd2fb</color>
     <color name="list_row_hover_end_color">#808897</color>
     <color name="list_row_date_color">#a2acc0</color>
 </resources>
+
+<!-- Material Design Color Swatches per Google guidelines -->
+    <!--33B5E5-->
+    <!--AA66CC-->
+    <!--99CC00-->
+    <!--FFBB33-->
+    <!--FF4444-->
+    <!--0099CC-->
+    <!--9933CC-->
+    <!--669900-->
+    <!--FF8800-->
+    <!--CC0000-->

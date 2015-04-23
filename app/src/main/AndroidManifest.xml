@@ -9,14 +9,13 @@
   ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
   ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.joaquimley.byinvitationonly" >
 
-    <!--Permissions-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -24,16 +23,21 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name_acronym"
         android:theme="@style/AppTheme" >
-
-        <activity
-            android:name=".activities.MainActivity">
-
+        <activity android:name=".activities.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
+        <activity
+            android:name=".activities.EditUserDetailsActivity"
+            android:label="@string/title_activity_edit_user_details" >
+        </activity>
+        <activity
+            android:name=".activities.ParticipantsList"
+            android:label="@string/title_activity_participants_list" >
+        </activity>
     </application>
+
 </manifest>

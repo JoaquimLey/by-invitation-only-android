@@ -20,12 +20,39 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity;
+import com.joaquimley.byinvitationonly.activities.MainActivity;
+import com.joaquimley.byinvitationonly.activities.ParticipantsList;
+import com.joaquimley.byinvitationonly.model.User;
+
+import java.util.ArrayList;
 
 /**
  * Helper class designed for Intent calls
  */
 
 public class IntentHelper {
+
+    public static Intent mainActivityIntent(Context context, User user) {
+        Intent mainActivityIntent = new Intent(context, MainActivity.class);
+        mainActivityIntent.putExtra("user", user);
+
+        return mainActivityIntent;
+    }
+
+    public static Intent createParticipantsListIntent(Context context, User user, ArrayList<User> users) {
+        Intent participantsListIntent = new Intent(context, ParticipantsList.class);
+        participantsListIntent.putExtra("user", user);
+        participantsListIntent.putExtra("users", users);
+        return participantsListIntent;
+    }
+
+    public static Intent userDetailsActivityIntent(Context context, User user){
+        Intent userDetailsActivityIntent = new Intent(context, EditUserDetailsActivity.class);
+        userDetailsActivityIntent.putExtra("user", user);
+
+        return userDetailsActivityIntent;
+    }
 
     /**
      * Create and start a email/share send Intent

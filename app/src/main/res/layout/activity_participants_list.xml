@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_smaller_horizontal_margin"
+    android:paddingBottom="@dimen/activity_smaller_vertical_margin"
+    android:paddingLeft="@dimen/activity_smaller_horizontal_margin"
+    android:paddingRight="@dimen/activity_smaller_horizontal_margin"
+    tools:context=".MainActivity"
+    android:id="@+id/main_activity"
+    android:weightSum="1">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_row_selector"
+        android:padding="0dp" >
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/iv_user_pic"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:contentDescription="Picture" />
+
+        <!-- Name -->
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_user_pic"
+            android:layout_alignTop="@+id/iv_user_pic"
+            android:textSize="@dimen/title"
+            android:textStyle="bold"
+            android:paddingBottom="7dp" />
+
+        <!-- Email -->
+        <TextView
+            android:id="@+id/tv_user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/speaker"
+            android:textStyle="bold"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:layout_below="@+id/tv_user_name"
+            android:layout_toEndOf="@+id/iv_user_pic" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/tv_user_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/description"
+            android:layout_below="@+id/tv_user_email"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/iv_user_pic" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#0D47A1"
+        android:text="@string/text_participants_list"
+        android:id="@+id/tv_up_coming_sessions" />
+
+    <!--<com.baoyz.widget.PullRefreshLayout-->
+        <!--android:id="@+id/swipeRefreshLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="3dp"-->
+        <!--android:layout_marginBottom="0dp">-->
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawSelectorOnTop="false"/>
+
+    <!--</com.baoyz.widget.PullRefreshLayout>-->
+
+</LinearLayout>

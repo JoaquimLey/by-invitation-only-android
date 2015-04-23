@@ -36,7 +36,7 @@ import java.util.List;
  * Image; Title; Subtitle; Description; Date;
  */
 
-public class CustomListAdapter extends BaseAdapter {
+public class CustomSessionListAdapter extends BaseAdapter {
 
     private Activity mActivity;
     private LayoutInflater mInflater;
@@ -44,7 +44,7 @@ public class CustomListAdapter extends BaseAdapter {
     private final FavoriteChangeListener mListener;
 
 
-    public CustomListAdapter(Activity activity, List<Session> items, FavoriteChangeListener listener) {
+    public CustomSessionListAdapter(Activity activity, List<Session> items, FavoriteChangeListener listener) {
         mActivity = activity;
         mItems = items;
         mListener = listener;

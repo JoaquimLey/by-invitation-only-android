@@ -25,28 +25,22 @@
     android:id="@+id/main_activity"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView" />
-
-    <include layout="@layout/custom_list_row"/>
+    <include layout="@layout/custom_user_row"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView2" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#0D47A1"
+        android:text="@string/text_up_coming_sessions"
+        android:id="@+id/tv_up_coming_sessions" />
 
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="0dp">
+    <!--<com.baoyz.widget.PullRefreshLayout-->
+        <!--android:id="@+id/swipeRefreshLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="3dp"-->
+        <!--android:layout_marginBottom="0dp">-->
 
         <ListView
                 android:id="@+id/list"
@@ -54,6 +48,6 @@
                 android:layout_height="260dp"
                 android:drawSelectorOnTop="false"/>
 
-    </com.baoyz.widget.PullRefreshLayout>
+    <!--</com.baoyz.widget.PullRefreshLayout>-->
 
 </LinearLayout>

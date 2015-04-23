@@ -13,20 +13,18 @@
 package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
-import com.joaquimley.byinvitationonly.model.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -45,7 +43,7 @@ public class FileHelper {
      * @param context  self explanatory
      * @return Buffered stream from file
      */
-    private static BufferedReader getBufferedReaderFromAssets(Context context, String fileName) {
+    public static BufferedReader getBufferedReaderFromAssets(Context context, String fileName) {
 
         InputStream inputStream;
         try {
@@ -91,6 +89,17 @@ public class FileHelper {
         return values;
     }
 
+    private void importConferenceData(BufferedReader br, Firebase fb) throws IOException {
+
+        Firebase db = fb.child("ConferenceData");
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] parts = line.split("\\|");
+            db.child(parts[0]).setValue(parts[1]);
+        }
+
+    }
 
     /**
      * Creates Conference object from "ConferenceData.csv" file in assets folder
@@ -117,81 +126,22 @@ public class FileHelper {
      * @param context   self explanatory
      * @param skipLines number of lines to skip (0 for null)
      */
-    public static void importSessionDataFromFile(Context context, ArrayList<Session> sessions, int skipLines) throws IOException {
+    public static void importSessionDataFromFile(Context context, ArrayList<Session> sessions, int skipLines) {
 
-        BufferedReader br = getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
-        String[] campos = br.readLine().split("\\|");
+        ArrayList<String> values = getValuesFromCsvFile(
+                getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data)),
+                0, '|', skipLines);
 
-        String line;
-        while ((line=br.readLine())!=null) {
+        Log.e(TAG, "skipLines: " + skipLines);
 
-            String[] parts = line.split("\\|",-1); // separar os diversos valores de uma sessão
-            for (int i=0; i<campos.length; i++) {
-                item.child(campos[i]).setValue(parts[i]); // definir o valor de cada campo
-            }
-        }
-
-
-
-
-
-
-
-        BufferedReader reader = getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
-        String row;
-        int rowNumba = 0;
-        try {
-            if (reader != null) {
-                while ((row = reader.readLine()) != null) {
-                    Log.e(TAG, String.valueOf(rowNumba));
-                    String[] values = row.split(context.getString(R.string.csv_split));
-                    Log.e(TAG, "values: " + Arrays.toString(values));
-//                    sessions.add(new Session(values[0], values[1],  values[2], values[3], values[4], values[5], values[6], values[7]));
-                    rowNumba++;
-//                    Log.e(TAG, values[0] + " " + values[1] + " " + values[2]+ " " + values[3]);
-                }
-            }
-        } catch (IOException e) {
+        if (values == null || values.isEmpty()) {
             Log.e(TAG, "No values to import");
+            return;
         }
-
-//        ArrayList<String> values = getValuesFromCsvFile(
-//                getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data)),
-//                                            0, '|', skipLines);
-//
-//        Log.e(TAG, "skipLines: " + skipLines);
-//
-//        if (values == null || values.isEmpty()) {
-//            Log.e(TAG, "No values to import");
-//            return;
-//        }
-//
-//        boolean flag = false;
-//        for(int i = 0; i < values.size(); i++){
-//            Log.e(TAG, "Line: " + skipLines + ", i value = " + i + " values.get(i): " + values.get(i));
-//            if((values.get(i)).equals("")){
-//                flag = true;
-//            }
-//        }
-
-//        if(!flag){
-//            sessions.add(new Session(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4),
-//                    values.get(5), values.get(6), values.get(7)));
-//
-//        }
-//        Log.e(TAG, "Flag value: " + String.valueOf(flag));
+        sessions.add(new Session(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4),
+                values.get(5), values.get(6), values.get(7)));
         // Recursive
         skipLines++;
         importSessionDataFromFile(context, sessions, skipLines);
-    }
-
-    public static User hasPersonalData(SharedPreferences sharedPreferences) {
-        String name = sharedPreferences.getString("chave_nome", "");
-        String email = sharedPreferences.getString("chave_email", "");
-
-        if (!name.isEmpty() && !email.isEmpty()) {
-            return new User(sharedPreferences.getString("chave_nome", ""), sharedPreferences.getString("chave_email", ""), null);
-        }
-        return null;
     }
 }

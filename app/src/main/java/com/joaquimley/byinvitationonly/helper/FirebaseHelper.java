@@ -13,6 +13,7 @@
 package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,8 +22,8 @@ import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 /**
  * Helper class, handles all Firebase communications
@@ -56,22 +57,17 @@ public class FirebaseHelper {
      * @param childRef self explanatory
      * @return true if change was successful
      */
-    public static boolean changeAvailabilityState(Context context, User user, Firebase childRef){
+    public static void changeAvailabilityState(Context context, User user, Firebase childRef, Firebase.CompletionListener listener){
+
+        if(user == null){
+            Log.e(TAG, "User is null");
+            return;
+        }
         if(!BioApp.isOnline(context)){
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
-            return false;
+            return;
         }
-
-        if(childRef.child(user.getEmail()) != null){
-            childRef.child(user.getEmail()).removeValue();
-            Toast.makeText(context, context.getString(R.string.user_invisible), Toast.LENGTH_LONG).show();
-        } else {
-            Map<String, User> contacts = new HashMap<>();
-            contacts.put(user.getEmail(), user);
-            childRef.setValue(contacts);
-            Toast.makeText(context, context.getString(R.string.user_visible), Toast.LENGTH_LONG).show();
-        }
-        return true;
+        childRef.child(user.getName()).child("visible").setValue(!user.isVisible(), listener);
     }
 
     /**
@@ -89,4 +85,39 @@ public class FirebaseHelper {
         return firebaseRef.child(childName);
     }
 
+    public static void exportSessions(Context context, Firebase firebaseChildRef) {
+
+        BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
+        if (bufferedReader == null) {
+            Log.e(TAG, "exportSessions(): File not found");
+            return;
+        }
+
+        String[] values;
+        try {
+            values = bufferedReader.readLine().split(context.getString(R.string.csv_split));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                Firebase item = firebaseChildRef.push();
+
+                String[] parts = line.split("\\|", -1);
+                for (int i = 0; i < values.length; i++) {
+                    item.child(values[i]).setValue(parts[i]);
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Couldn't get bufferedReader");
+            e.printStackTrace();
+        }
+    }
+
+    public static User hasPersonalData(SharedPreferences sharedPreferences) {
+        String name = sharedPreferences.getString("chave_nome", "");
+        String email = sharedPreferences.getString("chave_email", "");
+
+        if (!name.isEmpty() && !email.isEmpty()) {
+//            return new User(sharedPreferences.getString("chave_nome", ""), sharedPreferences.getString("chave_email", ""), null);
+        }
+        return null;
+    }
 }
