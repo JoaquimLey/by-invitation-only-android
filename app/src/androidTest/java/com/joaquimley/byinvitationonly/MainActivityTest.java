@@ -12,6 +12,7 @@
 
 package com.joaquimley.byinvitationonly;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -61,11 +62,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo = new Solo(getInstrumentation());
         mActivity = getActivity();
         mUser = mActivity.getUser();
-
-        mEditTestUserName = (EditText) mActivity.findViewById(R.id.et_edit_user_details_name);
-        mEditTestUserEmail = (EditText) mActivity.findViewById(R.id.et_edit_user_details_email);
-        mEditTestUserDescription = (EditText) mActivity.findViewById(R.id.et_edit_user_details_description);
-
     }
 
     /**
@@ -92,10 +88,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     /**
      * Initialisation of UI components
      */
-    public void init() {
-        mBtnStatus = (ImageButton) mActivity.findViewById(R.id.ib_user_edit);
-        mBtnEditUser = (ImageButton) mActivity.findViewById(R.id.ib_user_status);
-        mParticipantsListActivity = (Button) mActivity.findViewById(R.id.ic_menu_group);
+    public void init(Activity activity) {
+        mEditTestUserName = (EditText) activity.findViewById(R.id.et_edit_user_details_name);
+        mEditTestUserEmail = (EditText) activity.findViewById(R.id.et_edit_user_details_email);
+        mEditTestUserDescription = (EditText) activity.findViewById(R.id.et_edit_user_details_description);
     }
 
     // --------------------------------------- Tests  --------------------------------------- //
@@ -157,7 +153,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     /**
      * Tests if the is user is ABLE to see other participants while visible
      */
-    @SmallTest
+    @MediumTest
     public void test06_UserDetailsEdited() {
         String newName = "new name";
         String newEmail = "new@email.com";
@@ -165,6 +161,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         solo.clickOnImageButton(0);
         assertTrue(solo.waitForActivity(EditUserDetailsActivity.class));
+        init(solo.getCurrentActivity());
         // Name
         solo.clearEditText(mEditTestUserName);
         solo.typeText(mEditTestUserName, newName);
@@ -175,9 +172,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clearEditText(mEditTestUserDescription);
         solo.typeText(mEditTestUserDescription, newDescription);
 
-        solo.clickOnButton(R.id.btn_save);
-        solo.waitForActivity(MainActivity.class);
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+
+        solo.clickOnText(solo.getString(R.string.text_save));
+        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
+
+        mUser = ((MainActivity) solo.getCurrentActivity()).getUser();
 
         assertTrue(mUser.getName().equals(newName));
         assertTrue(mUser.getEmail().equals(newEmail));

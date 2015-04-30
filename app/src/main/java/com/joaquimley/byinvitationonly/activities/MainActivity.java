@@ -62,32 +62,18 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle data = getIntent().getExtras();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if(savedInstanceState == null){
+        if(data != null && data.getParcelable("user") != null){
+            mUser = data.getParcelable("user");
+        } else {
             mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer",
                     "https://graph.facebook.com/1254180865/picture?type=normal");
-        } else {
-            Bundle data = getIntent().getExtras();
-            if(data != null){
-                mUser = data.getParcelable("user");
-            } else {
-                mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer",
-                        "https://graph.facebook.com/1254180865/picture?type=normal");
-            }
         }
+
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         init();
-//        BioApp.pushDummyUsersToFirebase(this, mUsersRef, mUser);
-
-        // FIXME: Get sessions from CsvFile
-//        Log.i(TAG, "Before size: " + BioApp.getInstance().getSessionList().size());
-//        FileHelper.importSessionDataFromFile(MainActivity.this, BioApp.getInstance().getSessionList(), 1);
-//        FirebaseHelper.exportSessions(MainActivity.this, mSessionsRef);
-//        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
-//        Log.i(TAG, "After size: " + BioApp.getInstance().getSessionList().size());
-
-//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.getInstance().getSessionList(), this);
     }
 
     /**
@@ -122,6 +108,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         mList = (ListView) findViewById(R.id.list);
         mList.setOnItemClickListener(this);
         mList.setItemsCanFocus(true);
+//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.c)
         mList.setAdapter(mCustomAdapter);
     }
 

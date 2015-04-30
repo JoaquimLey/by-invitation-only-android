@@ -61,5 +61,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="text_participants_list">Participants List</string>
+    <string name="text_edit_details">Edit your public details:</string>
 
 </resources>

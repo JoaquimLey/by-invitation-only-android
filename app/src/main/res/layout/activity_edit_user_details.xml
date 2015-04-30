@@ -22,14 +22,25 @@
     tools:context="com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity">
 
     <TextView
+        android:id="@+id/tv_edit_details"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="#0D47A1"
+    android:text="@string/text_edit_details"  />
+
+    <TextView
     android:id="@+id/tv_details_name"
+    android:layout_marginTop="5dp"
     android:text="@string/text_name"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tv_edit_details"
+    android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/et_edit_user_details_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
@@ -47,13 +58,12 @@
 
     <EditText
         android:id="@+id/et_edit_user_details_email"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:layout_below="@+id/tv_details_email"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/et_edit_user_details_name" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/tv_details_description"
@@ -65,9 +75,9 @@
 
     <EditText
         android:id="@+id/et_edit_user_details_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:ems="10"
         android:layout_below="@+id/tv_details_description"
         android:layout_alignParentStart="true"
@@ -82,6 +92,7 @@
         android:paddingRight="30dp"
         android:paddingTop="5dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         fancy:borderColor="#838383"
         fancy:borderWidth="1dp"
         fancy:defaultColor="@color/action_bar_color"
@@ -89,7 +100,7 @@
         fancy:radius="30dp"
         fancy:text="@string/text_save"
         fancy:textColor="#FFFFFF"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/et_edit_user_details_description"
         android:layout_alignParentStart="true" />
 
     <mehdi.sakout.fancybuttons.FancyButton
@@ -110,7 +121,6 @@
         fancy:textColor="#FFFFFF"
         android:layout_alignTop="@+id/btn_save"
         android:layout_alignParentEnd="true" />
-
 
 
 </RelativeLayout>

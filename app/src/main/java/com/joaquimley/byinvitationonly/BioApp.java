@@ -185,10 +185,17 @@ public class BioApp extends Activity {
 
     public static ArrayList<User> createDummyUsers() {
         ArrayList<User> users = new ArrayList<>();
-        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg"));
+//        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg"));
         users.add(new User("Mark Zuckerberg", "mark@facebook.com", "CEO", "https://pbs.twimg.com/profile_images/1146014416/mark-zuckerberg.jpg"));
         users.add(new User("Tom Anderson", "friend@myspace.com", "Rich has-been", "http://www.techyville.com/wp-content/uploads/2012/12/tom-myspace.jpg"));
         users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg"));
         return users;
+    }
+
+    public static ArrayList<Session> createDummySessions(){
+        ArrayList<Session> sessions = new ArrayList<>();
+//
+//        sessions.add(new Session("title 1", "Presenter 1", "Abstrac Abstrac Abstrac Abstrac", "Room 1", 1))
+        return sessions;
     }
 }

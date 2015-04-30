@@ -52,8 +52,8 @@ public class User implements Parcelable {
         return mEmail;
     }
 
-    public void setEmail(String mEmail) {
-        mEmail = mEmail;
+    public void setEmail(String email) {
+        mEmail = email;
     }
 
     public String getDescription() {

@@ -35,9 +35,13 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_details);
-        CustomUi.simplifyActionBay(getActionBar(), "Edit your details", R.drawable.action_bar_app);
+        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+
+        mUser = null;
         Bundle data = getIntent().getExtras();
-        mUser = data.getParcelable("user");
+        if(data != null && data.getParcelable("user") != null){
+            mUser = data.getParcelable("user");
+        }
         if (mUser == null) {
             CustomUi.createAlertDialog(this, "No user!", "There was a error getting user details");
         }
@@ -50,7 +54,7 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
         mEtDescription = ((EditText) findViewById(R.id.et_edit_user_details_description));
 
         mEtName.setText(mUser.getName());
-        mEtEmail.setText(mUser.getEmail());
+        mEtEmail.setText(String.valueOf(mUser.getEmail()));
         mEtDescription.setText(mUser.getDescription());
 
         (findViewById(R.id.btn_save)).setOnClickListener(this);
@@ -59,24 +63,14 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_user_details, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @Override
