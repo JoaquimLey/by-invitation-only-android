@@ -42,12 +42,14 @@ public class BioApp extends Activity {
     protected static DatabaseHelper sDatabase = null;
     protected static ArrayList<Session> sSessionsList = null;
     protected static Conference sConference = null;
+    protected static String sCurrentUserId = null;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         sInstance = this;
         sDatabase = null;
+        sCurrentUserId = "";
     }
 
     @Override
@@ -69,6 +71,17 @@ public class BioApp extends Activity {
             sInstance = new BioApp();
         }
         return sInstance;
+    }
+
+    public static String getCurrentUserId(){
+        if(sCurrentUserId == null){
+            return "";
+        }
+        return sCurrentUserId;
+    }
+
+    public  static void setCurrentUserId(String currentUserId){
+        sCurrentUserId = currentUserId;
     }
 
     public ArrayList<Session> getSessionList() {
@@ -103,9 +116,8 @@ public class BioApp extends Activity {
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             return cm.getActiveNetworkInfo().isConnectedOrConnecting();
-
         } catch (Exception e) {
-            Log.e(TAG, "Unable to fetch device connection status", e);
+            Log.e(TAG, "isOnline(): Unable to fetch device connection status", e);
             return false;
         }
     }
@@ -196,7 +208,6 @@ public class BioApp extends Activity {
 
     public static ArrayList<Session> createDummySessions(){
         ArrayList<Session> sessions = new ArrayList<>();
-//
 //        sessions.add(new Session("title 1", "Presenter 1", "Abstrac Abstrac Abstrac Abstrac", "Room 1", 1))
         return sessions;
     }

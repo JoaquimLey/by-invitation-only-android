@@ -15,7 +15,6 @@ package com.joaquimley.byinvitationonly.helper;
 import android.content.Context;
 import android.util.Log;
 
-import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
@@ -87,18 +86,6 @@ public class FileHelper {
             return null;
         }
         return values;
-    }
-
-    private void importConferenceData(BufferedReader br, Firebase fb) throws IOException {
-
-        Firebase db = fb.child("ConferenceData");
-
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split("\\|");
-            db.child(parts[0]).setValue(parts[1]);
-        }
-
     }
 
     /**

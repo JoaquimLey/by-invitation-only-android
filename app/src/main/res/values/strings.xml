@@ -62,5 +62,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="text_participants_list">Participants List</string>
     <string name="text_edit_details">Edit your public details:</string>
+    <string name="error_user_null">Current user is null</string>
+    <string name="error_user_edit_available">You must be invisible to edit your information</string>
 
 </resources>

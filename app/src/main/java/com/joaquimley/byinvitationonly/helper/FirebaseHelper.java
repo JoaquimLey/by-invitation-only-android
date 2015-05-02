@@ -17,7 +17,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.User;
@@ -32,8 +35,9 @@ import java.io.IOException;
 public class FirebaseHelper {
 
     private static final String TAG = FirebaseHelper.class.getSimpleName();
+    private static boolean mValueExists;
 
-    private FirebaseHelper(){
+    private FirebaseHelper() {
         // No args constructor, prevent instantiating
     }
 
@@ -43,7 +47,7 @@ public class FirebaseHelper {
      * @param context self explanatory
      * @return firebase reference
      */
-    public static Firebase initiateFirebase(Context context){
+    public static Firebase initiateFirebase(Context context) {
         Firebase.setAndroidContext(context);
         return new Firebase(context.getString(R.string.firebase_url));
     }
@@ -52,33 +56,63 @@ public class FirebaseHelper {
     /**
      * Change user availability on database Im Here/Invisible
      *
-     * @param context self explanatory
-     * @param user self explanatory
-     * @param childRef self explanatory
-     * @return true if change was successful
+     * @param context  self explanatory
+     * @param user     self explanatory
+     * @param usersRef self explanatory
+     * @param listener handle callback response
      */
-    public static void changeAvailabilityState(Context context, User user, Firebase childRef, Firebase.CompletionListener listener){
+    public static void changeAvailabilityState(Context context, User user, Firebase usersRef, Firebase.CompletionListener listener) {
 
-        if(user == null){
-            Log.e(TAG, "User is null");
+        if (user == null) {
+            Log.e(TAG, context.getString(R.string.error_user_null));
             return;
         }
-        if(!BioApp.isOnline(context)){
+
+        if (!BioApp.isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
             return;
         }
-        childRef.child(user.getName()).child("visible").setValue(!user.isVisible(), listener);
+
+        Firebase newUserRef = usersRef.push();
+        if (isValueOnRef(usersRef, BioApp.getCurrentUserId())) {
+            usersRef.child(BioApp.getCurrentUserId()).removeValue(listener);
+            BioApp.setCurrentUserId("");
+        } else {
+            BioApp.setCurrentUserId(newUserRef.getKey());
+            newUserRef.setValue(user, listener);
+        }
+    }
+
+    /**
+     * Query firebaseRef for a child value passed by @param value, sets mValueExists GLOBAL_VAR
+     *
+     * @param firebaseRef self explanatory
+     * @param value       to be compared on ref
+     */
+    public static boolean isValueOnRef(final Firebase firebaseRef, String value) {
+
+        firebaseRef.child(value).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                mValueExists = snapshot.getValue() != null;
+            }
+
+            @Override
+            public void onCancelled(FirebaseError arg0) {
+            }
+        });
+        return mValueExists;
     }
 
     /**
      * Retrieve or Create a child reference from root reference
      *
      * @param firebaseRef self explanatory
-     * @param childName self explanatory
+     * @param childName   self explanatory
      * @return Firebase child reference
      */
     public static Firebase getChildRef(Firebase firebaseRef, String childName) {
-        if(firebaseRef == null){
+        if (firebaseRef == null) {
             Log.e(TAG, "Firebase Reference is null");
             return null;
         }
@@ -89,7 +123,7 @@ public class FirebaseHelper {
 
         BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
         if (bufferedReader == null) {
-            Log.e(TAG, "exportSessions(): File not found");
+            Log.e(TAG, "exportSessions(): Csv file not found");
             return;
         }
 
@@ -106,7 +140,7 @@ public class FirebaseHelper {
                 }
             }
         } catch (IOException e) {
-            Log.e(TAG, "Couldn't get bufferedReader");
+            Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
             e.printStackTrace();
         }
     }

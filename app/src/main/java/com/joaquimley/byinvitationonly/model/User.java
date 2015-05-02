@@ -21,6 +21,7 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
+    private String mId;
     private String mName;
     private String mEmail;
     private String mDescription;
@@ -80,6 +81,15 @@ public class User implements Parcelable {
         mIsVisible = visible;
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
+
+
     @Override
     public String toString() {
         return "User{" +
@@ -88,7 +98,6 @@ public class User implements Parcelable {
                 "Description='" + mDescription + '\'' +
                 '}';
     }
-
 
     @Override
     public int describeContents() {

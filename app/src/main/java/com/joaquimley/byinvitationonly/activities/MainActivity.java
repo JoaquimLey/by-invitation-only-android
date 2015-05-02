@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,9 +48,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
     private Firebase mUsersRef;
     private Firebase mSessionsRef;
-    private ListView mList;
     private ImageButton mBtnStatus;
-    private ImageButton mBtnEdit;
     private SharedPreferences mSharedPreferences;
     private PullRefreshLayout mPullRefreshLayout;
 
@@ -62,35 +61,52 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bundle data = getIntent().getExtras();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        Bundle data = getIntent().getExtras();
         if(data != null && data.getParcelable("user") != null){
             mUser = data.getParcelable("user");
         } else {
             mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer \nGraphic Designer",
                     "https://graph.facebook.com/1254180865/picture?type=normal");
         }
-
-        BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         init();
+        BioApp.pushDummyUsersToFirebase(this, mUsersRef, mUser);
     }
 
     /**
      * Initialize Firebase references, UI elements, listeners
      */
     private void init() {
-        CustomUi.simplifyActionBay(getActionBar(), "",  R.drawable.action_bar_app);
-        mBtnEdit = (ImageButton) findViewById(R.id.ib_user_edit);
-        mBtnEdit.setOnClickListener(this);
-        mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
-        mBtnStatus.setOnClickListener(this);
-        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
         mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
-        // Profile
+
+        loadProfile();
+        BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
+        CustomUi.simplifyActionBay(getActionBar(), "",  R.drawable.action_bar_app);
+        ImageButton mBtnEdit = (ImageButton) findViewById(R.id.ib_user_edit);
+        mBtnEdit.setOnClickListener(this);
+        mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
+        mBtnStatus.setOnClickListener(this);
+        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
+        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(BioApp.getInstance().getConference().getAcronym()
+                + " - " + getString(R.string.text_up_coming_sessions));
+        // List
+        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mPullRefreshLayout.setOnRefreshListener(this);
+        ListView mList = (ListView) findViewById(R.id.list);
+        mList.setOnItemClickListener(this);
+        mList.setItemsCanFocus(true);
+//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.c)
+        mList.setAdapter(mCustomAdapter);
+    }
+
+    /**
+     * Updates header info with current user
+     */
+    private void loadProfile() {
         ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
         ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
         ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
@@ -99,24 +115,6 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
                 .error(R.drawable.image_placeholder_error)
                 .transform(new ImageCircleTransform())
                 .into((ImageView) findViewById(R.id.iv_user_pic));
-
-        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(BioApp.getInstance().getConference().getAcronym()
-                + " - " + getString(R.string.text_up_coming_sessions));
-        // List
-//        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-//        mPullRefreshLayout.setOnRefreshListener(this);
-        mList = (ListView) findViewById(R.id.list);
-        mList.setOnItemClickListener(this);
-        mList.setItemsCanFocus(true);
-//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.c)
-        mList.setAdapter(mCustomAdapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
@@ -125,21 +123,21 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         switch (item.getItemId()) {
             case R.id.ic_menu_group:
                 if(mUser == null){
-                    Toast.makeText(this, "Current user is null", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_user_null), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
                 if(!mUser.isVisible()){
-                    Toast.makeText(this, getString(R.string.error_user_must_be_visible), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.error_user_must_be_visible), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
                 if(!BioApp.isOnline(this)){
-                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-
                 startActivity(IntentHelper.createParticipantsListIntent(this, mUser, BioApp.createDummyUsers()));
+                return true;
 
             case R.id.ic_menu_favorite:
                 //TODO: Show favorites activity
@@ -152,6 +150,13 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
 //    @Override
@@ -171,36 +176,39 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
 
     @Override
-    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-        if(firebaseError != null){
-            Toast.makeText(this, "Error contacting server", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        mUser.setVisible(!mUser.isVisible());
-        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ib_user_edit:
-                if(!BioApp.isOnline(this)){
-                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
+                if(mUser.isVisible()){
+                    Toast.makeText(this, getString(R.string.error_user_edit_available), Toast.LENGTH_LONG).show();
                     return;
                 }
                 startActivity(IntentHelper.userDetailsActivityIntent(this, mUser));
                 break;
+
             case R.id.ib_user_status:
                 FirebaseHelper.changeAvailabilityState(this, mUser, mUsersRef, this);
                 break;
+
             default:
         }
     }
 
     @Override
+    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        if(firebaseError != null){
+            Toast.makeText(this, "Error contacting server: " + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mUser.setVisible(!mUser.isVisible());
+        mUser.setId(BioApp.getCurrentUserId());
+        Log.w(TAG, "User id: " + mUser.getId());
+        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
+    }
+
+    @Override
     public void onRefresh() {
-        // TODO: See what type of list is and update according
+        // TODO: Query server and populate list
     }
 
     public Firebase getContactsChildRef() {
