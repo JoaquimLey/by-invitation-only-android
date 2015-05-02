@@ -68,7 +68,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         if(data != null && data.getParcelable("user") != null){
             mUser = data.getParcelable("user");
         } else {
-            mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer",
+            mUser = new User("Joaquim Ley", "me@joaquimley.com", "Android Developer \nGraphic Designer",
                     "https://graph.facebook.com/1254180865/picture?type=normal");
         }
 

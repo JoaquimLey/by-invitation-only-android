@@ -14,6 +14,7 @@ package com.joaquimley.byinvitationonly.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class CustomUserListAdapter extends BaseAdapter {
 
+    private static final String TAG = CustomUserListAdapter.class.getSimpleName();
     private Activity mActivity;
     private LayoutInflater mInflater;
     private List<User> mItems;
@@ -85,6 +87,7 @@ public class CustomUserListAdapter extends BaseAdapter {
         // Getting user data for row
         User user = mItems.get(position);
         if(user == null){
+            Log.e(TAG, "user is null");
             return convertView;
         }
         // Title
@@ -107,7 +110,7 @@ public class CustomUserListAdapter extends BaseAdapter {
     }
 
     /**
-     * Private view holder class
+     * Private holder class
      */
     private static class CustomHolder {
         ImageView listPhoto;
@@ -115,7 +118,6 @@ public class CustomUserListAdapter extends BaseAdapter {
         TextView listEmail;
         TextView listDescription;
     }
-
 
     public Activity getActivity() {
         return mActivity;

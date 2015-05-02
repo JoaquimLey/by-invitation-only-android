@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Helper class to parsing values from .CSV files (Talks/Sessions)
+ * Helper class to parsing and editing/saving values from/to .CSV files
  */
 
 public class FileHelper {

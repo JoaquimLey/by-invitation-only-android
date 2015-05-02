@@ -172,7 +172,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clearEditText(mEditTestUserDescription);
         solo.typeText(mEditTestUserDescription, newDescription);
 
-
         solo.clickOnText(solo.getString(R.string.text_save));
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
 

@@ -185,7 +185,9 @@ public class BioApp extends Activity {
 
     public static ArrayList<User> createDummyUsers() {
         ArrayList<User> users = new ArrayList<>();
-//        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg"));
+        users.add(new User("Evan Spiegel", "e.spiegel@snapchat.com", "CEO", "http://static5.businessinsider.com/image/539b5f6eeab8ea0266b8bbce-480/snapchat-evan-spiegel.jpg"));
+        users.add(new User("Travis Cordell", "travis@uber.com", "Entrepreneur", "https://s3.amazonaws.com/chicago_ideas_production/portraits/medium/61.jpg?1326134159"));
+        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg"));
         users.add(new User("Mark Zuckerberg", "mark@facebook.com", "CEO", "https://pbs.twimg.com/profile_images/1146014416/mark-zuckerberg.jpg"));
         users.add(new User("Tom Anderson", "friend@myspace.com", "Rich has-been", "http://www.techyville.com/wp-content/uploads/2012/12/tom-myspace.jpg"));
         users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg"));

@@ -40,7 +40,7 @@ public class ParticipantsList extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_participants_list);
 
-        CustomUi.simplifyActionBay(getActionBar(), " Participants List", R.drawable.action_bar_app);
+        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         Bundle data = getIntent().getExtras();
         mUser = data.getParcelable("user");
         mUsersList = BioApp.createDummyUsers();
