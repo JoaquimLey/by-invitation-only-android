@@ -73,14 +73,14 @@ public class BioApp extends Activity {
         return sInstance;
     }
 
-    public static String getCurrentUserId(){
-        if(sCurrentUserId == null){
+    public static String getCurrentUserId() {
+        if (sCurrentUserId == null) {
             return "";
         }
         return sCurrentUserId;
     }
 
-    public  static void setCurrentUserId(String currentUserId){
+    public static void setCurrentUserId(String currentUserId) {
         sCurrentUserId = currentUserId;
     }
 
@@ -149,13 +149,50 @@ public class BioApp extends Activity {
     // TODO: Delete or comment before pushing to production, ensure there are 0 (ZERO) usages
 
     /**
+     * Pushes dummy users to firebase ref
+     *
+     * @param context  self-explanatory
+     * @param usersRef self-explanatory
+     */
+    public static void pushDummyUsersToFirebase(Context context, Firebase usersRef) {
+        if (!isOnline(context)) {
+            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<User> users = createDummyUsers();
+        Firebase newUserRef;
+        for (User user : users) {
+            newUserRef = usersRef.push();
+            user.setId(newUserRef.getKey());
+            newUserRef.setValue(user);
+        }
+    }
+
+    /**
+     * Creates dummy User objects
+     *
+     * @return list with dummy users
+     */
+    public static ArrayList<User> createDummyUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("Evan Spiegel", "e.spiegel@snapchat.com", "CEO", "http://static5.businessinsider.com/image/539b5f6eeab8ea0266b8bbce-480/snapchat-evan-spiegel.jpg", true));
+        users.add(new User("Travis Cordell", "travis@uber.com", "Entrepreneur", "https://s3.amazonaws.com/chicago_ideas_production/portraits/medium/61.jpg?1326134159", true));
+        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg", true));
+        users.add(new User("Mark Zuckerberg", "mark@facebook.com", "CEO", "https://pbs.twimg.com/profile_images/1146014416/mark-zuckerberg.jpg", true));
+        users.add(new User("Tom Anderson", "friend@myspace.com", "Rich has-been", "http://www.techyville.com/wp-content/uploads/2012/12/tom-myspace.jpg", true));
+        users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg", true));
+        return users;
+    }
+
+    /**
      * Push sessions into Firebase cloud
      *
-     * @param context self explanatory
+     * @param context     self explanatory
      * @param sessionsRef self explanatory
      */
     public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
-        if(!isOnline(context)){
+        if (!isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -174,39 +211,7 @@ public class BioApp extends Activity {
         sessionsRef.setValue(sessions);
     }
 
-    public static void pushDummyUsersToFirebase(Context context, Firebase usersRef, User myUser){
-
-        if(!isOnline(context)){
-            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ArrayList<User> users = createDummyUsers();
-        users.add(myUser);
-
-        Map<String, User> usersMap = new HashMap<>();
-        usersMap.put(users.get(0).getName(), users.get(0));
-        usersMap.put(users.get(1).getName(), users.get(1));
-        usersMap.put(users.get(2).getName(), users.get(2));
-        usersMap.put(users.get(3).getName(), users.get(3));
-        usersMap.put(users.get(4).getName(), users.get(4));
-        usersMap.put(users.get(5).getName(), users.get(5));
-
-        usersRef.setValue(usersMap);
-    }
-
-    public static ArrayList<User> createDummyUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User("Evan Spiegel", "e.spiegel@snapchat.com", "CEO", "http://static5.businessinsider.com/image/539b5f6eeab8ea0266b8bbce-480/snapchat-evan-spiegel.jpg"));
-        users.add(new User("Travis Cordell", "travis@uber.com", "Entrepreneur", "https://s3.amazonaws.com/chicago_ideas_production/portraits/medium/61.jpg?1326134159"));
-        users.add(new User("Emma Watson", "emma@hogwarts.com", "Actor/Director", "http://static.dnaindia.com/sites/default/files/2015/02/23/313017-emma-watson-2.jpg"));
-        users.add(new User("Mark Zuckerberg", "mark@facebook.com", "CEO", "https://pbs.twimg.com/profile_images/1146014416/mark-zuckerberg.jpg"));
-        users.add(new User("Tom Anderson", "friend@myspace.com", "Rich has-been", "http://www.techyville.com/wp-content/uploads/2012/12/tom-myspace.jpg"));
-        users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg"));
-        return users;
-    }
-
-    public static ArrayList<Session> createDummySessions(){
+    public static ArrayList<Session> createDummySessions() {
         ArrayList<Session> sessions = new ArrayList<>();
 //        sessions.add(new Session("title 1", "Presenter 1", "Abstrac Abstrac Abstrac Abstrac", "Room 1", 1))
         return sessions;

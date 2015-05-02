@@ -12,7 +12,6 @@
 
 package com.joaquimley.byinvitationonly.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,10 +32,19 @@ import java.util.ArrayList;
 
 public class IntentHelper {
 
-    public static Intent mainActivityIntent(Context context, User user) {
-        Intent mainActivityIntent = new Intent(context, MainActivity.class);
-        mainActivityIntent.putExtra("user", user);
+    /**
+     * @param context self explanatory
+     * @param user    user to be edited if applied
+     * @return the intent
+     */
 
+    /**
+     * @param context self explanatory
+     * @return the intent
+     */
+    public static Intent createMainActivityIntent(Context context) {
+        Intent mainActivityIntent = new Intent(context, MainActivity.class);
+//        createMainActivityIntent.putExtra("user", user);
         return mainActivityIntent;
     }
 
@@ -47,35 +55,36 @@ public class IntentHelper {
         return participantsListIntent;
     }
 
-    public static Intent userDetailsActivityIntent(Context context, User user){
+    public static Intent createUserDetailsActivityIntent(Context context, User user) {
         Intent userDetailsActivityIntent = new Intent(context, EditUserDetailsActivity.class);
-        userDetailsActivityIntent.putExtra("user", user);
-
+        if (user != null) {
+            userDetailsActivityIntent.putExtra("user", user);
+        }
         return userDetailsActivityIntent;
     }
 
     /**
      * Create and start a email/share send Intent
      *
-     * @param activity self explanatory
+     * @param context          self explanatory
      * @param destinationEmail self explanatory
      */
-    public static void createEmailIntent(Activity activity, String destinationEmail){
+    public static void createEmailIntent(Context context, String destinationEmail) {
         Intent emailIntent;
         emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{destinationEmail});
-        activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.text_contact)));
+        context.startActivity(emailIntent);
     }
 
     /**
      * Create and start a dialer Intent with given number by @param
      *
-     * @param context self explanatory
+     * @param context     self explanatory
      * @param phoneNumber self explanatory
      */
-    public static void createDialerIntent(Context context, String phoneNumber){
-        if(!isTelephonyEnabled(context)){
+    public static void createDialerIntent(Context context, String phoneNumber) {
+        if (!isTelephonyEnabled(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_dialer), Toast.LENGTH_LONG).show();
             return;
         }
@@ -91,7 +100,7 @@ public class IntentHelper {
      * @param context self explanatory
      * @return boolean value with capability
      */
-    private static boolean isTelephonyEnabled(Context context){
+    private static boolean isTelephonyEnabled(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null && tm.getSimState() == TelephonyManager.SIM_STATE_READY;
     }

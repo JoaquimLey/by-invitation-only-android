@@ -28,17 +28,27 @@ public class User implements Parcelable {
     private String mPhotoUrl;
     private boolean mIsVisible;
 
-    public User(){
+    public User() {
         // No args constructor
     }
 
-    public User(String name, String email, String description, String photoUrl) {
+
+    public User(String name, String email, String description, String photoUrl, boolean isVisible) {
         mName = name;
         mEmail = email;
         mDescription = description;
         mPhotoUrl = photoUrl;
 
-        mIsVisible = false;
+        mIsVisible = isVisible;
+    }
+
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 
     public String getName() {
@@ -81,18 +91,10 @@ public class User implements Parcelable {
         mIsVisible = visible;
     }
 
-    public String getId() {
-        return mId;
-    }
-
-    public void setId(String id) {
-        mId = id;
-    }
-
-
     @Override
     public String toString() {
         return "User{" +
+                "Id" + mId + '\'' +
                 "Name" + mName + '\'' +
                 "Email='" + mEmail + '\'' +
                 "Description='" + mDescription + '\'' +
@@ -119,6 +121,7 @@ public class User implements Parcelable {
         this.mDescription = in.readString();
         this.mPhotoUrl = in.readString();
         this.mIsVisible = in.readByte() != 0;
+        this.mId = in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

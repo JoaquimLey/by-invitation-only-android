@@ -23,10 +23,13 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class, handles all Firebase communications
@@ -36,6 +39,8 @@ public class FirebaseHelper {
 
     private static final String TAG = FirebaseHelper.class.getSimpleName();
     private static boolean mValueExists;
+    private static ArrayList<User> visibleUsers;
+    private static Object sessions;
 
     private FirebaseHelper() {
         // No args constructor, prevent instantiating
@@ -153,5 +158,19 @@ public class FirebaseHelper {
 //            return new User(sharedPreferences.getString("chave_nome", ""), sharedPreferences.getString("chave_email", ""), null);
         }
         return null;
+    }
+
+    /**
+     * Queries the server for all the visible participants
+     *
+     * @return arrayList with user objects
+     */
+    public static ArrayList<User> getVisibleUsers() {
+        return visibleUsers;
+    }
+
+    public static List<Session> getSessions() {
+        ArrayList<Session> sessions = new ArrayList<>();
+        return sessions;
     }
 }

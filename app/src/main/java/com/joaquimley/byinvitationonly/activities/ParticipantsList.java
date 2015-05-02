@@ -20,9 +20,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
+import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
@@ -43,7 +43,7 @@ public class ParticipantsList extends Activity {
         CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         Bundle data = getIntent().getExtras();
         mUser = data.getParcelable("user");
-        mUsersList = BioApp.createDummyUsers();
+        mUsersList = FirebaseHelper.getVisibleUsers();
         if(mUser == null || mUsersList == null){
             CustomUi.createAlertDialog(this, "Error", "There was a error getting user(s) details");
         }

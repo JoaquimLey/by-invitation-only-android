@@ -13,13 +13,17 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.IntentHelper;
@@ -30,6 +34,7 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     private EditText mEtName;
     private EditText mEtEmail;
     private EditText mEtDescription;
+    private EditText mEtPhotoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +44,8 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
 
         mUser = null;
         Bundle data = getIntent().getExtras();
-        if(data != null && data.getParcelable("user") != null){
+        if (data != null && data.getParcelable("user") != null) {
             mUser = data.getParcelable("user");
-        }
-        if (mUser == null) {
-            CustomUi.createAlertDialog(this, "No user!", "There was a error getting user details");
         }
         init();
     }
@@ -52,10 +54,14 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
         mEtName = ((EditText) findViewById(R.id.et_edit_user_details_name));
         mEtEmail = ((EditText) findViewById(R.id.et_edit_user_details_email));
         mEtDescription = ((EditText) findViewById(R.id.et_edit_user_details_description));
+        mEtPhotoUrl = ((EditText) findViewById(R.id.et_edit_user_details_photo_url));
 
-        mEtName.setText(mUser.getName());
-        mEtEmail.setText(String.valueOf(mUser.getEmail()));
-        mEtDescription.setText(mUser.getDescription());
+        if (mUser != null) {
+            mEtName.setText(mUser.getName());
+            mEtEmail.setText(String.valueOf(mUser.getEmail()));
+            mEtDescription.setText(mUser.getDescription());
+            mEtPhotoUrl.setText(mUser.getPhotoUrl());
+        }
 
         (findViewById(R.id.btn_save)).setOnClickListener(this);
         (findViewById(R.id.btn_cancel)).setOnClickListener(this);
@@ -77,12 +83,37 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_save:
-                mUser.setName(String.valueOf(mEtName.getText()));
-                mUser.setEmail(String.valueOf(mEtEmail.getText()));
-                mUser.setDescription(String.valueOf(mEtDescription.getText()));
 
-                startActivity(IntentHelper.mainActivityIntent(this, mUser));
+                if (mEtName.getText().length() < 0 || mEtEmail.getText().length() < 0 || mEtDescription.getText().length() < 0) {
+                    Toast.makeText(this, "Please insert all mandatory details", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (mUser == null) {
+
+                    String photoUrl = String.valueOf(mEtPhotoUrl.getText());
+                    if (photoUrl.length() > 4) {
+                        mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
+                                String.valueOf(mEtDescription.getText()), String.valueOf(mEtPhotoUrl.getText()), false);
+
+                    } else {
+                        mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
+                                String.valueOf(mEtDescription.getText()), "", false);
+                    }
+
+                } else {
+                    mUser.setName(String.valueOf(mEtName.getText()));
+                    mUser.setEmail(String.valueOf(mEtEmail.getText()));
+                    mUser.setDescription(String.valueOf(mEtDescription.getText()));
+                    mUser.setPhotoUrl(String.valueOf(mEtPhotoUrl.getText()));
+                }
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                FileHelper.updateUserFromSharedPreferences(this, sharedPreferences, mUser);
+//                startActivity(IntentHelper.createMainActivityIntent(this, mUser));
+                startActivity(IntentHelper.createMainActivityIntent(this));
                 break;
+
             case R.id.btn_cancel:
                 finish();
         }

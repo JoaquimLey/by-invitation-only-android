@@ -13,11 +13,14 @@
 package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
+import com.joaquimley.byinvitationonly.model.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,6 +89,61 @@ public class FileHelper {
             return null;
         }
         return values;
+    }
+
+    /**
+     * Parses data User from sharedPreferences
+     *
+     * @param context           self explanatory
+     * @param sharedPreferences self explanatory
+     * @return user object if data is available
+     */
+    public static User getUserFromSharedPreferences(Context context, SharedPreferences sharedPreferences) {
+
+        // Using userName value to assert there is info on sharedPreferences
+        String userName = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_name), "");
+        if (userName == null || userName.isEmpty()) {
+            Toast.makeText(context, "Please create your user profile", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        String userId = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_id), "");
+        String userEmail = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_email), "");
+        String userDescription = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_description), "");
+        String userPhotoUrl = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_url), "");
+        boolean userLastAvailabilityStatus = sharedPreferences.getBoolean(context.getString(R.string.shared_pref_user_details_availability), false);
+
+        User user;
+        if (!userName.isEmpty() && !userEmail.isEmpty() && !userDescription.isEmpty() && !userPhotoUrl.isEmpty()) {
+
+            user = new User(userName, userEmail, userDescription, userPhotoUrl, userLastAvailabilityStatus);
+            if (!userId.isEmpty()) {
+                user.setId(userId);
+            }
+            return user;
+        }
+        user = new User(userName, userEmail, userDescription, "", userLastAvailabilityStatus);
+
+        if (!userId.isEmpty()) {
+            user.setId(userId);
+        }
+        return user;
+    }
+
+    /**
+     * Updates data on sharedPreferences with User @param information
+     *
+     * @param context           self explanatory
+     * @param sharedPreferences self explanatory
+     * @param user              which will be used to fill the details
+     */
+    public static void updateUserFromSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), user.getName()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_url), user.getPhotoUrl()).apply();
+        sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
     }
 
     /**
