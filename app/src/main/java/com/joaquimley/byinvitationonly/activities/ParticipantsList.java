@@ -12,10 +12,10 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -33,11 +33,11 @@ import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
+import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.squareup.picasso.Picasso;
 
-public class ParticipantsList extends Activity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
+public class ParticipantsList extends ActionBarActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
 
     private static final String TAG = ParticipantsList.class.getSimpleName();
     private SharedPreferences mSharedPreferences;
@@ -57,7 +57,7 @@ public class ParticipantsList extends Activity implements PullRefreshLayout.OnRe
 
         User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
         if (user == null) {
-            CustomUi.createAlertDialog(this, "Error", "There was a error retering your user data");
+            UiUxUtils.createAlertDialog(this, "Error", "There was a error retering your user data");
             finish();
         }
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
@@ -65,7 +65,7 @@ public class ParticipantsList extends Activity implements PullRefreshLayout.OnRe
         if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
         }
-        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         ((TextView) findViewById(R.id.tv_participant_name)).setText(user.getName());
         ((TextView) findViewById(R.id.tv_participant_email)).setText(user.getEmail());
         ((TextView) findViewById(R.id.tv_participant_description)).setText(user.getDescription());
@@ -120,7 +120,9 @@ public class ParticipantsList extends Activity implements PullRefreshLayout.OnRe
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class));
+        if(BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class))){
+            mCustomUserListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.CustomUi;
+import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.IntentHelper;
 import com.squareup.picasso.Picasso;
@@ -48,7 +48,7 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_details);
-        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
 
         mUser = null;
         Bundle data = getIntent().getExtras();

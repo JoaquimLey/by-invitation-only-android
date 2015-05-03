@@ -25,6 +25,10 @@
     android:id="@+id/main_activity"
     android:weightSum="1">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
     <include layout="@layout/custom_user_row"/>
 
     <TextView

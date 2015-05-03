@@ -12,10 +12,10 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,15 +39,15 @@ import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.IntentHelper;
+import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
 
-public class MainActivity extends Activity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
+public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
         Firebase.CompletionListener, View.OnClickListener, ChildEventListener, FavoriteChangeListener {
 
     public static final int USER_DETAILS_CHANGED = 0;
@@ -61,14 +61,19 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     private CustomSessionListAdapter mCustomAdapter;
     private User mUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setActionBarIcon(R.drawable.ic_ab_drawer);
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         init();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_main;
     }
 
     /**
@@ -86,10 +91,10 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         // UI
         loadProfileInfo();
         findViewById(R.id.ib_user_edit).setOnClickListener(this);
-        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
-        CustomUi.changeStatusIcon(mUser, mBtnStatus);
+        UiUxUtils.changeStatusIcon(mUser, mBtnStatus);
         ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(BioApp.getInstance().getConference().getAcronym()
                 + " - " + getString(R.string.text_up_coming_sessions));
         // List
@@ -152,7 +157,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
                     return false;
                 }
 
-                if (!BioApp.isOnline(this)) {
+                if (!UiUxUtils.isOnline(this)) {
                     Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -236,7 +241,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
             Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
-        CustomUi.changeStatusIcon(mUser, mBtnStatus);
+        UiUxUtils.changeStatusIcon(mUser, mBtnStatus);
         FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
     }
 

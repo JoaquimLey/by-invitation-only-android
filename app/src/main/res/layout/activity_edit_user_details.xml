@@ -21,26 +21,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity">
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:id="@+id/tv_edit_details"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_edit_details"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#0D47A1" />
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false" />
 
     <ImageView
         android:id="@+id/iv_profile_picture"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_below="@+id/tv_edit_details"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentStart="false"
         android:contentDescription="@string/text_user_profile_picture"
         android:layout_alignParentEnd="false"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:id="@+id/tv_details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +50,7 @@
         android:layout_marginTop="5dp"
         android:text="@string/text_name" />
 
-    <EditText
+    <android.support.v7.internal.widget.TintEditText
         android:id="@+id/et_edit_user_details_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,10 +58,10 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_details_name"
         android:ems="10"
-        android:inputType="textPersonName|textCapWords"/>
+        android:inputType="textPersonName|textCapWords" />
 
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:id="@+id/tv_details_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +69,7 @@
         android:layout_below="@+id/et_edit_user_details_name"
         android:text="@string/email" />
 
-    <EditText
+    <android.support.v7.internal.widget.TintEditText
         android:id="@+id/et_edit_user_details_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
         android:ems="10"
         android:inputType="textEmailAddress" />
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:id="@+id/tv_details_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
         android:layout_below="@+id/et_edit_user_details_email"
         android:text="@string/description" />
 
-    <EditText
+    <android.support.v7.internal.widget.TintEditText
         android:id="@+id/et_edit_user_details_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,15 +103,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:paddingTop="5dp"
-        fancy:borderColor="#838383"
-        fancy:borderWidth="1dp"
-        fancy:defaultColor="@color/action_bar_color"
-        fancy:focusColor="@color/list_row_hover_start_color"
+        android:paddingTop="10dp"
+        fancy:defaultColor="@color/primary_app_color"
+        fancy:focusColor="@color/accent_material_light"
         fancy:radius="30dp"
         fancy:text="@string/text_save"
         fancy:textColor="#FFFFFF"
@@ -123,15 +122,12 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/btn_save"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
         android:paddingBottom="10dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:paddingTop="5dp"
-        fancy:borderColor="#838383"
-        fancy:borderWidth="1dp"
-        fancy:defaultColor="@color/action_bar_color"
-        fancy:focusColor="@color/list_row_hover_start_color"
+        android:paddingTop="10dp"
+        fancy:defaultColor="@color/primary_app_color"
+        fancy:focusColor="@color/accent_material_light"
         fancy:radius="30dp"
         fancy:text="@string/text_cancel"
         fancy:textColor="#FFFFFF" />
