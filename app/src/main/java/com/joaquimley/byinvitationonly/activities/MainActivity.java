@@ -14,7 +14,6 @@ package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -113,9 +112,8 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
             ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
             ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
 
-            if (!mUser.getPhotoBase64().isEmpty()) {
-                Uri uri = Uri.parse(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""));
-                Picasso.with(this).load(uri)
+            if (!mUser.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null) {
+                Picasso.with(this).load(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
                         .placeholder(R.drawable.image_placeholder)
                         .error(R.drawable.image_placeholder_error)
                         .transform(new ImageCircleTransform())
@@ -158,7 +156,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
                     Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                startActivity(IntentHelper.createParticipantsListIntent(this, mUser, BioApp.createDummyUsers()));
+                startActivity(IntentHelper.createParticipantsListIntent(this));
                 return true;
 
             case R.id.ic_menu_favorite:

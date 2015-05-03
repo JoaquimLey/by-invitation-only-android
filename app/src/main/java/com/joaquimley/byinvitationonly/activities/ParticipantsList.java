@@ -13,14 +13,20 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
@@ -32,35 +38,46 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ParticipantsList extends Activity {
+public class ParticipantsList extends Activity implements ChildEventListener {
 
-    private User mUser;
+    private static final String TAG = ParticipantsList.class.getSimpleName();
     private ArrayList<User> mUsersList;
+    private SharedPreferences mSharedPreferences;
+    private Firebase mUsersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_participants_list);
-
-        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
-        mUser = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
-        mUsersList = FirebaseHelper.getVisibleUsers();
-        if(mUser == null){
-            CustomUi.createAlertDialog(this, "Error", "There was a error retering your user data");
-            finish();
-        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         init();
     }
 
     private void init() {
-        ((TextView) findViewById(R.id.tv_participant_name)).setText(mUser.getName());
-        ((TextView) findViewById(R.id.tv_participant_email)).setText(mUser.getEmail());
-        ((TextView) findViewById(R.id.tv_participant_description)).setText(mUser.getDescription());
-        Picasso.with(this).load(mUser.getPhotoBase64())
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder_error)
-                .transform(new ImageCircleTransform())
-                .into((ImageView) findViewById(R.id.iv_participant_pic));
+
+        User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
+        if(user == null){
+            CustomUi.createAlertDialog(this, "Error", "There was a error retering your user data");
+            finish();
+        }
+        mUsersList = new ArrayList<>();
+        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
+        if(mUsersRef != null){
+            mUsersRef.addChildEventListener(this);
+        }
+
+        CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+        ((TextView) findViewById(R.id.tv_participant_name)).setText(user.getName());
+        ((TextView) findViewById(R.id.tv_participant_email)).setText(user.getEmail());
+        ((TextView) findViewById(R.id.tv_participant_description)).setText(user.getDescription());
+        if(!user.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null){
+            Picasso.with(this).load(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder_error)
+                    .transform(new ImageCircleTransform())
+                    .into((ImageView) findViewById(R.id.iv_participant_pic));
+        }
 
         ((ListView) findViewById(R.id.list)).setAdapter(new CustomUserListAdapter(this, mUsersList));
     }
@@ -84,5 +101,31 @@ public class ParticipantsList extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        mUsersList.add((User) dataSnapshot.getValue());
+        Log.w(TAG, "Users list: " + mUsersList);
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
     }
 }

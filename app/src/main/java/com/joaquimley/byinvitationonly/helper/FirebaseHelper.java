@@ -16,6 +16,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -25,8 +26,6 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,39 +120,13 @@ public class FirebaseHelper {
         });
     }
 
-    public static void exportSessions(Context context, Firebase firebaseChildRef) {
-
-        BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
-        if (bufferedReader == null) {
-            Log.e(TAG, "exportSessions(): Csv file not found");
-            return;
-        }
-
-        String[] values;
-        try {
-            values = bufferedReader.readLine().split(context.getString(R.string.csv_split));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                Firebase item = firebaseChildRef.push();
-
-                String[] parts = line.split("\\|", -1);
-                for (int i = 0; i < values.length; i++) {
-                    item.child(values[i]).setValue(parts[i]);
-                }
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Queries the server for all the visible participants
      *
      * @return arrayList with user objects
      */
-    public static ArrayList<User> getVisibleUsers() {
-        return visibleUsers;
+    public static void getVisibleUsers(Firebase usersRef, ChildEventListener listener) {
+        usersRef.addChildEventListener(listener);
     }
 
     public static List<Session> getSessions() {

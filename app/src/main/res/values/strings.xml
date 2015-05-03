@@ -67,6 +67,7 @@
     <string name="text_save">Save</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_user_profile_picture">User profile picture</string>
+    <string name="error_create_user_profile_first">Please create your profile first</string>
 
 
 </resources>

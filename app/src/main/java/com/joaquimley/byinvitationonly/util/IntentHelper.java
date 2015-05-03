@@ -24,8 +24,6 @@ import com.joaquimley.byinvitationonly.activities.MainActivity;
 import com.joaquimley.byinvitationonly.activities.ParticipantsList;
 import com.joaquimley.byinvitationonly.model.User;
 
-import java.util.ArrayList;
-
 /**
  * Helper class designed for Intent calls
  */
@@ -33,26 +31,18 @@ import java.util.ArrayList;
 public class IntentHelper {
 
     /**
-     * @param context self explanatory
-     * @param user    user to be edited if applied
-     * @return the intent
-     */
-
-    /**
+     * Creates a MainActivity intent
+     *
      * @param context self explanatory
      * @return the intent
      */
     public static Intent createMainActivityIntent(Context context) {
-        Intent mainActivityIntent = new Intent(context, MainActivity.class);
-//        createMainActivityIntent.putExtra("user", user);
-        return mainActivityIntent;
+        return new Intent(context, MainActivity.class);
     }
 
-    public static Intent createParticipantsListIntent(Context context, User user, ArrayList<User> users) {
-        Intent participantsListIntent = new Intent(context, ParticipantsList.class);
-        participantsListIntent.putExtra("user", user);
-        participantsListIntent.putExtra("users", users);
-        return participantsListIntent;
+    public static Intent createParticipantsListIntent(Context context) {
+        //        participantsListIntent.putExtra("usersRef", usersRef);
+        return new Intent(context, ParticipantsList.class);
     }
 
     public static Intent createUserDetailsActivityIntent(Context context, User user) {
@@ -63,11 +53,10 @@ public class IntentHelper {
         return userDetailsActivityIntent;
     }
 
-    public static Intent createPickImageIntent(Context context){
+    public static Intent createPickImageIntent(Context context) {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK);
         galleryIntent.setType("image/*");
         return galleryIntent;
-//        context.startActivity(galleryIntent);
     }
 
     /**

@@ -23,6 +23,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
@@ -49,6 +50,61 @@ import au.com.bytecode.opencsv.CSVReader;
 public class FileHelper {
 
     private static final String TAG = FileHelper.class.getSimpleName();
+
+    /**
+     * Parses data User from sharedPreferences
+     *
+     * @param context           self explanatory
+     * @param sharedPreferences self explanatory
+     * @return user object if data is available
+     */
+    public static User getUserFromSharedPreferences(Context context, SharedPreferences sharedPreferences) {
+
+        // Using userName value to assert there is user data on sharedPreferences
+        String userName = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_name), "");
+        if (userName == null || userName.isEmpty()) {
+            Toast.makeText(context, context.getString(R.string.error_create_user_profile_first), Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        String userId = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_id), "");
+        String userEmail = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_email), "");
+        String userDescription = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_description), "");
+        String userPhotoBase64String = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_base64), "");
+        boolean userLastAvailabilityStatus = sharedPreferences.getBoolean(context.getString(R.string.shared_pref_user_details_availability), false);
+
+        User user;
+        if (!userName.isEmpty() && !userEmail.isEmpty() && !userDescription.isEmpty() && !userPhotoBase64String.isEmpty()) {
+
+            user = new User(userName, userEmail, userDescription, userPhotoBase64String, userLastAvailabilityStatus);
+            if (!userId.isEmpty()) {
+                user.setId(userId);
+            }
+            return user;
+        }
+        user = new User(userName, userEmail, userDescription, "", userLastAvailabilityStatus);
+
+        if (!userId.isEmpty()) {
+            user.setId(userId);
+        }
+        return user;
+    }
+
+    /**
+     * Updates data on sharedPreferences with User @param information
+     *
+     * @param context           self explanatory
+     * @param sharedPreferences self explanatory
+     * @param user              which will be used to fill the details
+     */
+    public static void updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), BioApp.getCurrentUserId()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64()).apply();
+        sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
+    }
 
     /**
      * Returns a bufferedReader from assets for the specific @param file
@@ -104,61 +160,6 @@ public class FileHelper {
     }
 
     /**
-     * Parses data User from sharedPreferences
-     *
-     * @param context           self explanatory
-     * @param sharedPreferences self explanatory
-     * @return user object if data is available
-     */
-    public static User getUserFromSharedPreferences(Context context, SharedPreferences sharedPreferences) {
-
-        // Using userName value to assert there is info on sharedPreferences
-        String userName = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_name), "");
-        if (userName == null || userName.isEmpty()) {
-            Toast.makeText(context, "Please create your user profile", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        String userId = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_id), "");
-        String userEmail = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_email), "");
-        String userDescription = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_description), "");
-        String userPhotoBase64String = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_base64), "");
-        boolean userLastAvailabilityStatus = sharedPreferences.getBoolean(context.getString(R.string.shared_pref_user_details_availability), false);
-
-        User user;
-        if (!userName.isEmpty() && !userEmail.isEmpty() && !userDescription.isEmpty() && !userPhotoBase64String.isEmpty()) {
-
-            user = new User(userName, userEmail, userDescription, userPhotoBase64String, userLastAvailabilityStatus);
-            if (!userId.isEmpty()) {
-                user.setId(userId);
-            }
-            return user;
-        }
-        user = new User(userName, userEmail, userDescription, "", userLastAvailabilityStatus);
-
-        if (!userId.isEmpty()) {
-            user.setId(userId);
-        }
-        return user;
-    }
-
-    /**
-     * Updates data on sharedPreferences with User @param information
-     *
-     * @param context           self explanatory
-     * @param sharedPreferences self explanatory
-     * @param user              which will be used to fill the details
-     */
-    public static void updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), BioApp.getCurrentUserId()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64()).apply();
-        sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
-    }
-
-    /**
      * Creates Conference object from "ConferenceData.csv" file in assets folder
      *
      * @param context self explanatory
@@ -202,6 +203,31 @@ public class FileHelper {
         importSessionDataFromFile(context, sessions, skipLines);
     }
 
+    public static void exportSessions(Context context, Firebase firebaseChildRef) {
+
+        BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
+        if (bufferedReader == null) {
+            Log.e(TAG, "exportSessions(): Csv file not found");
+            return;
+        }
+
+        String[] values;
+        try {
+            values = bufferedReader.readLine().split(context.getString(R.string.csv_split));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                Firebase item = firebaseChildRef.push();
+
+                String[] parts = line.split("\\|", -1);
+                for (int i = 0; i < values.length; i++) {
+                    item.child(values[i]).setValue(parts[i]);
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Decodes base64String given by @param and returns the image file's uri
@@ -212,7 +238,7 @@ public class FileHelper {
     public static File decodeBase64ToFile(Context context, String base64String) {
 
         byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
-        Bitmap bitmap =  BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, byteArrayOutputStream);
