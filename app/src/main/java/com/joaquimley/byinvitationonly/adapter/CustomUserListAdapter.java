@@ -73,16 +73,14 @@ public class CustomUserListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = mActivity.getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_participant_row, parent, false);
-
-            holder = new CustomHolder();
-            holder.listName = (TextView) convertView.findViewById(R.id.tv_participant_name);
-            holder.listEmail = (TextView) convertView.findViewById(R.id.tv_participant_email);
-            holder.listDescription = (TextView) convertView.findViewById(R.id.tv_participant_description);
-            holder.listPhoto = (ImageView) convertView.findViewById(R.id.iv_participant_pic);
-
-        } else {
-            holder = (CustomHolder) convertView.getTag();
         }
+
+        holder = new CustomHolder();
+        holder.listName = (TextView) convertView.findViewById(R.id.tv_participant_name);
+        holder.listEmail = (TextView) convertView.findViewById(R.id.tv_participant_email);
+        holder.listDescription = (TextView) convertView.findViewById(R.id.tv_participant_description);
+        holder.listPhoto = (ImageView) convertView.findViewById(R.id.iv_participant_pic);
+        convertView.setTag(holder);
 
         // Getting user data for row
         User user = mItems.get(position);
@@ -139,7 +137,7 @@ public class CustomUserListAdapter extends BaseAdapter {
         return mItems;
     }
 
-    public void setArtistItems(List<User> items) {
+    public void setItems(List<User> items) {
         mItems = items;
     }
 }

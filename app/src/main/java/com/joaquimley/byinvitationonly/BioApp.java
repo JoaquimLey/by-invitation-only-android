@@ -41,6 +41,7 @@ public class BioApp extends Activity {
     protected static BioApp sInstance = null;
     protected static DatabaseHelper sDatabase = null;
     protected static ArrayList<Session> sSessionsList = null;
+    protected static ArrayList<User> sUsersList = null;
     protected static Conference sConference = null;
     protected static String sCurrentUserId = null;
 
@@ -58,6 +59,8 @@ public class BioApp extends Activity {
         if (sDatabase != null) {
             OpenHelperManager.releaseHelper();
             sDatabase = null;
+            sUsersList = null;
+            sSessionsList = null;
         }
     }
 
@@ -84,7 +87,7 @@ public class BioApp extends Activity {
         sCurrentUserId = currentUserId;
     }
 
-    public ArrayList<Session> getSessionList() {
+    public ArrayList<Session> getSessionsList() {
         if (sSessionsList == null) {
             sSessionsList = new ArrayList<>();
         }
@@ -93,6 +96,17 @@ public class BioApp extends Activity {
 
     public void setSessionList(ArrayList<Session> sessions) {
         sSessionsList = sessions;
+    }
+
+    public ArrayList<User> getUsersList() {
+        if (sUsersList == null) {
+            sUsersList = new ArrayList<>();
+        }
+        return sUsersList;
+    }
+
+    public void setUsersList(ArrayList<User> users) {
+        sUsersList = users;
     }
 
     public Conference getConference() {
@@ -104,6 +118,24 @@ public class BioApp extends Activity {
 
     public void setConference(Conference conference) {
         sConference = conference;
+    }
+
+    /**
+     * Removes the user from the instance usersList, should only be called by a "onChildRemoved()
+     * listener
+     *
+     * @param user returned by dataSnapshot, compared with the current user list
+     */
+    public void removeUserFromList(User user) {
+        if(sUsersList == null){
+            return;
+        }
+
+        for (User userInList : sUsersList) {
+            if (user.getId().equals(userInList.getId())) {
+                sUsersList.remove(userInList);
+            }
+        }
     }
 
     /**

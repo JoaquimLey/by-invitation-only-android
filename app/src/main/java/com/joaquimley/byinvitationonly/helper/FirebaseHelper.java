@@ -16,18 +16,13 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
-import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Helper class, handles all Firebase communications
@@ -36,9 +31,6 @@ import java.util.List;
 public class FirebaseHelper {
 
     private static final String TAG = FirebaseHelper.class.getSimpleName();
-    private static boolean mValueExists;
-    private static ArrayList<User> visibleUsers;
-    private static Object sessions;
 
     private FirebaseHelper() {
         // No args constructor, prevent instantiating
@@ -94,7 +86,6 @@ public class FirebaseHelper {
         usersRef.child(BioApp.getCurrentUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
                 if (snapshot.getValue() != null && user.getId() != null && user.isVisible()) {
                     usersRef.child(user.getId()).removeValue(listener);
                     BioApp.setCurrentUserId("");
@@ -118,19 +109,5 @@ public class FirebaseHelper {
             public void onCancelled(FirebaseError arg0) {
             }
         });
-    }
-
-    /**
-     * Queries the server for all the visible participants
-     *
-     * @return arrayList with user objects
-     */
-    public static void getVisibleUsers(Firebase usersRef, ChildEventListener listener) {
-        usersRef.addChildEventListener(listener);
-    }
-
-    public static List<Session> getSessions() {
-        ArrayList<Session> sessions = new ArrayList<>();
-        return sessions;
     }
 }

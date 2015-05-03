@@ -16,17 +16,18 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
@@ -36,13 +37,12 @@ import com.joaquimley.byinvitationonly.util.CustomUi;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
-public class ParticipantsList extends Activity implements ChildEventListener {
+public class ParticipantsList extends Activity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
 
     private static final String TAG = ParticipantsList.class.getSimpleName();
-    private ArrayList<User> mUsersList;
     private SharedPreferences mSharedPreferences;
+    private PullRefreshLayout mPullRefreshLayout;
+    private CustomUserListAdapter mCustomUserListAdapter;
     private Firebase mUsersRef;
 
     @Override
@@ -56,30 +56,30 @@ public class ParticipantsList extends Activity implements ChildEventListener {
     private void init() {
 
         User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
-        if(user == null){
+        if (user == null) {
             CustomUi.createAlertDialog(this, "Error", "There was a error retering your user data");
             finish();
         }
-        mUsersList = new ArrayList<>();
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
-        if(mUsersRef != null){
+        if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
         }
-
         CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         ((TextView) findViewById(R.id.tv_participant_name)).setText(user.getName());
         ((TextView) findViewById(R.id.tv_participant_email)).setText(user.getEmail());
         ((TextView) findViewById(R.id.tv_participant_description)).setText(user.getDescription());
-        if(!user.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null){
+        if (!user.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null) {
             Picasso.with(this).load(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
                     .transform(new ImageCircleTransform())
                     .into((ImageView) findViewById(R.id.iv_participant_pic));
         }
-
-        ((ListView) findViewById(R.id.list)).setAdapter(new CustomUserListAdapter(this, mUsersList));
+        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mPullRefreshLayout.setOnRefreshListener(this);
+        mCustomUserListAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
+        ((ListView) findViewById(R.id.list)).setAdapter(mCustomUserListAdapter);
     }
 
     @Override
@@ -104,18 +104,27 @@ public class ParticipantsList extends Activity implements ChildEventListener {
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        mUsersList.add((User) dataSnapshot.getValue());
-        Log.w(TAG, "Users list: " + mUsersList);
+    public void onRefresh() {
+        mCustomUserListAdapter.setItems(BioApp.getInstance().getUsersList());
+        mCustomUserListAdapter.notifyDataSetChanged();
+        mPullRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        User user = dataSnapshot.getValue(User.class);
+        if(!user.getId().equals(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_id), ""))){
+            BioApp.getInstance().getUsersList().add(dataSnapshot.getValue(User.class));
+        }
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
+        BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class));
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
     }
 

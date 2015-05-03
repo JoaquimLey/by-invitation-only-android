@@ -74,25 +74,20 @@ public class CustomSessionListAdapter extends BaseAdapter {
 
         CustomHolder holder;
         if (convertView == null) {
-
             LayoutInflater inflater = mActivity.getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_list_row, parent, false);
-
-            holder = new CustomHolder();
-            holder.listTitle = (TextView) convertView.findViewById(R.id.title);
-            holder.listSubtitle = (TextView) convertView.findViewById(R.id.speaker);
-            holder.listDate = (TextView) convertView.findViewById(R.id.date);
-            holder.listDescription = (TextView) convertView.findViewById(R.id.description);
-            holder.listImage = (ImageView) convertView.findViewById(R.id.image);
-            holder.favorite = (CheckBox) convertView.findViewById(R.id.favorite);
-
-            convertView.setTag(holder);
-
-        } else {
-            holder = (CustomHolder) convertView.getTag();
         }
 
-        // Getting artist data for row
+        holder = new CustomHolder();
+        holder.listTitle = (TextView) convertView.findViewById(R.id.title);
+        holder.listSubtitle = (TextView) convertView.findViewById(R.id.speaker);
+        holder.listDate = (TextView) convertView.findViewById(R.id.date);
+        holder.listDescription = (TextView) convertView.findViewById(R.id.description);
+        holder.listImage = (ImageView) convertView.findViewById(R.id.image);
+        holder.favorite = (CheckBox) convertView.findViewById(R.id.favorite);
+        convertView.setTag(holder);
+
+        // Getting Session data for row
         Session session = mItems.get(position);
         // Title
         holder.listTitle.setText(session.getTitle());
