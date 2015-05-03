@@ -13,7 +13,6 @@
 package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,58 +56,6 @@ public class FirebaseHelper {
         return new Firebase(context.getString(R.string.firebase_url));
     }
 
-
-    /**
-     * Change user availability on database Im Here/Invisible
-     *
-     * @param context  self explanatory
-     * @param user     self explanatory
-     * @param usersRef self explanatory
-     * @param listener handle callback response
-     */
-    public static void changeAvailabilityState(Context context, User user, Firebase usersRef, Firebase.CompletionListener listener) {
-
-        if (user == null) {
-            Log.e(TAG, context.getString(R.string.error_user_null));
-            return;
-        }
-
-        if (!BioApp.isOnline(context)) {
-            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Firebase newUserRef = usersRef.push();
-        if (isValueOnRef(usersRef, BioApp.getCurrentUserId())) {
-            usersRef.child(BioApp.getCurrentUserId()).removeValue(listener);
-            BioApp.setCurrentUserId("");
-        } else {
-            BioApp.setCurrentUserId(newUserRef.getKey());
-            newUserRef.setValue(user, listener);
-        }
-    }
-
-    /**
-     * Query firebaseRef for a child value passed by @param value, sets mValueExists GLOBAL_VAR
-     *
-     * @param firebaseRef self explanatory
-     * @param value       to be compared on ref
-     */
-    public static boolean isValueOnRef(final Firebase firebaseRef, String value) {
-
-        firebaseRef.child(value).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                mValueExists = snapshot.getValue() != null;
-            }
-
-            @Override
-            public void onCancelled(FirebaseError arg0) {
-            }
-        });
-        return mValueExists;
-    }
-
     /**
      * Retrieve or Create a child reference from root reference
      *
@@ -122,6 +69,56 @@ public class FirebaseHelper {
             return null;
         }
         return firebaseRef.child(childName);
+    }
+
+    /**
+     * Change current user's availability/visibility
+     *
+     * @param context  self explanatory
+     * @param user     self explanatory
+     * @param usersRef self explanatory
+     * @param listener handle callback response
+     */
+    public static void changeAvailabilityState(final Context context, final Firebase usersRef, final User user,
+                                               final Firebase.CompletionListener listener) {
+
+        if (user == null) {
+            Log.e(TAG, context.getString(R.string.error_user_null));
+            return;
+        }
+
+        if (!BioApp.isOnline(context)) {
+            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        usersRef.child(BioApp.getCurrentUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                if (snapshot.getValue() != null && user.getId() != null && user.isVisible()) {
+                    usersRef.child(user.getId()).removeValue(listener);
+                    BioApp.setCurrentUserId("");
+                    user.setId(BioApp.getCurrentUserId());
+                    user.setVisible(!user.isVisible());
+
+                } else if (!user.isVisible()) {
+                    Firebase newUserRef = usersRef.push();
+                    BioApp.setCurrentUserId(newUserRef.getKey());
+                    user.setId(BioApp.getCurrentUserId());
+                    user.setVisible(true);
+                    newUserRef.setValue(user, listener);
+
+                } else {
+                    user.setVisible(!user.isVisible());
+                    Toast.makeText(context, "Server synchronization problem, please try again", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError arg0) {
+            }
+        });
     }
 
     public static void exportSessions(Context context, Firebase firebaseChildRef) {
@@ -148,16 +145,6 @@ public class FirebaseHelper {
             Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
             e.printStackTrace();
         }
-    }
-
-    public static User hasPersonalData(SharedPreferences sharedPreferences) {
-        String name = sharedPreferences.getString("chave_nome", "");
-        String email = sharedPreferences.getString("chave_email", "");
-
-        if (!name.isEmpty() && !email.isEmpty()) {
-//            return new User(sharedPreferences.getString("chave_nome", ""), sharedPreferences.getString("chave_email", ""), null);
-        }
-        return null;
     }
 
     /**

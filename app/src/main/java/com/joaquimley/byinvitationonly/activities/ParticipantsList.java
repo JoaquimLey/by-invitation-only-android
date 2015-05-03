@@ -14,6 +14,7 @@ package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
+import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CustomUi;
@@ -41,11 +43,11 @@ public class ParticipantsList extends Activity {
         setContentView(R.layout.activity_participants_list);
 
         CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
-        Bundle data = getIntent().getExtras();
-        mUser = data.getParcelable("user");
+        mUser = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
         mUsersList = FirebaseHelper.getVisibleUsers();
-        if(mUser == null || mUsersList == null){
-            CustomUi.createAlertDialog(this, "Error", "There was a error getting user(s) details");
+        if(mUser == null){
+            CustomUi.createAlertDialog(this, "Error", "There was a error retering your user data");
+            finish();
         }
         init();
     }
@@ -54,7 +56,7 @@ public class ParticipantsList extends Activity {
         ((TextView) findViewById(R.id.tv_participant_name)).setText(mUser.getName());
         ((TextView) findViewById(R.id.tv_participant_email)).setText(mUser.getEmail());
         ((TextView) findViewById(R.id.tv_participant_description)).setText(mUser.getDescription());
-        Picasso.with(this).load(mUser.getPhotoUrl())
+        Picasso.with(this).load(mUser.getPhotoBase64())
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder_error)
                 .transform(new ImageCircleTransform())

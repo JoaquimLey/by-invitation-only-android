@@ -97,10 +97,10 @@ public class CustomUserListAdapter extends BaseAdapter {
         // Description
         holder.listDescription.setText(user.getDescription());
         // Photo
-        if (user.getPhotoUrl() == null || user.getPhotoUrl().isEmpty()) {
+        if (user.getPhotoBase64() == null || user.getPhotoBase64().isEmpty()) {
             Picasso.with(mActivity).load(R.drawable.image_placeholder).into(holder.listPhoto);
         } else {
-            Picasso.with(mActivity).load(user.getPhotoUrl())
+            Picasso.with(mActivity).load(user.getPhotoBase64())
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
                     .transform(new ImageCircleTransform())

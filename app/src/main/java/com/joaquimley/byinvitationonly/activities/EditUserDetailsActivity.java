@@ -13,28 +13,36 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CustomUi;
+import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.IntentHelper;
+import com.squareup.picasso.Picasso;
 
 public class EditUserDetailsActivity extends Activity implements View.OnClickListener {
+
+    public static final int RESULT_GALLERY = 0;
 
     private User mUser;
     private EditText mEtName;
     private EditText mEtEmail;
     private EditText mEtDescription;
-    private EditText mEtPhotoUrl;
+    private ImageView mIvUserPhoto;
+    private Uri mImageUri;
+    private boolean mImageChangedFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +62,22 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
         mEtName = ((EditText) findViewById(R.id.et_edit_user_details_name));
         mEtEmail = ((EditText) findViewById(R.id.et_edit_user_details_email));
         mEtDescription = ((EditText) findViewById(R.id.et_edit_user_details_description));
-        mEtPhotoUrl = ((EditText) findViewById(R.id.et_edit_user_details_photo_url));
+
+        mIvUserPhoto = (ImageView) findViewById(R.id.iv_profile_picture);
+        mIvUserPhoto.setOnClickListener(this);
+        Picasso.with(this).load(R.drawable.image_placeholder).transform(new ImageCircleTransform()).into(mIvUserPhoto);
 
         if (mUser != null) {
             mEtName.setText(mUser.getName());
             mEtEmail.setText(String.valueOf(mUser.getEmail()));
             mEtDescription.setText(mUser.getDescription());
-            mEtPhotoUrl.setText(mUser.getPhotoUrl());
+            if(!mUser.getPhotoBase64().isEmpty()){
+                Picasso.with(this)
+                        .load(FileHelper.decodeBase64ToFile(this, mUser.getPhotoBase64()))
+                        .transform(new ImageCircleTransform())
+                        .into(mIvUserPhoto);
+            }
         }
-
         (findViewById(R.id.btn_save)).setOnClickListener(this);
         (findViewById(R.id.btn_cancel)).setOnClickListener(this);
     }
@@ -82,35 +97,34 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.iv_profile_picture:
+                startActivityForResult(IntentHelper.createPickImageIntent(this), RESULT_GALLERY);
+                break;
+
             case R.id.btn_save:
 
                 if (mEtName.getText().length() < 0 || mEtEmail.getText().length() < 0 || mEtDescription.getText().length() < 0) {
-                    Toast.makeText(this, "Please insert all mandatory details", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.error_fill_required_fields), Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 if (mUser == null) {
-
-                    String photoUrl = String.valueOf(mEtPhotoUrl.getText());
-                    if (photoUrl.length() > 4) {
-                        mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
-                                String.valueOf(mEtDescription.getText()), String.valueOf(mEtPhotoUrl.getText()), false);
-
-                    } else {
-                        mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
-                                String.valueOf(mEtDescription.getText()), "", false);
-                    }
+                    mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
+                            String.valueOf(mEtDescription.getText()), "", false);
 
                 } else {
                     mUser.setName(String.valueOf(mEtName.getText()));
                     mUser.setEmail(String.valueOf(mEtEmail.getText()));
                     mUser.setDescription(String.valueOf(mEtDescription.getText()));
-                    mUser.setPhotoUrl(String.valueOf(mEtPhotoUrl.getText()));
                 }
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                FileHelper.updateUserFromSharedPreferences(this, sharedPreferences, mUser);
-//                startActivity(IntentHelper.createMainActivityIntent(this, mUser));
+                if(mImageChangedFlag && mImageUri != null){
+                    mUser.setPhotoBase64(FileHelper.encodeUriToBase64(this, mImageUri));
+                }
+                mUser.setVisible(false);
+
+                FileHelper.updateUserDataToSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this), mUser);
                 startActivity(IntentHelper.createMainActivityIntent(this));
                 break;
 
@@ -118,4 +132,31 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
                 finish();
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case EditUserDetailsActivity.RESULT_GALLERY:
+                if (data != null) {
+                    mImageChangedFlag = true;
+                    mImageUri = data.getData();
+                    PreferenceManager.getDefaultSharedPreferences(this)
+                            .edit()
+                            .putString(getString(R.string.shared_pref_user_details_photo_uri), String.valueOf(mImageUri))
+                            .apply();
+
+                    Picasso.with(this)
+                            .load(mImageUri)
+                            .transform(new ImageCircleTransform())
+                            .into(mIvUserPhoto);
+                }
+                break;
+
+            default:
+        }
+    }
+
+
 }

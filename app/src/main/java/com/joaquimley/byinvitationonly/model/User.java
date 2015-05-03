@@ -25,7 +25,7 @@ public class User implements Parcelable {
     private String mName;
     private String mEmail;
     private String mDescription;
-    private String mPhotoUrl;
+    private String mPhotoBase64;
     private boolean mIsVisible;
 
     public User() {
@@ -33,11 +33,11 @@ public class User implements Parcelable {
     }
 
 
-    public User(String name, String email, String description, String photoUrl, boolean isVisible) {
+    public User(String name, String email, String description, String photoBase64, boolean isVisible) {
         mName = name;
         mEmail = email;
         mDescription = description;
-        mPhotoUrl = photoUrl;
+        mPhotoBase64 = photoBase64;
 
         mIsVisible = isVisible;
     }
@@ -75,12 +75,12 @@ public class User implements Parcelable {
         mDescription = description;
     }
 
-    public String getPhotoUrl() {
-        return mPhotoUrl;
+    public String getPhotoBase64() {
+        return mPhotoBase64;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        mPhotoUrl = photoUrl;
+    public void setPhotoBase64(String photoBase64) {
+        mPhotoBase64 = photoBase64;
     }
 
     public boolean isVisible() {
@@ -111,7 +111,7 @@ public class User implements Parcelable {
         dest.writeString(this.mName);
         dest.writeString(this.mEmail);
         dest.writeString(this.mDescription);
-        dest.writeString(this.mPhotoUrl);
+        dest.writeString(this.mPhotoBase64);
         dest.writeByte(mIsVisible ? (byte) 1 : (byte) 0);
     }
 
@@ -119,7 +119,7 @@ public class User implements Parcelable {
         this.mName = in.readString();
         this.mEmail = in.readString();
         this.mDescription = in.readString();
-        this.mPhotoUrl = in.readString();
+        this.mPhotoBase64 = in.readString();
         this.mIsVisible = in.readByte() != 0;
         this.mId = in.readString();
     }

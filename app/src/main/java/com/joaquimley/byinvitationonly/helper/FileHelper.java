@@ -14,15 +14,27 @@ package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -110,13 +122,13 @@ public class FileHelper {
         String userId = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_id), "");
         String userEmail = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_email), "");
         String userDescription = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_description), "");
-        String userPhotoUrl = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_url), "");
+        String userPhotoBase64String = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_base64), "");
         boolean userLastAvailabilityStatus = sharedPreferences.getBoolean(context.getString(R.string.shared_pref_user_details_availability), false);
 
         User user;
-        if (!userName.isEmpty() && !userEmail.isEmpty() && !userDescription.isEmpty() && !userPhotoUrl.isEmpty()) {
+        if (!userName.isEmpty() && !userEmail.isEmpty() && !userDescription.isEmpty() && !userPhotoBase64String.isEmpty()) {
 
-            user = new User(userName, userEmail, userDescription, userPhotoUrl, userLastAvailabilityStatus);
+            user = new User(userName, userEmail, userDescription, userPhotoBase64String, userLastAvailabilityStatus);
             if (!userId.isEmpty()) {
                 user.setId(userId);
             }
@@ -137,12 +149,12 @@ public class FileHelper {
      * @param sharedPreferences self explanatory
      * @param user              which will be used to fill the details
      */
-    public static void updateUserFromSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), user.getName()).apply();
+    public static void updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), BioApp.getCurrentUserId()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_url), user.getPhotoUrl()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64()).apply();
         sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
     }
 
@@ -188,5 +200,89 @@ public class FileHelper {
         // Recursive
         skipLines++;
         importSessionDataFromFile(context, sessions, skipLines);
+    }
+
+
+    /**
+     * Decodes base64String given by @param and returns the image file's uri
+     *
+     * @param base64String self explanatory
+     * @return correspondent uri
+     */
+    public static File decodeBase64ToFile(Context context, String base64String) {
+
+        byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
+        Bitmap bitmap =  BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, byteArrayOutputStream);
+
+        File file = new File(context.getCacheDir(), "userProfilePic");
+        FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = new FileOutputStream(file);
+            byte[] bitmapData = byteArrayOutputStream.toByteArray();
+            fileOutputStream.write(bitmapData);
+
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            return file;
+
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "encodeImageToBase64(): ERROR file not found");
+            return null;
+        } catch (IOException e) {
+            Log.e(TAG, "encodeImageToBase64(): ERROR writing values");
+            return null;
+        }
+    }
+
+    /**
+     * Encode a file @param Uri into a base64String
+     * WARNING: <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> required
+     *
+     * @param context self explanatory
+     * @param uri     from the file that will get the conversion
+     * @return base64string
+     */
+    public static String encodeUriToBase64(Context context, Uri uri) {
+        InputStream inputStream;
+        try {
+            inputStream = new FileInputStream(getImageFilePathFromUri(context, uri));
+            byte[] bytes;
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+            bytes = output.toByteArray();
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
+
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "encodeImageToBase64(): ERROR file not found");
+            return null;
+        } catch (IOException e) {
+            Log.e(TAG, "encodeImageToBase64(): ERROR writing values");
+            return null;
+        }
+    }
+
+    /**
+     * Gets the path from a Uri file, image files only
+     *
+     * @param context  self explanatory
+     * @param imageUri self explanatory
+     * @return the picture path String
+     */
+    private static String getImageFilePathFromUri(Context context, Uri imageUri) {
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(imageUri,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String imagePath = cursor.getString(columnIndex);
+        cursor.close();
+        return imagePath;
     }
 }

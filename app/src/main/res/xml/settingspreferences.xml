@@ -12,18 +12,9 @@
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com-joaquimley.util.MyEditTextPreferences
-        android:defaultValue=""
-        android:key="@string/prefs_key_name"
-        android:summary="@string/prefs_summary_name"
-        android:title="@string/prefs_title_name" />
-
-    <com-joaquimley.util.MyEditTextPreferences
-        android:defaultValue=""
-        android:key="@string/prefs_key_email"
-        android:summary="@string/prefs_summary_email"
-        android:title="@string/prefs_title_email" />
+    <!-- Content goes here -->
 
 </PreferenceScreen>

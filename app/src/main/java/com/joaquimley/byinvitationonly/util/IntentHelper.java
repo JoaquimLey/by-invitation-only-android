@@ -63,6 +63,13 @@ public class IntentHelper {
         return userDetailsActivityIntent;
     }
 
+    public static Intent createPickImageIntent(Context context){
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        galleryIntent.setType("image/*");
+        return galleryIntent;
+//        context.startActivity(galleryIntent);
+    }
+
     /**
      * Create and start a email/share send Intent
      *

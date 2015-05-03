@@ -15,11 +15,9 @@ package com.joaquimley.byinvitationonly.util;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Session;
@@ -33,18 +31,16 @@ public class CustomUi {
 
     private static final String TAG = CustomUi.class.getSimpleName();
 
-    public static void changeStatusIcon(Context context, User user, View btnView) {
+    public static void changeStatusIcon(User user, View btnView) {
         if(user == null){
             Log.e(TAG, "changeStatusIcon(): User is null");
             return;
         }
         if(user.isVisible()){
-            Toast.makeText(context, context.getString(R.string.user_visible), Toast.LENGTH_SHORT).show();
             btnView.setBackgroundResource(R.drawable.ic_status_green);
             return;
         }
         btnView.setBackgroundResource(R.drawable.ic_status_red);
-        Toast.makeText(context, context.getString(R.string.user_invisible), Toast.LENGTH_SHORT).show();
     }
 
     /**

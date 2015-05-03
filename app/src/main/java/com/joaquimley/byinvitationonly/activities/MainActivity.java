@@ -14,9 +14,9 @@ package com.joaquimley.byinvitationonly.activities;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,12 +51,14 @@ import java.util.Map;
 public class MainActivity extends Activity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
         Firebase.CompletionListener, View.OnClickListener, ChildEventListener, FavoriteChangeListener {
 
+    public static final int USER_DETAILS_CHANGED = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Firebase mUsersRef;
     private Firebase mSessionsRef;
     private ImageButton mBtnStatus;
     private PullRefreshLayout mPullRefreshLayout;
+    private SharedPreferences mSharedPreferences;
     private CustomSessionListAdapter mCustomAdapter;
     private User mUser;
 
@@ -65,11 +67,9 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUser = FileHelper.getUserFromSharedPreferences(this, sharedPreferences);
-
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         init();
-//        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
     }
 
     /**
@@ -77,7 +77,6 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
      */
     private void init() {
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
-
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
@@ -87,12 +86,11 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
         // UI
         loadProfileInfo();
+        findViewById(R.id.ib_user_edit).setOnClickListener(this);
         CustomUi.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
-        ImageButton mBtnEdit = (ImageButton) findViewById(R.id.ib_user_edit);
-        mBtnEdit.setOnClickListener(this);
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
-        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
+        CustomUi.changeStatusIcon(mUser, mBtnStatus);
         ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(BioApp.getInstance().getConference().getAcronym()
                 + " - " + getString(R.string.text_up_coming_sessions));
         // List
@@ -110,11 +108,14 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
      */
     private void loadProfileInfo() {
         if (mUser != null) {
+            BioApp.setCurrentUserId(mUser.getId());
             ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
             ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
             ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
-            if (!mUser.getPhotoUrl().isEmpty()) {
-                Picasso.with(this).load(mUser.getPhotoUrl())
+
+            if (!mUser.getPhotoBase64().isEmpty()) {
+                Uri uri = Uri.parse(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""));
+                Picasso.with(this).load(uri)
                         .placeholder(R.drawable.image_placeholder)
                         .error(R.drawable.image_placeholder_error)
                         .transform(new ImageCircleTransform())
@@ -130,7 +131,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
         }
         ((TextView) findViewById(R.id.tv_user_name)).setText("Create Your Profile");
         ((TextView) findViewById(R.id.tv_user_email)).setText("Use the edit button");
-        ((TextView) findViewById(R.id.tv_user_description)).setText("To share your details and see other participants.\nStart networking!");
+        ((TextView) findViewById(R.id.tv_user_description)).setText("To share your details and see other participants. Start networking! :)");
         Picasso.with(this).load(R.drawable.image_placeholder)
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder_error)
@@ -149,7 +150,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
                 }
 
                 if (!mUser.isVisible()) {
-                    Toast.makeText(this, getString(R.string.error_user_must_be_visible), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_user_must_check_in), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -161,6 +162,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
                 return true;
 
             case R.id.ic_menu_favorite:
+                BioApp.pushDummyUsersToFirebase(this, mUsersRef);
                 //TODO: Show favorites activity
                 return true;
 
@@ -193,7 +195,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create Session activity with item details (getItemAtPosition(position))
+        // TODO: Create Session details activity (getItemAtPosition(position))
         Toast.makeText(MainActivity.this, "List Click", Toast.LENGTH_SHORT).show();
 
     }
@@ -217,7 +219,7 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
             case R.id.ib_user_status:
                 if (mUser != null) {
-                    FirebaseHelper.changeAvailabilityState(this, mUser, mUsersRef, this);
+                    FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
                 } else {
                     Toast.makeText(this, getString(R.string.error_no_user_details), Toast.LENGTH_SHORT).show();
                 }
@@ -230,32 +232,27 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
     /**
      * Firebase.CompletionListener
      */
-
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
         if (firebaseError != null) {
             Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
-        mUser.setVisible(!mUser.isVisible());
-        mUser.setId(BioApp.getCurrentUserId());
-        Log.w(TAG, "User id: " + mUser.getId());
-        CustomUi.changeStatusIcon(this, mUser, mBtnStatus);
+        CustomUi.changeStatusIcon(mUser, mBtnStatus);
+        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
     }
 
     /**
      * PullRefreshLayout.OnRefreshListener
      */
-
     @Override
     public void onRefresh() {
-        // TODO: Query server and populate list
+        // TODO: Query server with sessions and populate list
     }
 
     /**
      * ChildEventListener
      */
-
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         if (mUser != null && mUser.isVisible()) {
@@ -287,10 +284,10 @@ public class MainActivity extends Activity implements PullRefreshLayout.OnRefres
 
     }
 
+
     /**
      * Generic getters and setters
      */
-
     public Firebase getContactsChildRef() {
         return mUsersRef;
     }
