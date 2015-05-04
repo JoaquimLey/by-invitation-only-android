@@ -11,43 +11,44 @@
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_smaller_horizontal_margin"
-    android:paddingBottom="@dimen/activity_smaller_vertical_margin"
-    android:paddingLeft="@dimen/activity_smaller_horizontal_margin"
-    android:paddingRight="@dimen/activity_smaller_horizontal_margin"
-    tools:context=".MainActivity"
-    android:id="@+id/main_activity"
-    android:weightSum="1">
+    tools:context="com.joaquimley.byinvitationonly.activities.ParticipantsList">
 
-    <include layout="@layout/custom_participant_row"/>
+    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/user_profile"
+        layout="@layout/custom_participant_row"
+        android:layout_below="@+id/toolbar"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#0D47A1"
-        android:text="@string/text_participants_list"
-        android:id="@+id/tv_up_coming_sessions" />
+        android:layout_width="match_parent" />
 
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="0dp">
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_below="@+id/user_profile">
 
-        <ListView
-            android:id="@+id/list"
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawSelectorOnTop="false"/>
+            android:layout_height="wrap_content">
 
-    </com.baoyz.widget.PullRefreshLayout>
+            <android.support.v7.internal.widget.ListViewCompat
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="false"/>
 
-</LinearLayout>
+        </com.baoyz.widget.PullRefreshLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -13,7 +13,7 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.joaquimley.byinvitationonly.R;
@@ -21,7 +21,7 @@ import com.joaquimley.byinvitationonly.R;
 /**
  * BaseActivity needed for correct ActionBar material style
  */
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 

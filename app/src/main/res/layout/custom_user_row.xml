@@ -24,7 +24,41 @@
         android:layout_height="90dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:contentDescription="Picture" />
+        android:contentDescription="@string/text_user_profile_picture" />
+
+
+    <!-- Name -->
+    <TextView
+    android:id="@+id/tv_user_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:textSize="@dimen/title"
+    android:textStyle="bold"
+    android:paddingBottom="1dp"
+    android:layout_toEndOf="@+id/iv_user_pic" />
+
+    <!-- Email -->
+    <TextView
+    android:id="@+id/tv_user_email"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/speaker"
+    android:textStyle="bold"
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp"
+    android:layout_below="@+id/tv_user_name"
+    android:layout_toEndOf="@+id/iv_user_pic" />
+
+    <!-- Description -->
+    <TextView
+    android:id="@+id/tv_user_description"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    android:textSize="@dimen/description"
+    android:layout_below="@+id/tv_user_email"
+    android:layout_toEndOf="@+id/iv_user_pic" />
 
     <!-- Edit -->
     <ImageButton
@@ -35,47 +69,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true" />
-
-    <!-- Name -->
-    <TextView
-        android:id="@+id/tv_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textSize="@dimen/title"
-        android:textStyle="bold"
-        android:paddingBottom="1dp"
-        android:layout_toEndOf="@+id/iv_user_pic" />
-
-    <!-- Email -->
-    <TextView
-        android:id="@+id/tv_user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/speaker"
-        android:textStyle="bold"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
-        android:layout_below="@+id/tv_user_name"
-        android:layout_toEndOf="@+id/iv_user_pic" />
-
-    <!-- Description -->
-    <TextView
-        android:id="@+id/tv_user_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:textSize="@dimen/description"
-        android:layout_below="@+id/tv_user_email"
-        android:layout_toEndOf="@+id/iv_user_pic" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"/>
 
     <!-- Status data -->
     <ImageButton
         android:background="@drawable/status_selector"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ib_user_status"

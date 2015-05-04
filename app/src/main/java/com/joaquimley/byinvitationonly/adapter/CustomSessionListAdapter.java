@@ -75,7 +75,7 @@ public class CustomSessionListAdapter extends BaseAdapter {
         CustomHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = mActivity.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.custom_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.custom_session_list, parent, false);
         }
 
         holder = new CustomHolder();

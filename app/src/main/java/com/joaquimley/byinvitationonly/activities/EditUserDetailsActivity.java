@@ -12,7 +12,6 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,12 +26,11 @@ import android.widget.Toast;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.IntentHelper;
 import com.squareup.picasso.Picasso;
 
-public class EditUserDetailsActivity extends Activity implements View.OnClickListener {
+public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     public static final int RESULT_GALLERY = 0;
 
@@ -47,15 +45,18 @@ public class EditUserDetailsActivity extends Activity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_details);
-        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+        setActionBarIcon(R.drawable.ic_ab_drawer);
 
-        mUser = null;
         Bundle data = getIntent().getExtras();
         if (data != null && data.getParcelable("user") != null) {
             mUser = data.getParcelable("user");
         }
         init();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_edit_user_details;
     }
 
     private void init() {

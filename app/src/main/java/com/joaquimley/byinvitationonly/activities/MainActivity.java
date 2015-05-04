@@ -15,7 +15,6 @@ package com.joaquimley.byinvitationonly.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +49,6 @@ import java.util.Map;
 public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
         Firebase.CompletionListener, View.OnClickListener, ChildEventListener, FavoriteChangeListener {
 
-    public static final int USER_DETAILS_CHANGED = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Firebase mUsersRef;
@@ -69,6 +67,7 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         init();
+        setTitle(getString(R.string.text_welcome_to) + " " + BioApp.getInstance().getConference().getAcronym());
     }
 
     @Override
@@ -91,12 +90,10 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
         // UI
         loadProfileInfo();
         findViewById(R.id.ib_user_edit).setOnClickListener(this);
-        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
         UiUxUtils.changeStatusIcon(mUser, mBtnStatus);
-        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(BioApp.getInstance().getConference().getAcronym()
-                + " - " + getString(R.string.text_up_coming_sessions));
+        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(getString(R.string.text_up_coming_sessions));
         // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
@@ -113,7 +110,7 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
     private void loadProfileInfo() {
         if (mUser != null) {
             BioApp.setCurrentUserId(mUser.getId());
-            ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
+            ((TextView) findViewById(R.id.tv_user_name) ).setText(mUser.getName());
             ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
             ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
 
@@ -124,22 +121,15 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
                         .transform(new ImageCircleTransform())
                         .into((ImageView) findViewById(R.id.iv_user_pic));
             } else {
-                Picasso.with(this).load(R.drawable.image_placeholder)
-                        .placeholder(R.drawable.image_placeholder)
-                        .error(R.drawable.image_placeholder_error)
-                        .transform(new ImageCircleTransform())
-                        .into((ImageView) findViewById(R.id.iv_user_pic));
+                Picasso.with(this).load(R.drawable.image_placeholder).into((ImageView) findViewById(R.id.iv_user_pic));
             }
             return;
         }
+
         ((TextView) findViewById(R.id.tv_user_name)).setText("Create Your Profile");
         ((TextView) findViewById(R.id.tv_user_email)).setText("Use the edit button");
         ((TextView) findViewById(R.id.tv_user_description)).setText("To share your details and see other participants. Start networking! :)");
-        Picasso.with(this).load(R.drawable.image_placeholder)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder_error)
-                .transform(new ImageCircleTransform())
-                .into((ImageView) findViewById(R.id.iv_user_pic));
+        Picasso.with(this).load(R.drawable.image_placeholder).into((ImageView) findViewById(R.id.iv_user_pic));
     }
 
     @Override

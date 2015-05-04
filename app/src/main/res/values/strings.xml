@@ -36,11 +36,11 @@
     <string name="error_no_dialer">Device has no telephony capabilities</string>
     <string name="error_user_null">Current user is null</string>
     <string name="error_user_edit_available">You must be invisible to edit your information</string>
-    <string name="error_user_must_check_in">You must checked-in</string>
+    <string name="error_user_must_check_in">You must be checked-in</string>
     <string name="error_create_user_profile_first">Please create your profile first</string>
     <string name="error_contacting_server">Error contacting server </string>
     <string name="error_no_user_details">Please create your user profile first</string>
-    <string name="error_fill_required_fields">Please fill all required fields</string>
+    <string name="error_fill_required_fields">Please fill all required (*) fields</string>
     <!-- Menu -->
     <string name="action_register">Register</string>
     <string name="action_check_in">Check-In</string>
@@ -50,16 +50,15 @@
     <string name="text_contact">Contact</string>
     <string name="text_session">Session</string>
     <string name="text_favorite">Favorite</string>
-    <string name="text_welcome_message">Welcome</string>
+    <string name="text_welcome_to">Welcome to</string>
     <string name="text_up_coming_sessions">Upcoming sessions</string>
     <string name="user_invisible">You are INVISIBLE to other participants</string>
     <string name="user_visible">You are VISIBLE to other participants</string>
     <!-- Participant List -->
     <string name="text_participants_list">Participants List</string>
     <string name="title_activity_participants_list">@string/text_participants_list</string>
-    <!-- Edit User Details Activity -->
-    <string name="title_activity_edit_user_details">@string/text_edit_details</string>
-    <string name="text_edit_details">Edit your details:</string>
+    <!-- Edit User Details -->
+    <string name="title_activity_edit_user_details">Edit your details</string>
     <string name="text_name">Name* :</string>
     <string name="email">Email* :</string>
     <string name="description">Description* :</string>

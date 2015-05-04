@@ -12,17 +12,19 @@
   -->
 
 <resources>
-    <!-- App Material like colors -->
+
+    <!-- App Material-like colors -->
     <color name="action_bar_color">#495f88</color>
     <color name="primary_app_color">#2979FF</color>
     <color name="dark_app_color">#2962FF</color>
+    <color name="subtitle_app_color">#cccaca</color>
     <color name="accent_app_color">#00BCD4</color>
-
     <!-- List -->
     <color name="list_divider">@color/material_blue_grey_800</color>
-    <color name="list_row_start_color">@color/ripple_material_light</color>
-    <color name="list_row_end_color">#81D4FA</color>
+    <color name="list_row_start_color">@color/ripple_material_dark</color>
+    <color name="list_row_end_color">@color/ripple_material_dark</color>
     <color name="list_row_hover_start_color">#29B6F6</color>
     <color name="list_row_hover_end_color">#29B6F6</color>
     <color name="list_row_date_color">#a2acc0</color>
+
 </resources>

@@ -14,7 +14,7 @@
 <resources>
   <!--
         Base application theme for API 21+. This theme replaces
-        MyTheme from res/values/styles.xml on API 21+ devices.
+        MyTheme from res/values/themes.xml on API 21+ devices.
     -->
   <style name="CustomMaterialLikeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="android:windowContentTransitions">true</item>

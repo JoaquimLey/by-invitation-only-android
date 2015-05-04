@@ -12,17 +12,13 @@
 
 <resources>
 
-    <style name="CustomMaterialLikeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    <style name="CustomMaterialLikeTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/primary_app_color</item>
         <item name="colorPrimaryDark">@color/dark_app_color</item>
         <item name="colorAccent">@color/accent_app_color</item>
-    </style>
-
-    <style name="MyActionBar" parent="ThemeOverlay.AppCompat.Light">
-    <item name="android:background">@color/action_bar_color</item>
     </style>
 
 </resources>

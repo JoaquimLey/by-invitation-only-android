@@ -15,7 +15,6 @@ package com.joaquimley.byinvitationonly.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -37,7 +36,7 @@ import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.squareup.picasso.Picasso;
 
-public class ParticipantsList extends ActionBarActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
+public class ParticipantsList extends BaseActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
 
     private static final String TAG = ParticipantsList.class.getSimpleName();
     private SharedPreferences mSharedPreferences;
@@ -48,9 +47,15 @@ public class ParticipantsList extends ActionBarActivity implements PullRefreshLa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_participants_list);
+        setActionBarIcon(R.drawable.ic_ab_drawer);
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         init();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_participants_list;
     }
 
     private void init() {
