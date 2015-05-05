@@ -32,13 +32,13 @@ import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.squareup.picasso.Picasso;
 
-public class ParticipantsList extends BaseActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
+public class SessionsListActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
 
-    private static final String TAG = ParticipantsList.class.getSimpleName();
+    private static final String TAG = SessionsListActivity.class.getSimpleName();
     private SharedPreferences mSharedPreferences;
     private PullRefreshLayout mPullRefreshLayout;
     private CustomUserListAdapter mCustomUserListAdapter;
@@ -47,7 +47,6 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarIcon(R.drawable.ic_ab_drawer);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         init();
@@ -55,14 +54,13 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.activity_participants_list;
+        return R.layout.activity_sessions_list;
     }
 
     private void init() {
-
         User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
         if (user == null) {
-            UiUxUtils.createAlertDialog(this, "Error", "There was a error retering your user data");
+            CommonUtils.createAlertDialog(this, "Error", "There was a error retering your user data");
             finish();
         }
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
@@ -70,10 +68,19 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
         if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
         }
-        UiUxUtils.simplifyActionBay(getActionBar(), "", R.drawable.action_bar_app);
+//        loadUserInfo(user);
+
+        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mPullRefreshLayout.setOnRefreshListener(this);
+        mCustomUserListAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
+        ((ListView) findViewById(R.id.list)).setAdapter(mCustomUserListAdapter);
+    }
+
+    private void loadUserInfo(User user) {
         ((TextView) findViewById(R.id.tv_participant_name)).setText(user.getName());
         ((TextView) findViewById(R.id.tv_participant_email)).setText(user.getEmail());
         ((TextView) findViewById(R.id.tv_participant_description)).setText(user.getDescription());
+
         if (!user.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null) {
             Picasso.with(this).load(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
                     .placeholder(R.drawable.image_placeholder)
@@ -81,10 +88,6 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
                     .transform(new ImageCircleTransform())
                     .into((ImageView) findViewById(R.id.iv_participant_pic));
         }
-        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mPullRefreshLayout.setOnRefreshListener(this);
-        mCustomUserListAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
-        ((ListView) findViewById(R.id.list)).setAdapter(mCustomUserListAdapter);
     }
 
     @Override
@@ -118,14 +121,14 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         User user = dataSnapshot.getValue(User.class);
-        if(!user.getId().equals(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_id), ""))){
+        if (!user.getId().equals(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_id), ""))) {
             BioApp.getInstance().getUsersList().add(dataSnapshot.getValue(User.class));
         }
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        if(BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class))){
+        if (BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class))) {
             mCustomUserListAdapter.notifyDataSetChanged();
         }
     }
@@ -142,6 +145,11 @@ public class ParticipantsList extends BaseActivity implements PullRefreshLayout.
 
     @Override
     public void onCancelled(FirebaseError firebaseError) {
+
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
 
     }
 }

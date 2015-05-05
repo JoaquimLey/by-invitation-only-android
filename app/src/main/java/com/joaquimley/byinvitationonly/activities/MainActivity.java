@@ -15,6 +15,7 @@ package com.joaquimley.byinvitationonly.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,19 +36,19 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomSessionListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
+import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
+import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
-import com.joaquimley.byinvitationonly.util.IntentHelper;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
-
 public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
-        Firebase.CompletionListener, View.OnClickListener, ChildEventListener, FavoriteChangeListener {
+        Firebase.CompletionListener, View.OnClickListener, ChildEventListener, FavoriteChangeListener, NavigationDrawerCallbacks {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -62,12 +63,15 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarIcon(R.drawable.ic_ab_drawer);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
+        BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
-        init();
         setTitle(getString(R.string.text_welcome_to) + " " + BioApp.getInstance().getConference().getAcronym());
+        init();
     }
 
     @Override
@@ -79,20 +83,19 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
      * Initialize Firebase references, UI elements, listeners
      */
     private void init() {
-        BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
         if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
         }
-        mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
         // UI
         loadProfileInfo();
         findViewById(R.id.ib_user_edit).setOnClickListener(this);
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
-        UiUxUtils.changeStatusIcon(mUser, mBtnStatus);
+        CommonUtils.changeStatusIcon(mUser, mBtnStatus);
         ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(getString(R.string.text_up_coming_sessions));
         // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -110,7 +113,7 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
     private void loadProfileInfo() {
         if (mUser != null) {
             BioApp.setCurrentUserId(mUser.getId());
-            ((TextView) findViewById(R.id.tv_user_name) ).setText(mUser.getName());
+            ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
             ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
             ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
 
@@ -133,35 +136,79 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.ic_menu_group:
+    public void onNavigationDrawerItemSelected(int position) {
+
+        Toast.makeText(this, "Item clicked: " + position, Toast.LENGTH_SHORT).show();
+        switch (position) {
+
+            case 0:
+                if(mNavigationDrawerFragment != null && mNavigationDrawerFragment.isDrawerOpen()){
+                    mNavigationDrawerFragment.closeDrawer();
+                }
+                break;
+
+            case 1:
+                startActivity(IntentHelper.createSessionListActivityIntent(this));
+                break;
+
+            case 2:
                 if (mUser == null) {
-                    Toast.makeText(this, getString(R.string.error_no_user_details), Toast.LENGTH_SHORT).show();
-                    return false;
+                    Log.w(TAG, "User is null");
+                    return;
+                }
+
+                if (!CommonUtils.isOnline(this)) {
+                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 if (!mUser.isVisible()) {
                     Toast.makeText(this, getString(R.string.error_user_must_check_in), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-
-                if (!UiUxUtils.isOnline(this)) {
-                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-                    return false;
+                    return;
                 }
                 startActivity(IntentHelper.createParticipantsListIntent(this));
-                return true;
+                break;
 
-            case R.id.ic_menu_favorite:
-                BioApp.pushDummyUsersToFirebase(this, mUsersRef);
-                //TODO: Show favorites activity
-                return true;
+            case 3:
+                startActivity(IntentHelper.createBookmarksActivity(this));
+                break;
 
-            case R.id.ic_menu_session:
-                //TODO: Show sessions activity
-                return true;
+            default:
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+
+//            case R.id.ic_menu_group:
+//                if (mUser == null) {
+//                    Toast.makeText(this, getString(R.string.error_no_user_details), Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//
+//                if (!mUser.isVisible()) {
+//                    Toast.makeText(this, getString(R.string.error_user_must_check_in), Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//
+//                if (!CommonUtils.isOnline(this)) {
+//                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//                startActivity(IntentHelper.createParticipantsListIntent(this));
+//                return true;
+//
+//            case R.id.ic_menu_favorite:
+//                BioApp.pushDummyUsersToFirebase(this, mUsersRef);
+//                //TODO: Show favorites activity
+//                return true;
+//
+//            case R.id.ic_menu_session:
+//                //TODO: Show sessions activity
+//                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -231,7 +278,7 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
             Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
-        UiUxUtils.changeStatusIcon(mUser, mBtnStatus);
+        CommonUtils.changeStatusIcon(mUser, mBtnStatus);
         FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
     }
 
@@ -277,7 +324,6 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
 
     }
 
-
     /**
      * Generic getters and setters
      */
@@ -304,4 +350,5 @@ public class MainActivity extends BaseActivity implements PullRefreshLayout.OnRe
     public void setUser(User user) {
         mUser = user;
     }
+
 }

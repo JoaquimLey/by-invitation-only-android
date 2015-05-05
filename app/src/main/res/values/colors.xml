@@ -14,11 +14,15 @@
 <resources>
 
     <!-- App Material-like colors -->
-    <color name="action_bar_color">#495f88</color>
-    <color name="primary_app_color">#2979FF</color>
-    <color name="dark_app_color">#2962FF</color>
-    <color name="subtitle_app_color">#cccaca</color>
-    <color name="accent_app_color">#00BCD4</color>
+    <color name="myPrimaryColor">#2962FF</color>
+    <color name="myPrimaryDarkColor">#2962FF</color>
+    <color name="myAccentColor">#2962FF</color>
+    <color name="myDrawerBackground">#F2F2F2</color>
+    <color name="myWindowBackground">#DEDEDE</color>
+    <color name="myTextPrimaryColor">#000000</color>
+    <color name="myNavigationColor">#000000</color>
+    <color name="selected_gray">#ffdbdbdb</color>
+    <color name="white">#FFFFFF</color>
     <!-- List -->
     <color name="list_divider">@color/material_blue_grey_800</color>
     <color name="list_row_start_color">@color/ripple_material_dark</color>

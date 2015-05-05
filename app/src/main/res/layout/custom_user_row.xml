@@ -24,7 +24,7 @@
         android:layout_height="90dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:contentDescription="@string/text_user_profile_picture" />
+        android:contentDescription="@string/user_profile_picture" />
 
 
     <!-- Name -->

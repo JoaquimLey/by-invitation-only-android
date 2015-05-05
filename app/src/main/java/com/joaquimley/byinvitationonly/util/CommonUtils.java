@@ -29,16 +29,16 @@ import com.joaquimley.byinvitationonly.model.User;
  * UI/UX related customization other util methods
  */
 
-public class UiUxUtils {
+public class CommonUtils {
 
-    private static final String TAG = UiUxUtils.class.getSimpleName();
+    private static final String TAG = CommonUtils.class.getSimpleName();
 
     public static void changeStatusIcon(User user, View btnView) {
-        if(user == null){
+        if (user == null) {
             Log.e(TAG, "changeStatusIcon(): User is null");
             return;
         }
-        if(user.isVisible()){
+        if (user.isVisible()) {
             btnView.setBackgroundResource(R.drawable.ic_status_green);
             return;
         }
@@ -49,11 +49,11 @@ public class UiUxUtils {
      * Clears the action bar label and sets a custom icon
      *
      * @param actionBar self explanatory
-     * @param title self explanatory
-     * @param iconId self explanatory
+     * @param title     self explanatory
+     * @param iconId    self explanatory
      */
-    public static void simplifyActionBay(ActionBar actionBar, String title, int iconId){
-        if(actionBar == null){
+    public static void simplifyActionBay(ActionBar actionBar, String title, int iconId) {
+        if (actionBar == null) {
             Log.e(TAG, "simplifyActionBay(): Action bar is null");
             return;
         }
@@ -77,7 +77,14 @@ public class UiUxUtils {
         }
     }
 
-    public static void createAlertDialog(final Activity activity, String title, String message){
+    /**
+     * Creates a simple alert dialog with given params
+     *
+     * @param activity self explanatory
+     * @param title    self explanatory
+     * @param message  self explanatory
+     */
+    public static void createAlertDialog(final Activity activity, String title, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
 
         // set title
@@ -87,8 +94,8 @@ public class UiUxUtils {
         alertDialogBuilder
                 .setMessage(message)
                 .setCancelable(false)
-                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         // if this button is clicked, close
                         // current activity
                         dialog.cancel();
@@ -103,7 +110,7 @@ public class UiUxUtils {
      * @param session self explanatory
      * @return date with the following format HHh - dd/MOT
      */
-    public static String getSessionListDay(Session session){
+    public static String getSessionListDay(Session session) {
         return session.getDate() + " | " + session.getStartHour() + "h " + session.getEndHour() + "h";
     }
 
@@ -113,7 +120,7 @@ public class UiUxUtils {
      * @param month number
      * @return the month name (abbreviated)
      */
-    public static String getMonthName(int month){
+    public static String getMonthName(int month) {
         String[] monthNames = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         return monthNames[month];
     }

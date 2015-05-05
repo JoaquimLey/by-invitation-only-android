@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Session;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
@@ -94,7 +94,7 @@ public class CustomSessionListAdapter extends BaseAdapter {
         // Speaker
         holder.listSubtitle.setText(session.getPresenter());
         // Date
-        holder.listDate.setText(UiUxUtils.getSessionListDay(session));
+        holder.listDate.setText(CommonUtils.getSessionListDay(session));
         // Bio
         holder.listDescription.setText(session.getAbstract());
         // Image

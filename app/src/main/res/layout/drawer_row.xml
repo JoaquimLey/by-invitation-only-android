@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
+  ~ All rights reserved.
+  ~
+  ~ Redistribution, modification or use of source and binary forms are NOT allowed
+  ~ without permission. The name of Joaquim Ley, or joaquimley.com may not be used
+  ~ to endorse products derived without previous authorization.
+  ~ THIS SOFTWARE IS PROVIDED 'AS IS' AND WITHOUT ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:alpha="0.87"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+</LinearLayout>

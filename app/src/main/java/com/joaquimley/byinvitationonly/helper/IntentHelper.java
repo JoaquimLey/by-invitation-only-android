@@ -10,7 +10,7 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package com.joaquimley.byinvitationonly.util;
+package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +19,11 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.activities.BookmarksListActivity;
 import com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity;
 import com.joaquimley.byinvitationonly.activities.MainActivity;
-import com.joaquimley.byinvitationonly.activities.ParticipantsList;
+import com.joaquimley.byinvitationonly.activities.ParticipantsListActivity;
+import com.joaquimley.byinvitationonly.activities.SessionsListActivity;
 import com.joaquimley.byinvitationonly.model.User;
 
 /**
@@ -40,9 +42,34 @@ public class IntentHelper {
         return new Intent(context, MainActivity.class);
     }
 
+    /**
+     * Creates a ParticipantsListActivity intent
+     *
+     * @param context self explanatory
+     * @return the intent
+     */
     public static Intent createParticipantsListIntent(Context context) {
-        //        participantsListIntent.putExtra("usersRef", usersRef);
-        return new Intent(context, ParticipantsList.class);
+        return new Intent(context, ParticipantsListActivity.class);
+    }
+
+    /**
+     * Creates a SessionsListActivity intent
+     *
+     * @param context self explanatory
+     * @return the intent
+     */
+    public static Intent createSessionListActivityIntent(Context context) {
+        return new Intent(context, SessionsListActivity.class);
+    }
+
+    /**
+     * Creates a BookmarksListActivity intent
+     *
+     * @param context self explanatory
+     * @return the intent
+     */
+    public static Intent createBookmarksActivity(Context context) {
+        return new Intent(context, BookmarksListActivity.class);
     }
 
     public static Intent createUserDetailsActivityIntent(Context context, User user) {

@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
   ~ All rights reserved.
   ~
@@ -10,14 +10,11 @@
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="?attr/colorPrimaryDark"
-    android:fitsSystemWindows="true"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/myPrimaryDarkColor" android:state_selected="true" />
+    <item android:drawable="@color/accent_material_light" android:state_pressed="true" />
+    <item android:drawable="@color/myPrimaryColor" android:state_focused="false" android:state_pressed="false" android:state_selected="false" />
 
 
+</selector>

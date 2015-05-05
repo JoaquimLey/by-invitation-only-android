@@ -27,7 +27,7 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
-import com.joaquimley.byinvitationonly.util.IntentHelper;
+import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.squareup.picasso.Picasso;
 
 public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener {
@@ -45,7 +45,6 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarIcon(R.drawable.ic_ab_drawer);
 
         Bundle data = getIntent().getExtras();
         if (data != null && data.getParcelable("user") != null) {
@@ -105,7 +104,7 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
 
             case R.id.btn_save:
 
-                if (mEtName.getText().length() < 0 || mEtEmail.getText().length() < 0 || mEtDescription.getText().length() < 0) {
+                if (mEtName.getText().length() <= 0 || mEtEmail.getText().length() <= 0 || mEtDescription.getText().length() < 0) {
                     Toast.makeText(this, getString(R.string.error_fill_required_fields), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -123,9 +122,11 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                 if(mImageChangedFlag && mImageUri != null){
                     mUser.setPhotoBase64(FileHelper.encodeUriToBase64(this, mImageUri));
                 }
+
                 mUser.setVisible(false);
 
                 FileHelper.updateUserDataToSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this), mUser);
+                Toast.makeText(this, getString(R.string.text_profile_updated), Toast.LENGTH_SHORT).show();
                 startActivity(IntentHelper.createMainActivityIntent(this));
                 break;
 
@@ -160,4 +161,8 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     }
 
 
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
+    }
 }

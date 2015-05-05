@@ -13,32 +13,69 @@
 package com.joaquimley.byinvitationonly.activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
+import com.joaquimley.byinvitationonly.ui.NavigationDrawerFragment;
+import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
+import com.squareup.picasso.Picasso;
 
 /**
  * BaseActivity needed for correct ActionBar material style
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
 
-    private Toolbar mToolbar;
+    private static final String TAG = BaseActivity.class.getSimpleName();
+    protected NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setupNavigationDrawer();
+        writeProfileInfo();
+    }
+
+
+    private void setupNavigationDrawer() {
+        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), toolBar);
+    }
+
+    protected void writeProfileInfo() {
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.shared_pref_user_details_name), "");
+        String userEmail = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.shared_pref_user_details_email), "");
+        String userAvatarUri = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.shared_pref_user_details_photo_uri), "");
+
+        if (userName != null && !userName.isEmpty()) {
+            mNavigationDrawerFragment.getUserName().setText(userName);
+        }
+
+        if (userEmail != null && !userEmail.isEmpty()) {
+            mNavigationDrawerFragment.getUserEmail().setText(userEmail);
+        }
+
+        if (userAvatarUri != null && !userAvatarUri.isEmpty()) {
+            Picasso.with(this).load(userAvatarUri).transform(new ImageCircleTransform())
+                    .into((ImageView) findViewById(R.id.imgAvatar));
         }
     }
 
-    protected abstract int getLayoutResource();
-
-    protected void setActionBarIcon(int iconRes) {
-        mToolbar.setNavigationIcon(iconRes);
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen())
+            mNavigationDrawerFragment.closeDrawer();
+        else
+            super.onBackPressed();
     }
+
+    protected abstract int getLayoutResource();
 }

@@ -23,7 +23,7 @@ import com.firebase.client.ValueEventListener;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 /**
  * Helper class, handles all Firebase communications
@@ -79,7 +79,7 @@ public class FirebaseHelper {
             return;
         }
 
-        if (!UiUxUtils.isOnline(context)) {
+        if (!CommonUtils.isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
             return;
         }

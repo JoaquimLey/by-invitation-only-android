@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
   ~ All rights reserved.
@@ -10,15 +12,14 @@
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<resources>
-
-    <style name="CustomMaterialLikeTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="colorPrimary">@color/primary_app_color</item>
-        <item name="colorPrimaryDark">@color/dark_app_color</item>
-        <item name="colorAccent">@color/accent_app_color</item>
-    </style>
-
-</resources>
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/myDrawerBackground"
+    android:clickable="true"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:scrollbars="vertical" />

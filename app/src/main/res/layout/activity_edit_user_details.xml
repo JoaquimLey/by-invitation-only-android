@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (c) 2015 Joaquim Ley - www.joaquimley.com
   ~ All rights reserved.
@@ -10,123 +11,141 @@
   ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity">
+    android:layout_height="match_parent">
 
-    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/toolbar">
+        android:orientation="vertical">
 
-        <android.support.v7.internal.widget.TintImageView
-            android:id="@+id/iv_profile_picture"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:contentDescription="@string/text_user_profile_picture"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentEnd="false"
-            android:layout_centerHorizontal="true" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_details_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/iv_profile_picture"
-            android:layout_marginTop="5dp"
-            android:text="@string/text_name" />
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_edit_user_details_name"
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_details_name"
-            android:ems="10"
-            android:inputType="textPersonName|textCapWords" />
+            android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_details_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/et_edit_user_details_name"
-            android:text="@string/email" />
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_edit_user_details_email"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_details_email"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_details_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/et_edit_user_details_email"
-            android:text="@string/description" />
+            <android.support.v7.internal.widget.TintImageView
+                android:id="@+id/iv_profile_picture"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/user_profile_picture" />
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_edit_user_details_description"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_details_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/iv_profile_picture"
+                android:layout_marginTop="5dp"
+                android:text="@string/text_name" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_edit_user_details_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_details_name"
+                android:ems="10"
+                android:inputType="textPersonName|textCapWords" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_details_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/et_edit_user_details_name"
+                android:text="@string/email" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_edit_user_details_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_details_email"
+                android:ems="10"
+                android:inputType="textEmailAddress" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_details_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/et_edit_user_details_email"
+                android:text="@string/description" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_edit_user_details_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/btn_cancel"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_details_description"
+                android:ems="10"
+                android:inputType="textCapWords|textMultiLine" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/et_edit_user_details_description"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
+                android:background="@drawable/button_state_selector"
+                android:text="@string/text_save"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/btn_save"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
+                android:background="@drawable/button_state_selector"
+                android:text="@string/text_cancel"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/btn_cancel"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_details_description"
-            android:ems="10"
-            android:inputType="textCapWords|textMultiLine" />
+            android:layout_height="match_parent"
+            android:clickable="true" />
 
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_save"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
-            fancy:defaultColor="@color/primary_app_color"
-            fancy:focusColor="@color/accent_material_light"
-            fancy:radius="30dp"
-            fancy:text="@string/text_save"
-            fancy:textColor="#FFFFFF"
-            android:layout_below="@+id/et_edit_user_details_description" />
+    </LinearLayout>
 
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_cancel"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/btn_save"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
-            fancy:defaultColor="@color/primary_app_color"
-            fancy:focusColor="@color/accent_material_light"
-            fancy:radius="30dp"
-            fancy:text="@string/text_cancel"
-            fancy:textColor="#FFFFFF" />
-    </RelativeLayout>
+    <fragment
+        android:id="@+id/fragment_drawer"
+        android:name="com.joaquimley.byinvitationonly.ui.NavigationDrawerFragment"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/fragment_navigation_drawer" />
 
-
-</RelativeLayout>
+</android.support.v4.widget.DrawerLayout>

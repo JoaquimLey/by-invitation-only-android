@@ -12,13 +12,10 @@
 
 package com.joaquimley.byinvitationonly;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,10 +25,7 @@ import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.UiUxUtils;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +35,7 @@ import java.util.Map;
  * Singleton class with application shared data
  */
 
-public class BioApp extends Activity implements View.OnClickListener, FloatingActionMenu.MenuStateChangeListener {
+public class BioApp extends Activity implements View.OnClickListener {
 
     protected static final String TAG = BioApp.class.getSimpleName();
 
@@ -53,7 +47,6 @@ public class BioApp extends Activity implements View.OnClickListener, FloatingAc
     protected static String sCurrentUserId = null;
     // FloatActionMenu
     private ImageView mMenuIcon;
-    private FloatingActionMenu mActionMenu;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -179,91 +172,91 @@ public class BioApp extends Activity implements View.OnClickListener, FloatingAc
 
     }
 
-    /**
-     * Creates menu and sub-menu items
-     */
-    public void buildMenu() {
-        // Create Button to attach to Menu
-        mMenuIcon = new ImageView(this); // Create an icon
-//        mMenuIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_cross_2));
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-                .setContentView(mMenuIcon)
-                .setPosition(FloatingActionButton.POSITION_BOTTOM_RIGHT)
-                .build();
-
-        // Custom sub-menu
-        int actionMenuContentSize = getResources().getDimensionPixelSize(R.dimen.sub_action_button_size);
-        int actionMenuContentMargin = getResources().getDimensionPixelSize(R.dimen.sub_action_button_content_margin);
-        SubActionButton.Builder lCSubBuilder = new SubActionButton.Builder(this);
-
-        FrameLayout.LayoutParams actionMenuContentParams = new FrameLayout
-                .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-
-        actionMenuContentParams.setMargins(actionMenuContentMargin, actionMenuContentMargin, actionMenuContentMargin,
-                actionMenuContentMargin);
-        lCSubBuilder.setLayoutParams(actionMenuContentParams);
-
-        // Set custom layout params
-        FrameLayout.LayoutParams subButtonParams = new FrameLayout.LayoutParams(actionMenuContentSize, actionMenuContentSize);
-        lCSubBuilder.setLayoutParams(subButtonParams);
-
-        // Create menu Buttons
-        ImageView mainActivityIcon = new ImageView(this);
-        ImageView participantsListIcon = new ImageView(this);
-        ImageView sessionsListIcon = new ImageView(this);
-        ImageView favouritesListIcon = new ImageView(this);
-
-//        mainActivityIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_list));
-//        participantsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_info));
-//        sessionsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
-//        favouritesListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
-
-        SubActionButton menuSubBtnHome = lCSubBuilder.setContentView(mainActivityIcon).build();
-        SubActionButton menuSubBtnInfo = lCSubBuilder.setContentView(participantsListIcon).build();
-        SubActionButton menuSubBtnMisc = lCSubBuilder.setContentView(sessionsListIcon).build();
-        SubActionButton menuSubBtnFavourites = lCSubBuilder.setContentView(sessionsListIcon).build();
-
-        // Button Action
-        menuSubBtnHome.setOnClickListener(this);
-        menuSubBtnInfo.setOnClickListener(this);
-        menuSubBtnMisc.setOnClickListener(this);
-        menuSubBtnFavourites.setOnClickListener(this);
-
-        // Create menu with MenuButton + SubItemsButtons
-        mActionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(menuSubBtnHome)
-                .addSubActionView(menuSubBtnInfo)
-                .addSubActionView(menuSubBtnMisc)
-                .attachTo(actionButton)
-                .build();
-
-        // Listen menu open and close events to animate the button content view
-        mActionMenu.setStateChangeListener(this);
-    }
-
-    private void closeMenu() {
-        if(mActionMenu != null && mActionMenu.isOpen()){
-            mActionMenu.close(true);
-        }
-    }
-
-    @Override
-    public void onMenuOpened(FloatingActionMenu menu) {
-        // Rotate the icon of rightLowerButton 45 degrees clockwise
-        mMenuIcon.setRotation(0);
-        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
-        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
-        animation.start();
-    }
-
-    @Override
-    public void onMenuClosed(FloatingActionMenu menu) {
-        // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
-        mMenuIcon.setRotation(45);
-        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
-        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
-        animation.start();
-    }
+//    /**
+//     * Creates menu and sub-menu items
+//     */
+//    public void buildMenu() {
+//        // Create Button to attach to Menu
+//        mMenuIcon = new ImageView(this); // Create an icon
+////        mMenuIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_cross_2));
+//        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+//                .setContentView(mMenuIcon)
+//                .setPosition(FloatingActionButton.POSITION_BOTTOM_RIGHT)
+//                .build();
+//
+//        // Custom sub-menu
+//        int actionMenuContentSize = getResources().getDimensionPixelSize(R.dimen.sub_action_button_size);
+//        int actionMenuContentMargin = getResources().getDimensionPixelSize(R.dimen.sub_action_button_content_margin);
+//        SubActionButton.Builder lCSubBuilder = new SubActionButton.Builder(this);
+//
+//        FrameLayout.LayoutParams actionMenuContentParams = new FrameLayout
+//                .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+//
+//        actionMenuContentParams.setMargins(actionMenuContentMargin, actionMenuContentMargin, actionMenuContentMargin,
+//                actionMenuContentMargin);
+//        lCSubBuilder.setLayoutParams(actionMenuContentParams);
+//
+//        // Set custom layout params
+//        FrameLayout.LayoutParams subButtonParams = new FrameLayout.LayoutParams(actionMenuContentSize, actionMenuContentSize);
+//        lCSubBuilder.setLayoutParams(subButtonParams);
+//
+//        // Create menu Buttons
+//        ImageView mainActivityIcon = new ImageView(this);
+//        ImageView participantsListIcon = new ImageView(this);
+//        ImageView sessionsListIcon = new ImageView(this);
+//        ImageView favouritesListIcon = new ImageView(this);
+//
+////        mainActivityIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_list));
+////        participantsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_info));
+////        sessionsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
+////        favouritesListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
+//
+//        SubActionButton menuSubBtnHome = lCSubBuilder.setContentView(mainActivityIcon).build();
+//        SubActionButton menuSubBtnInfo = lCSubBuilder.setContentView(participantsListIcon).build();
+//        SubActionButton menuSubBtnMisc = lCSubBuilder.setContentView(sessionsListIcon).build();
+//        SubActionButton menuSubBtnFavourites = lCSubBuilder.setContentView(sessionsListIcon).build();
+//
+//        // Button Action
+//        menuSubBtnHome.setOnClickListener(this);
+//        menuSubBtnInfo.setOnClickListener(this);
+//        menuSubBtnMisc.setOnClickListener(this);
+//        menuSubBtnFavourites.setOnClickListener(this);
+//
+//        // Create menu with MenuButton + SubItemsButtons
+//        mActionMenu = new FloatingActionMenu.Builder(this)
+//                .addSubActionView(menuSubBtnHome)
+//                .addSubActionView(menuSubBtnInfo)
+//                .addSubActionView(menuSubBtnMisc)
+//                .attachTo(actionButton)
+//                .build();
+//
+//        // Listen menu open and close events to animate the button content view
+//        mActionMenu.setStateChangeListener(this);
+//    }
+//
+//    private void closeMenu() {
+//        if(mActionMenu != null && mActionMenu.isOpen()){
+//            mActionMenu.close(true);
+//        }
+//    }
+//
+//    @Override
+//    public void onMenuOpened(FloatingActionMenu menu) {
+//        // Rotate the icon of rightLowerButton 45 degrees clockwise
+//        mMenuIcon.setRotation(0);
+//        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
+//        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
+//        animation.start();
+//    }
+//
+//    @Override
+//    public void onMenuClosed(FloatingActionMenu menu) {
+//        // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
+//        mMenuIcon.setRotation(45);
+//        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
+//        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
+//        animation.start();
+//    }
 
     //********************************** Debug/Dummy methods **********************************//
     //********************************** Debug/Dummy methods **********************************//
@@ -281,7 +274,7 @@ public class BioApp extends Activity implements View.OnClickListener, FloatingAc
      * @param usersRef self-explanatory
      */
     public static void pushDummyUsersToFirebase(Context context, Firebase usersRef) {
-        if (!UiUxUtils.isOnline(context)) {
+        if (!CommonUtils.isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -318,7 +311,7 @@ public class BioApp extends Activity implements View.OnClickListener, FloatingAc
      * @param sessionsRef self explanatory
      */
     public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
-        if (!UiUxUtils.isOnline(context)) {
+        if (!CommonUtils.isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
