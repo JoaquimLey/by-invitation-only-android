@@ -3,34 +3,48 @@
 ## Part of "**School Source Code**" project
 +info: [joaquimley.com/school](http://www.joaquimley.com/school)
 
-### Briefing
+Motivation
+----------
 Academic project for my Computer Science course. Simple Android app where the users can see all the info related to an event. The app is foucused on the networking aspect of these type of events.
 
-###Used Technology
-* [Firebase](https://www.firebase.com/)
-* [SQLite/ORMLite](http://ormlite.com/)
-* [Robotium Automated Tests](https://code.google.com/p/robotium/)
+Technology
+----------
+* [Firebase](https://www.firebase.com/) - As backend cloud service
+* [Google Support Libraries](https://developer.android.com/tools/support-library/features.html) - Mainly for material-like design on pre-Lollipop
+* [Robotium](https://code.google.com/p/robotium/) - Automated Tests
 
-###Libraries
+Libraries
+---------
+Firebase Android Client
+Google Appcompat-V7
+Google Recylervew-V7
+OpenCsv
+Picasso
+PullRefreshLayout
+OrmLite
 
-###Features
-* Talks Schedule
-* Speakers information
-* See other participants information
-* Share your details to other participants
-
+Features
+--------
+* Event schedule with session's information.
+* Give feedback on the sessions.
+* Bookmark your own sessions to organize your "personal agenda" for the event.
+* See other participants information.
+* Contact other participants.
+* Create your personal profile for the event and share with other participants.
 
 Future Releases
------------------------
+---------------
 
-Further improve already available features
-Implement new features as development goes
+* In-app chat with other participants
+* Call, send email to other participants directly from the app
+* Further improve already available features
 
 Contribution guidelines
 -----------------------
 
 * **For each Module/UserStory:**
-  Create a new branch (copy from master) with the **following syntax:** author/moduleOrFunctionName
+  Create a new branch (copy from master) with the
+  **following syntax:** author/moduleOrFunctionName
 
 * **Code review:**
   Each commit must be clearly explained (keep it short and simple).
@@ -44,7 +58,7 @@ Contribution guidelines
 
 Joaquim Ley - <me@joaquimley.com>
 
-### Who do I session to? ###
+### Who do I talk to? ###
 
 Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
 
@@ -72,4 +86,4 @@ Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
     SOFTWARE.`
 
 ## IMPORTANT
-This is a under development academic project, if you are going to use any part of it, please DO READ the MIT License and follow it's guidelines guidelines.
+This is a under development academic project, if you are going to use any part of it, please DO READ the MIT License and follow it's guidelines.

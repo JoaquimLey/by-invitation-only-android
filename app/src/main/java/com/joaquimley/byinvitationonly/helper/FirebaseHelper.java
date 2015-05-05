@@ -92,6 +92,7 @@ public class FirebaseHelper {
                     BioApp.setCurrentUserId("");
                     user.setId(BioApp.getCurrentUserId());
                     user.setVisible(!user.isVisible());
+                    // TODO: Go to participants list Activity
 
                 } else if (!user.isVisible()) {
                     Firebase newUserRef = usersRef.push();
@@ -99,6 +100,7 @@ public class FirebaseHelper {
                     user.setId(BioApp.getCurrentUserId());
                     user.setVisible(true);
                     newUserRef.setValue(user, listener);
+                    // TODO: Go to participants list Activity
 
                 } else {
                     user.setVisible(!user.isVisible());

@@ -31,7 +31,6 @@ import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.squareup.picasso.Picasso;
 
 public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener {
-
     public static final int RESULT_GALLERY = 0;
 
     private User mUser;
