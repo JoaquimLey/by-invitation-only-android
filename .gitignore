@@ -18,7 +18,7 @@ gen-external-apklibs
 build
 
 # Other
-design
+design/
 tmp
 .DS_Store
 Thumbs.com.joaquimley.myapplication.db
