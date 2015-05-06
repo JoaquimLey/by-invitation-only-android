@@ -5,85 +5,81 @@
 
 Motivation
 ----------
-Academic project for my Computer Science course. Simple Android app where the users can see all the info related to an event. The app is foucused on the networking aspect of these type of events.
-
-Technology
-----------
-* [Firebase](https://www.firebase.com/) - As backend cloud service
-* [Google Support Libraries](https://developer.android.com/tools/support-library/features.html) - Mainly for material-like design on pre-Lollipop
-* [Robotium](https://code.google.com/p/robotium/) - Automated Tests
-
-Libraries
----------
-Firebase Android Client
-Google Appcompat-V7
-Google Recylervew-V7
-OpenCsv
-Picasso
-PullRefreshLayout
-OrmLite
+Academic project for my Computer Science course.  
+Simple Android app where the users can see all the info related to an event and do some networking with other participants.
 
 Features
 --------
-* Event schedule with session's information.
+* Event schedule with all relevant info.
 * Give feedback on the sessions.
-* Bookmark your own sessions to organize your "personal agenda" for the event.
+* Bookmark your own sessions to organize a personal event agenda.
 * See other participants information.
-* Contact other participants.
+* Contact other participants (networking).
 * Create your personal profile for the event and share with other participants.
 
 Future Releases
 ---------------
+* In-app chat with other participants (using Firebase)
 
-* In-app chat with other participants
-* Call, send email to other participants directly from the app
-* Further improve already available features
+
+Technology
+----------
+* [Firebase](https://www.firebase.com/) as backend cloud service
+* [Google Support Libraries](https://developer.android.com/tools/support-library/features.html) for material-like design on pre-Lollipop
+
+Dependencies
+---------
+* [robotium-solo](https://code.google.com/p/robotium/)
+* [firebase-client-android](https://www.firebase.com/docs/android/quickstart.html)
+* [appcompat-v7](http://android-developers.blogspot.pt/2014/10/appcompat-v21-material-design-for-pre.html)
+* [recyclerview-v7](https://developer.android.com/tools/support-library/features.html)
+* [opencsv](http://opencsv.sourceforge.net/)
+* [picasso](http://square.github.io/picasso/)
+* [pullrefreshlayout](https://github.com/baoyongzhang/android-PullRefreshLayout)
+
+Automated Tests
+---------------
+Using [Robotium](https://code.google.com/p/robotium/) framework, every feature should be tested simulating user behaviour.  
+All tests can be found [here](../master/app/src/androidTest/java/com/joaquimley/byinvitationonly) (javadocs currently in portuguese).  
+*I will update this section soon (implment new and improve already written tests).*
 
 Contribution guidelines
 -----------------------
+[Git cheat sheet](http://tinyurl.com/mslxyyt) **by** [Ryan Amaral](https://github.com/ryanamaral)
 
-* **For each Module/UserStory:**
-  Create a new branch (copy from master) with the
-  **following syntax:** author/moduleOrFunctionName
+* For each Feature/Module: **Create a new branch (copy from master) with the following syntax: **author/featureName **(i.e.: *ley/navigationDrawer*)**
 
-* **Code review:**
-  Each commit must be clearly explained (keep it short and simple).
+* Code review: **Each commit must be clearly explained (keep it short and simple).**
 
-* **Other guidelines:**
-  Always PULL from master before doing any work, please keep the REABASE conflicts to a minimum.
-* **Git documentation (by Ryan Amaral):** [http://tinyurl.com/mslxyyt](http://tinyurl.com/mslxyyt)
+* Testing: **Try to not neglet feature testing (using robotium).**
+
+* Other guidelines: **Always PULL from master before doing any work, doing so keeps the REABASE conflicts to a minimum.**
 
 
-### Contributors ###
+
+### Contributors
 
 Joaquim Ley - <me@joaquimley.com>
 
-### Who do I talk to? ###
-
-Joaquim Ley - [joaquimley.com](http://www.joaquimley.com)
-
 #License
-    The MIT License (MIT)
+    GNU GENERAL PUBLIC LICENSE VERSION 2
 
     Copyright (c) 2015 Joaquim Ley <me@joaquimley.com>
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.`
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+Read the full license - [GNU GPL](../master/LICENSE.md)
 
 ## IMPORTANT
-This is a under development academic project, if you are going to use any part of it, please DO READ the MIT License and follow it's guidelines.
+This project is under development, if you are going to use any part of it, please DO READ the License and follow it's guidelines.

@@ -1,24 +1,50 @@
-# Eclipse
-bin/
-gen/
-out/
-.settings/
-AndroidManifest.out.xml
-/res/values/com_crashlytics_export_strings.xml
+# Author: Ryan Amaral - ryanamaral.com
+# 
+# To remove tracked the files from cache run the following commands:
+# Note: Don't forget to commit your current changes before, otherwise you will lose control on all the changed files!
+#  $ git rm -r --cached .
+#  $ git add --all
+#  $ git commit -m "fixed untracked files"
 
 # IntelliJ IDEA
-*.idea
-*.ipr
-*.iws
+**/.idea/workspace.xml
+**/.idea/tasks.xml
 classes
 gen-external-apklibs
 
+# Eclipse project files
+.classpath
+.project
+.settings/
+
 # Gradle
 .gradle
-build
+
+# Generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Java class files
+*.class
+
+# Files for the dex VM
+*.dex
+
+# Built application files
+out/
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
 
 # Other
-design/
 tmp
-.DS_Store
-Thumbs.com.joaquimley.myapplication.db
+
+# Crashlytics
+/res/values/com_crashlytics_export_strings.xml
+/assets/crashlytics-build.properties
