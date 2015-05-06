@@ -90,16 +90,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * Tests if the fragment with the TAG is showing
-     *
-     * @param activityName self explanatory
-     */
-    public void correctActivityChange(String activityName, int index) {
-        solo.clickOnButton(index);
-        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(activityName));
-    }
-
-    /**
      * Initialisation of UI components
      */
     public void init() {
@@ -115,7 +105,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * Testes if Activity isn't null
+     * Testes if start Activity isn't null
      */
     public void preConditions() {
         assertNotNull(mActivity);
@@ -123,7 +113,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * Clears all sharedPreferences information on device, sets mUser NULL
+     * Clears all sharedPreferences information on device, sets mUser to NULL
      */
     private void clearUserProfile() {
         mSharedPreferences.edit().clear().apply();
@@ -131,7 +121,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * Recreates user profile (sim user behavior)
+     * Recreates user profile simulating user behavior
      */
     public void reCreateUserProfile(boolean forceUpdate) {
         if(!forceUpdate){
@@ -253,12 +243,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @MediumTest
     public void test06_UserDetailsEdited() {
+        // Goes to "Edit Details activity first"
+        solo.clickOnImageButton(0);
+        assertTrue(solo.waitForActivity(EditUserDetailsActivity.class));
+
         String newName = "new name";
         String newEmail = "new@email.com";
         String newDescription = "new description";
 
-        solo.clickOnImageButton(0);
-        assertTrue(solo.waitForActivity(EditUserDetailsActivity.class));
         init();
         // Name
         solo.clearEditText(mEditTestUserName);

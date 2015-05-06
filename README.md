@@ -55,10 +55,7 @@ Contribution guidelines
 
 * Other guidelines: **Always PULL from master before doing any work, doing so keeps the REABASE conflicts to a minimum.**
 
-
-
 ### Contributors
-
 Joaquim Ley - <me@joaquimley.com>
 
 #License
