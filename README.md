@@ -47,7 +47,7 @@ Contribution guidelines
 -----------------------
 [Git cheat sheet](http://tinyurl.com/mslxyyt) **by** [Ryan Amaral](https://github.com/ryanamaral)
 
-* For each Feature/Module: **Create a new branch (copy from master) with the following syntax: **author/featureName **(i.e.: *ley/navigationDrawer*)**
+* For each Feature/Module: **Create a new branch (copy from master) with the following syntax:** author/featureName **(i.e.: *ley/navigationDrawerAdapter*)**
 
 * Code review: **Each commit must be clearly explained (keep it short and simple).**
 
