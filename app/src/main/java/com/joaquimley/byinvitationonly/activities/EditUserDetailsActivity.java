@@ -53,6 +53,9 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         Bundle data = getIntent().getExtras();
         if (data != null && data.getParcelable("user") != null) {
