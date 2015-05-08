@@ -33,8 +33,6 @@ import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Singleton class with application shared data
@@ -170,28 +168,24 @@ public class BioApp extends Activity {
      * @param sessionsRef self explanatory
      */
     public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
+
         if (!CommonUtils.isOnline(context)) {
             Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ArrayList<Session> sessionList = new ArrayList<>();
-
-//        sessionList.add(new Session("Keynote: " + "On the State of Software Engineering", "Dr. James T. Kirk", ))
-
-
-        Map<String, Session> sessions = new HashMap<>();
-        sessions.put(sessionList.get(0).getTitle(), sessionList.get(0));
-        sessions.put(sessionList.get(1).getTitle(), sessionList.get(1));
-        sessions.put(sessionList.get(2).getTitle(), sessionList.get(2));
-        sessions.put(sessionList.get(3).getTitle(), sessionList.get(3));
-
-        sessionsRef.setValue(sessions);
+        ArrayList<Session> sessions = createDummySessions();
+        Firebase newSessionRef;
+        for (Session session : sessions) {
+            newSessionRef = sessionsRef.push();
+            session.setId(newSessionRef.getKey());
+            newSessionRef.setValue(session);
+        }
     }
 
     public static ArrayList<Session> createDummySessions() {
         ArrayList<Session> sessions = new ArrayList<>();
-//        sessions.add(new Session("title 1", "Presenter 1", "Abstrac Abstrac Abstrac Abstrac", "Room 1", 1))
+//        sessions.add(new Session())
         return sessions;
     }
 

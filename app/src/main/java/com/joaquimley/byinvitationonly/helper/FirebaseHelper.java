@@ -34,8 +34,11 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 /**
- * Helper class, handles all Firebase communications
+ * Helper class for Firebase communications
  */
 
 public class FirebaseHelper {
@@ -70,6 +73,31 @@ public class FirebaseHelper {
             return null;
         }
         return firebaseRef.child(childName);
+    }
+
+    /**
+     * Parse files from SessionsData.csv assets file and pushes to server
+     * WARNING: Remove this before going into production
+     *
+     * @param context        from which the method is called
+     * @param sessionsRef    is the child reference for "sessions"
+     * @param bufferedReader from assets file
+     */
+    public static void pushSessionsFromFileToServer(Context context, Firebase sessionsRef, BufferedReader bufferedReader) {
+        // TODO: Remove this method before pushing into production, gives the end-user the ability to push items to server
+        try {
+            String[] fields = bufferedReader.readLine().split(context.getString(R.string.csv_split));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                Firebase newSessionRef = sessionsRef.push();
+                String[] parts = line.split(context.getString(R.string.csv_split), -1);
+                for (int i = 0; i < fields.length; i++) {
+                    newSessionRef.child(fields[i]).setValue(parts[i]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

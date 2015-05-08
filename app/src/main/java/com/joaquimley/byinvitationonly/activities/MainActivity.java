@@ -34,10 +34,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomSessionListAdapter;
@@ -46,12 +46,11 @@ import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Session;
-import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks,
-        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, ValueEventListener, FavoriteChangeListener {
+        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener, ChildEventListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int EDIT_USER_DETAILS = 0;
@@ -60,13 +59,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private PullRefreshLayout mPullRefreshLayout;
     private SharedPreferences mSharedPreferences;
     private CustomSessionListAdapter mCustomAdapter;
-    private User mUser;
     private ListView mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTitle(getString(R.string.text_welcome_to) + " " + BioApp.getInstance().getConference().getAcronym());
@@ -86,7 +83,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
         if (mSessionsRef != null) {
-            mSessionsRef.addValueEventListener(this);
+            mSessionsRef.addChildEventListener(this);
         }
         // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -144,9 +141,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         // TODO: Create session details activity
     }
 
-    /**
-     * PullRefreshLayout.OnRefreshListener
-     */
+
     @Override
     public void onRefresh() {
         mCustomAdapter.setItems(BioApp.getInstance().getSessionsList());
@@ -154,6 +149,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         mPullRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Sessions list listener
+     */
     @Override
     public void onCheckBoxClick(int position, Session session) {
         session.setBookmarked(!session.isBookmarked());
@@ -164,11 +162,33 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     }
 
     /**
-     * Sessions list listener
+     * PullRefreshLayout.OnRefreshListener
      */
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        mCustomAdapter.notifyDataSetChanged();
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Session session = dataSnapshot.getValue(Session.class);
+        if (!BioApp.getInstance().getSessionsList().contains(session)) {
+            BioApp.getInstance().getSessionsList().add(session);
+        }
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+        if (CommonUtils.removeSessionFromList(dataSnapshot.getValue(Session.class),
+                BioApp.getInstance().getSessionsList())) {
+
+            mCustomAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
     }
 
     @Override
@@ -219,15 +239,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         return mSessionsRef;
     }
 
-    public void setSEssionsChildRef(Firebase talksChildRef) {
+    public void setSessionsChildRef(Firebase talksChildRef) {
         mSessionsRef = talksChildRef;
-    }
-
-    public User getUser() {
-        return mUser;
-    }
-
-    public void setUser(User user) {
-        mUser = user;
     }
 }

@@ -99,7 +99,7 @@ public class CommonUtils {
      * Removes the user from the instance usersList, should only be called by a "onChildRemoved()
      * listener
      *
-     * @param user returned by dataSnapshot, compared with the current user list
+     * @param user returned by dataSnapshot, compared with the current users list
      */
     public static boolean removeUserFromList(User user, ArrayList<User> usersList) {
         int removeUserIndex = 0;
@@ -114,6 +114,29 @@ public class CommonUtils {
 
         if(removeUserFlag){
             usersList.remove(removeUserIndex);
+        }
+        return removeUserFlag;
+    }
+
+    /**
+     * Removes the user from the instance usersList, should only be called by a "onChildRemoved()
+     * listener
+     *
+     * @param session returned by dataSnapshot, compared with the current sessions list
+     */
+    public static boolean removeSessionFromList(Session session, ArrayList<Session> sessionsList) {
+        int removeSessionIndex = 0;
+        boolean removeUserFlag = false;
+
+        for(int i = 0; i < sessionsList.size(); i++){
+            if (session.getId().equals(sessionsList.get(i).getId())) {
+                removeSessionIndex = i;
+                removeUserFlag = true;
+            }
+        }
+
+        if(removeUserFlag){
+            sessionsList.remove(removeSessionIndex);
         }
         return removeUserFlag;
     }

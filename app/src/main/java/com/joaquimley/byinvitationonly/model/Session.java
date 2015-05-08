@@ -27,6 +27,7 @@ package com.joaquimley.byinvitationonly.model;
 
 public class Session {
 
+    private String mId;
     private String mTitle;
     private String mPresenter;
     private String mAbstract;
@@ -73,6 +74,13 @@ public class Session {
                 '}';
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
 
     public String getTitle() {
         return mTitle;

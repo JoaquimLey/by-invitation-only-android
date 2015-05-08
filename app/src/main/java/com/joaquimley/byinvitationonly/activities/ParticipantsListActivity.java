@@ -99,14 +99,13 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
         mBtnStatus.setOnClickListener(this);
         CommonUtils.changeStatusIcon(mUser, mBtnStatus);
-        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(getString(R.string.text_up_coming_sessions));
         // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
         ListView mList = (ListView) findViewById(R.id.list);
         mList.setOnItemClickListener(this);
         mList.setItemsCanFocus(true);
-//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, FirebaseHelper.getSessions(), this);
+        mCustomAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
         mList.setAdapter(mCustomAdapter);
     }
 
@@ -172,11 +171,6 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
                     startActivityForResult(IntentHelper.createUserDetailsActivityIntent(this, null), EDIT_USER_DETAILS);
                     return;
                 }
-//
-//                if (mUser.isVisible()) {
-//                    Toast.makeText(this, getString(R.string.error_user_edit_available), Toast.LENGTH_LONG).show();
-//                    return;
-//                }
                 startActivity(IntentHelper.createUserDetailsActivityIntent(this, mUser));
                 break;
 
@@ -242,7 +236,7 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+        mCustomAdapter.notifyDataSetChanged();
     }
 
     @Override

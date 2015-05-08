@@ -38,7 +38,7 @@ import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
 /**
- * BaseActivity needed for correct ActionBar material style
+ * BaseActivity needed for correct ActionBar material Toolbar/ActionBar and shared components
  */
 public abstract class BaseActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
 
@@ -61,7 +61,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             mNavigationDrawerFragment.closeDrawer();
         }
     }
-
 
     private void setupNavigationDrawer() {
         Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
