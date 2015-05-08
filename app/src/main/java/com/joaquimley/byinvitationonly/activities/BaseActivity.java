@@ -28,7 +28,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
+import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
+import com.joaquimley.byinvitationonly.helper.FileHelper;
+import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
 import com.joaquimley.byinvitationonly.ui.NavigationDrawerFragment;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
@@ -41,19 +44,31 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     protected NavigationDrawerFragment mNavigationDrawerFragment;
+    protected User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
         setupNavigationDrawer();
+        mUser = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
+        if (mUser != null) {
+            BioApp.getInstance().setCurrentUser(mUser);
+        }
         writeProfileInfo();
+
+        if (mNavigationDrawerFragment != null) {
+            mNavigationDrawerFragment.closeDrawer();
+        }
     }
 
 
     private void setupNavigationDrawer() {
         Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), toolBar);

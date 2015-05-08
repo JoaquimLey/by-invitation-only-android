@@ -30,10 +30,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
@@ -72,7 +70,6 @@ public class FileHelper {
         // Using userName value to assert there is user data on sharedPreferences
         String userName = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_name), "");
         if (userName == null || userName.isEmpty()) {
-            Toast.makeText(context, context.getString(R.string.error_create_user_profile_first), Toast.LENGTH_SHORT).show();
             return null;
         }
 
@@ -107,7 +104,7 @@ public class FileHelper {
      * @param user              which will be used to fill the details
      */
     public static void updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), BioApp.getCurrentUserId()).apply();
+        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), user.getId()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
         sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();

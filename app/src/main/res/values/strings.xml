@@ -35,8 +35,8 @@
     <string name="shared_pref_user_details_email">user_details_email</string>
     <string name="shared_pref_user_details_description">user_details_description</string>
     <string name="shared_pref_user_details_name">user_details_name</string>
-    <string name="shared_pref_user_details_photo_base64">user_details_photo_url</string>
-    <string name="shared_pref_user_details_photo_uri">user_details_image_uri</string>
+    <string name="shared_pref_user_details_photo_base64">user_details_photo_base64</string>
+    <string name="shared_pref_user_details_photo_uri">user_details_photo_uri</string>
     <string name="shared_pref_user_details_availability">user_details_availability</string>
     <string name="shared_pref_user_details_id">user_details_id</string>
     <!-- Errors -->
@@ -76,5 +76,7 @@
     <string name="text_cancel">Cancel</string>
     <!-- Bookmarked List Activity -->
     <string name="title_activity_bookmarked_list">Bookmarked List</string>
+    <string name="title_create_your_profile">Create your profile</string>
+    <string name="error_user_data">There was a error with your user data</string>
 
 </resources>

@@ -34,7 +34,7 @@
         <!--android:title="@string/title_bookmark"-->
         <!--android:orderInCategory="99"-->
         <!--app:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_favorite_checkbox_selected"/>-->
+        <!--android:icon="@drawable/ic_star_selected"/>-->
 
     <!--<item android:id="@+id/ic_menu_session"-->
         <!--android:title="@string/title_sessions"-->

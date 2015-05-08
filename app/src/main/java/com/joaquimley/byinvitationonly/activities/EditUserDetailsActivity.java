@@ -21,7 +21,11 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,14 +38,15 @@ import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
+import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
-import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.squareup.picasso.Picasso;
 
 public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener {
     public static final int RESULT_GALLERY = 0;
 
+    private SharedPreferences mSharedPreferences;
     private User mUser;
     private EditText mEtName;
     private EditText mEtEmail;
@@ -53,15 +58,13 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-        Bundle data = getIntent().getExtras();
-        if (data != null && data.getParcelable("user") != null) {
-            mUser = data.getParcelable("user");
-        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         init();
+
+        if(mUser == null){
+            setTitle(getString(R.string.title_create_your_profile));
+        }
     }
 
     @Override
@@ -76,21 +79,38 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
 
         mIvUserPhoto = (ImageView) findViewById(R.id.iv_profile_picture);
         mIvUserPhoto.setOnClickListener(this);
-        Picasso.with(this).load(R.drawable.image_placeholder).transform(new ImageCircleTransform()).into(mIvUserPhoto);
-
         if (mUser != null) {
-            mEtName.setText(mUser.getName());
-            mEtEmail.setText(String.valueOf(mUser.getEmail()));
-            mEtDescription.setText(mUser.getDescription());
-            if(!mUser.getPhotoBase64().isEmpty()){
+            loadProfileInfo();
+        } else {
+            Picasso.with(this)
+                    .load(R.drawable.image_placeholder)
+                    .transform(new ImageCircleTransform())
+                    .into(mIvUserPhoto);
+        }
+        (findViewById(R.id.btn_save)).setOnClickListener(this);
+        (findViewById(R.id.btn_cancel)).setOnClickListener(this);
+    }
+
+    private void loadProfileInfo() {
+        mImageUri = Uri.parse(getString(R.string.shared_pref_user_details_photo_uri));
+        mEtName.setText(mUser.getName());
+        mEtEmail.setText(String.valueOf(mUser.getEmail()));
+        mEtDescription.setText(mUser.getDescription());
+
+        if(!mUser.getPhotoBase64().isEmpty()){
+            if(mImageUri != null){
+                Picasso.with(this)
+                        .load(mImageUri)
+                        .transform(new ImageCircleTransform())
+                        .into(mIvUserPhoto);
+            } else {
                 Picasso.with(this)
                         .load(FileHelper.decodeBase64ToFile(this, mUser.getPhotoBase64()))
                         .transform(new ImageCircleTransform())
                         .into(mIvUserPhoto);
             }
+
         }
-        (findViewById(R.id.btn_save)).setOnClickListener(this);
-        (findViewById(R.id.btn_cancel)).setOnClickListener(this);
     }
 
     @Override
@@ -130,15 +150,32 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                     mUser.setDescription(String.valueOf(mEtDescription.getText()));
                 }
 
-                if(mImageChangedFlag && mImageUri != null){
+                if(mImageChangedFlag && mImageUri != null) {
                     mUser.setPhotoBase64(FileHelper.encodeUriToBase64(this, mImageUri));
                 }
 
-                mUser.setVisible(false);
-
                 FileHelper.updateUserDataToSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this), mUser);
                 Toast.makeText(this, getString(R.string.text_profile_updated), Toast.LENGTH_SHORT).show();
-                startActivity(IntentHelper.createMainActivityIntent(this));
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Share");
+                alertDialogBuilder
+                        .setMessage("Do you wish to share your info now?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                setResult(Activity.RESULT_OK, IntentHelper.createParticipantsListIntent(getApplicationContext()));
+                                dialog.dismiss();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                setResult(Activity.RESULT_CANCELED, IntentHelper.createParticipantsListIntent(getApplicationContext()));
+                                dialog.dismiss();
+                                finish();
+                            }
+                        })
+                        .create().show();
                 break;
 
             case R.id.btn_cancel:
@@ -155,7 +192,7 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                 if (data != null) {
                     mImageChangedFlag = true;
                     mImageUri = data.getData();
-                    PreferenceManager.getDefaultSharedPreferences(this)
+                    mSharedPreferences
                             .edit()
                             .putString(getString(R.string.shared_pref_user_details_photo_uri), String.valueOf(mImageUri))
                             .apply();

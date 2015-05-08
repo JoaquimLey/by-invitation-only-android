@@ -54,10 +54,6 @@
             android:name=".activities.BookmarksListActivity"
             android:label="@string/title_activity_bookmarked_list" >
         </activity>
-        <activity
-            android:name=".activities.SessionsListActivity"
-            android:label="@string/title_activity_bookmarked_list" >
-        </activity>
     </application>
 
 </manifest>

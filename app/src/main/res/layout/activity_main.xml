@@ -38,13 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/user_profile"
-            layout="@layout/custom_user_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp" />
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_up_coming_sessions"
             android:layout_width="match_parent"
@@ -54,7 +47,7 @@
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingTop="13dp"
-            android:text="@string/text_up_coming_sessions"
+            android:text="@string/text_sessions"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RelativeLayout

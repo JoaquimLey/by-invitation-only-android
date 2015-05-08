@@ -70,7 +70,7 @@ public class BookmarksListActivity extends BaseActivity implements PullRefreshLa
 
         User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
         if (user == null) {
-            CommonUtils.createAlertDialog(this, "Error", "There was a error retering your user data");
+            CommonUtils.createAlertDialog(this, "Error", "There was a error with your user data");
             finish();
         }
 
@@ -136,7 +136,7 @@ public class BookmarksListActivity extends BaseActivity implements PullRefreshLa
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        if (BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class))) {
+        if (CommonUtils.removeUserFromList(dataSnapshot.getValue(User.class), BioApp.getInstance().getUsersList())) {
             mCustomUserListAdapter.notifyDataSetChanged();
         }
     }

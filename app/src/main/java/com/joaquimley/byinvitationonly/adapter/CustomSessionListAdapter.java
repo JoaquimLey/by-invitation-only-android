@@ -81,7 +81,7 @@ public class CustomSessionListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        CustomHolder holder;
+        final CustomHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = mActivity.getLayoutInflater();
             convertView = inflater.inflate(R.layout.custom_session_list, parent, false);
@@ -128,6 +128,7 @@ public class CustomSessionListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 mListener.onCheckBoxClick(position, (Session) v.getTag());
+                CommonUtils.changeBookmarkIcon((Session) v.getTag(), holder.favorite);
             }
         });
 
@@ -167,7 +168,7 @@ public class CustomSessionListAdapter extends BaseAdapter {
         return mItems;
     }
 
-    public void setArtistItems(List<Session> items) {
+    public void setItems(List<Session> items) {
         mItems = items;
     }
 }

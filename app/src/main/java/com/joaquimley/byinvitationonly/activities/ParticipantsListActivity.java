@@ -21,14 +21,22 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.ChildEventListener;
@@ -40,24 +48,36 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
+import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.model.User;
-import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
+import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
-public class ParticipantsListActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener, ChildEventListener {
+public class ParticipantsListActivity extends BaseActivity implements PullRefreshLayout.OnRefreshListener,
+        ChildEventListener, View.OnClickListener, AdapterView.OnItemClickListener, Firebase.CompletionListener {
 
     private static final String TAG = ParticipantsListActivity.class.getSimpleName();
+    private static final int EDIT_USER_DETAILS = 0;
+
     private SharedPreferences mSharedPreferences;
     private PullRefreshLayout mPullRefreshLayout;
-    private CustomUserListAdapter mCustomUserListAdapter;
+    private CustomUserListAdapter mCustomAdapter;
     private Firebase mUsersRef;
+    private ImageButton mBtnStatus;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
+        if (mUser == null) {
+            CommonUtils.createAlertDialog(this, "Error", getString(R.string.error_user_data));
+            finish();
+        }
+
         init();
     }
 
@@ -67,69 +87,144 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
     }
 
     private void init() {
-
-        User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
-        if (user == null) {
-            CommonUtils.createAlertDialog(this, "Error", "There was a error retering your user data");
-            finish();
-        }
-
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
         if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
         }
 
-//        loadProfileInfo(user);
-
+        // UI
+        loadProfileInfo();
+        findViewById(R.id.ib_user_edit).setOnClickListener(this);
+        mBtnStatus = (ImageButton) findViewById(R.id.ib_user_status);
+        mBtnStatus.setOnClickListener(this);
+        CommonUtils.changeStatusIcon(mUser, mBtnStatus);
+        ((TextView) findViewById(R.id.tv_up_coming_sessions)).setText(getString(R.string.text_up_coming_sessions));
+        // List
         mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mPullRefreshLayout.setOnRefreshListener(this);
-        mCustomUserListAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
-        ((ListView) findViewById(R.id.list)).setAdapter(mCustomUserListAdapter);
+        ListView mList = (ListView) findViewById(R.id.list);
+        mList.setOnItemClickListener(this);
+        mList.setItemsCanFocus(true);
+//        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, FirebaseHelper.getSessions(), this);
+        mList.setAdapter(mCustomAdapter);
     }
 
-    private void loadProfileInfo(User user) {
-        ((TextView) findViewById(R.id.tv_participant_name)).setText(user.getName());
-        ((TextView) findViewById(R.id.tv_participant_email)).setText(user.getEmail());
-        ((TextView) findViewById(R.id.tv_participant_description)).setText(user.getDescription());
+    private void loadProfileInfo() {
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
+        if (mUser != null) {
+            BioApp.getInstance().setCurrentUser(mUser);
+            ((TextView) findViewById(R.id.tv_user_name)).setText(mUser.getName());
+            ((TextView) findViewById(R.id.tv_user_email)).setText(mUser.getEmail());
+            ((TextView) findViewById(R.id.tv_user_description)).setText(mUser.getDescription());
 
-        if (!user.getPhotoBase64().isEmpty() && mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null) {
-            Picasso.with(this).load(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder_error)
-                    .transform(new ImageCircleTransform())
-                    .into((ImageView) findViewById(R.id.iv_participant_pic));
+            if (!mUser.getPhotoBase64().isEmpty() && mSharedPreferences
+                    .getString(getString(R.string.shared_pref_user_details_photo_uri), "") != null) {
+
+                Picasso.with(this).load(mSharedPreferences.
+                        getString(getString(R.string.shared_pref_user_details_photo_uri), ""))
+                        .placeholder(R.drawable.image_placeholder)
+                        .error(R.drawable.image_placeholder_error)
+                        .transform(new ImageCircleTransform())
+                        .into((ImageView) findViewById(R.id.iv_user_pic));
+            } else {
+                Picasso.with(this).load(R.drawable.image_placeholder).into((ImageView) findViewById(R.id.iv_user_pic));
+            }
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_participants_list, menu);
-        return true;
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case ParticipantsListActivity.EDIT_USER_DETAILS:
+                if (data != null) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
+                    } else if (resultCode == Activity.RESULT_CANCELED) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                        alertDialogBuilder.setTitle("Check in");
+                        alertDialogBuilder
+                                .setMessage("You must be checked in to see other participants")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        dialog.dismiss();
+                                        finish();
+                                    }
+                                });
+                    }
+                }
+                break;
+
+            default:
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_user_edit:
+                if (mUser == null) {
+                    startActivityForResult(IntentHelper.createUserDetailsActivityIntent(this, null), EDIT_USER_DETAILS);
+                    return;
+                }
+//
+//                if (mUser.isVisible()) {
+//                    Toast.makeText(this, getString(R.string.error_user_edit_available), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+                startActivity(IntentHelper.createUserDetailsActivityIntent(this, mUser));
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.ib_user_status:
+                if (mUser != null) {
+                    FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
+                } else {
+                    Toast.makeText(this, getString(R.string.error_no_user_details), Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
         }
-        return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO: Create Session details activity (getItemAtPosition(position))
+        Toast.makeText(this, "List Click", Toast.LENGTH_SHORT).show();
+
+    }
+
+    /**
+     * PullRefreshLayout.OnRefreshListener
+     */
     @Override
     public void onRefresh() {
-        mCustomUserListAdapter.setItems(BioApp.getInstance().getUsersList());
-        mCustomUserListAdapter.notifyDataSetChanged();
+        mCustomAdapter.setItems(BioApp.getInstance().getUsersList());
+        mCustomAdapter.notifyDataSetChanged();
         mPullRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Firebase.CompletionListener
+     */
+    @Override
+    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        if (firebaseError != null) {
+            Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        CommonUtils.changeStatusIcon(mUser, mBtnStatus);
+        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
+    }
+
+    /**
+     * ChildEventListener
+     */
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         User user = dataSnapshot.getValue(User.class);
@@ -140,8 +235,8 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        if (BioApp.getInstance().removeUserFromList(dataSnapshot.getValue(User.class))) {
-            mCustomUserListAdapter.notifyDataSetChanged();
+        if (CommonUtils.removeUserFromList(dataSnapshot.getValue(User.class), BioApp.getInstance().getUsersList())) {
+            mCustomAdapter.notifyDataSetChanged();
         }
     }
 
@@ -163,5 +258,16 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_participants_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }

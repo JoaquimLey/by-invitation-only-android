@@ -93,27 +93,25 @@ public class FirebaseHelper {
             return;
         }
 
-        usersRef.child(BioApp.getCurrentUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        usersRef.child(BioApp.getInstance().getCurrentUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null && user.getId() != null && user.isVisible()) {
                     usersRef.child(user.getId()).removeValue(listener);
-                    BioApp.setCurrentUserId("");
-                    user.setId(BioApp.getCurrentUserId());
+                    BioApp.getInstance().getCurrentUser().setId("");
                     user.setVisible(!user.isVisible());
                     // TODO: Go to participants list Activity
 
                 } else if (!user.isVisible()) {
                     Firebase newUserRef = usersRef.push();
-                    BioApp.setCurrentUserId(newUserRef.getKey());
-                    user.setId(BioApp.getCurrentUserId());
+                    BioApp.getInstance().getCurrentUser().setId(newUserRef.getKey());
                     user.setVisible(true);
                     newUserRef.setValue(user, listener);
                     // TODO: Go to participants list Activity
 
                 } else {
                     user.setVisible(!user.isVisible());
-                    Toast.makeText(context, "Server synchronization problem, please try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Server synchronization error, please try again", Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -32,7 +32,6 @@ import com.joaquimley.byinvitationonly.activities.BookmarksListActivity;
 import com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity;
 import com.joaquimley.byinvitationonly.activities.MainActivity;
 import com.joaquimley.byinvitationonly.activities.ParticipantsListActivity;
-import com.joaquimley.byinvitationonly.activities.SessionsListActivity;
 import com.joaquimley.byinvitationonly.model.User;
 
 /**
@@ -59,16 +58,6 @@ public class IntentHelper {
      */
     public static Intent createParticipantsListIntent(Context context) {
         return new Intent(context, ParticipantsListActivity.class);
-    }
-
-    /**
-     * Creates a SessionsListActivity intent
-     *
-     * @param context self explanatory
-     * @return the intent
-     */
-    public static Intent createSessionListActivityIntent(Context context) {
-        return new Intent(context, SessionsListActivity.class);
     }
 
     /**

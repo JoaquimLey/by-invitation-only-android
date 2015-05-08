@@ -21,7 +21,6 @@
 
 package com.joaquimley.byinvitationonly.util;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,6 +33,8 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
 
+import java.util.ArrayList;
+
 /**
  * UI/UX related customization other util methods
  */
@@ -42,6 +43,12 @@ public class CommonUtils {
 
     private static final String TAG = CommonUtils.class.getSimpleName();
 
+    /**
+     * Changes icon background - Red Checked out, Green checked in
+     *
+     * @param user    to be considered
+     * @param btnView view to have background refreshed
+     */
     public static void changeStatusIcon(User user, View btnView) {
         if (user == null) {
             Log.e(TAG, "changeStatusIcon(): User is null");
@@ -55,19 +62,21 @@ public class CommonUtils {
     }
 
     /**
-     * Clears the action bar label and sets a custom icon
+     * Changes icon background - Red Checked out, Green checked in
      *
-     * @param actionBar self explanatory
-     * @param title     self explanatory
-     * @param iconId    self explanatory
+     * @param session    to be considered
+     * @param btnView view to have background refreshed
      */
-    public static void simplifyActionBay(ActionBar actionBar, String title, int iconId) {
-        if (actionBar == null) {
-            Log.e(TAG, "simplifyActionBay(): Action bar is null");
+    public static void changeBookmarkIcon(Session session, View btnView) {
+        if (session == null) {
+            Log.e(TAG, "changeStatusIcon(): Session is null");
             return;
         }
-        actionBar.setTitle(title);
-        actionBar.setIcon(iconId);
+        if (session.isBookmarked()) {
+            btnView.setBackgroundResource(R.drawable.ic_star_selected);
+            return;
+        }
+        btnView.setBackgroundResource(R.drawable.ic_star);
     }
 
     /**
@@ -87,6 +96,29 @@ public class CommonUtils {
     }
 
     /**
+     * Removes the user from the instance usersList, should only be called by a "onChildRemoved()
+     * listener
+     *
+     * @param user returned by dataSnapshot, compared with the current user list
+     */
+    public static boolean removeUserFromList(User user, ArrayList<User> usersList) {
+        int removeUserIndex = 0;
+        boolean removeUserFlag = false;
+
+        for(int i = 0; i < usersList.size(); i++){
+            if (user.getId().equals(usersList.get(i).getId())) {
+                removeUserIndex = i;
+                removeUserFlag = true;
+            }
+        }
+
+        if(removeUserFlag){
+            usersList.remove(removeUserIndex);
+        }
+        return removeUserFlag;
+    }
+
+    /**
      * Creates a simple alert dialog with given params
      *
      * @param activity self explanatory
@@ -95,7 +127,6 @@ public class CommonUtils {
      */
     public static void createAlertDialog(final Activity activity, String title, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-
         // set title
         alertDialogBuilder.setTitle(title);
 
@@ -111,6 +142,34 @@ public class CommonUtils {
                         activity.finish();
                     }
                 });
+    }
+
+    /**
+     * Creates a simple Yes/No alert dialog with given params, returns user option with a boolean
+     * handle in the called context
+     *
+     * @param activity self explanatory
+     * @param title    self explanatory
+     * @param message  self explanatory
+     * @return boolean value user decision
+     */
+    public static boolean createDecisionDialog(final Activity activity, String title, String message) {
+        final boolean[] result = new boolean[1];
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(title);
+        builder.setMessage(message)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        result[0] = true;
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        result[0] = false;
+                    }
+                })
+                .create().show();
+        return result[0];
     }
 
     /**

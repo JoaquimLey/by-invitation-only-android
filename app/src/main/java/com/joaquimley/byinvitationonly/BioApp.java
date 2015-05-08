@@ -24,13 +24,9 @@ package com.joaquimley.byinvitationonly;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.joaquimley.byinvitationonly.db.DatabaseHelper;
 import com.joaquimley.byinvitationonly.model.Conference;
 import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
@@ -44,36 +40,28 @@ import java.util.Map;
  * Singleton class with application shared data
  */
 
-public class BioApp extends Activity implements View.OnClickListener {
+public class BioApp extends Activity {
 
     protected static final String TAG = BioApp.class.getSimpleName();
 
     protected static BioApp sInstance = null;
-    protected static DatabaseHelper sDatabase = null;
     protected static ArrayList<Session> sSessionsList = null;
     protected static ArrayList<User> sUsersList = null;
     protected static Conference sConference = null;
-    protected static String sCurrentUserId = null;
-    // FloatActionMenu
-    private ImageView mMenuIcon;
+    protected static User sCurrentUser = null;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         sInstance = this;
-        sDatabase = null;
-        sCurrentUserId = "";
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (sDatabase != null) {
-            OpenHelperManager.releaseHelper();
-            sDatabase = null;
-            sUsersList = null;
-            sSessionsList = null;
-        }
+        sUsersList = null;
+        sSessionsList = null;
+        sCurrentUser = null;
     }
 
     /**
@@ -88,15 +76,12 @@ public class BioApp extends Activity implements View.OnClickListener {
         return sInstance;
     }
 
-    public static String getCurrentUserId() {
-        if (sCurrentUserId == null) {
-            return "";
-        }
-        return sCurrentUserId;
+    public User getCurrentUser() {
+        return sCurrentUser;
     }
 
-    public static void setCurrentUserId(String currentUserId) {
-        sCurrentUserId = currentUserId;
+    public void setCurrentUser(User currentUser) {
+        sCurrentUser = currentUser;
     }
 
     public ArrayList<Session> getSessionsList() {
@@ -131,141 +116,6 @@ public class BioApp extends Activity implements View.OnClickListener {
     public void setConference(Conference conference) {
         sConference = conference;
     }
-
-    /**
-     * Removes the user from the instance usersList, should only be called by a "onChildRemoved()
-     * listener
-     *
-     * @param user returned by dataSnapshot, compared with the current user list
-     */
-    public boolean removeUserFromList(User user) {
-        int removeUserIndex = 0;
-        boolean removeUserFlag = false;
-
-        for(int i = 0; i < sUsersList.size(); i++){
-            if (user.getId().equals(sUsersList.get(i).getId())) {
-                removeUserIndex = i;
-                removeUserFlag = true;
-            }
-        }
-
-        if(removeUserFlag){
-            sUsersList.remove(removeUserIndex);
-        }
-        return removeUserFlag;
-    }
-
-    /**
-     * Get application local database, create if not exists
-     *
-     * @param context self explanatory
-     * @return DatabaseHelper current database
-     */
-    public DatabaseHelper getDb(Context context) {
-        if (sDatabase == null) {
-            sDatabase = OpenHelperManager.getHelper(context, DatabaseHelper.class);
-        }
-        return sDatabase;
-    }
-
-    public void setDb(DatabaseHelper dataBase) {
-        sDatabase = dataBase;
-    }
-
-    //********************************************************************************************//
-    //*********************************** Floating Action Menu ***********************************//
-    //********************************************************************************************//
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-//    /**
-//     * Creates menu and sub-menu items
-//     */
-//    public void buildMenu() {
-//        // Create Button to attach to Menu
-//        mMenuIcon = new ImageView(this); // Create an icon
-////        mMenuIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_cross_2));
-//        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-//                .setContentView(mMenuIcon)
-//                .setPosition(FloatingActionButton.POSITION_BOTTOM_RIGHT)
-//                .build();
-//
-//        // Custom sub-menu
-//        int actionMenuContentSize = getResources().getDimensionPixelSize(R.dimen.sub_action_button_size);
-//        int actionMenuContentMargin = getResources().getDimensionPixelSize(R.dimen.sub_action_button_content_margin);
-//        SubActionButton.Builder lCSubBuilder = new SubActionButton.Builder(this);
-//
-//        FrameLayout.LayoutParams actionMenuContentParams = new FrameLayout
-//                .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-//
-//        actionMenuContentParams.setMargins(actionMenuContentMargin, actionMenuContentMargin, actionMenuContentMargin,
-//                actionMenuContentMargin);
-//        lCSubBuilder.setLayoutParams(actionMenuContentParams);
-//
-//        // Set custom layout params
-//        FrameLayout.LayoutParams subButtonParams = new FrameLayout.LayoutParams(actionMenuContentSize, actionMenuContentSize);
-//        lCSubBuilder.setLayoutParams(subButtonParams);
-//
-//        // Create menu Buttons
-//        ImageView mainActivityIcon = new ImageView(this);
-//        ImageView participantsListIcon = new ImageView(this);
-//        ImageView sessionsListIcon = new ImageView(this);
-//        ImageView favouritesListIcon = new ImageView(this);
-//
-////        mainActivityIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_list));
-////        participantsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_info));
-////        sessionsListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
-////        favouritesListIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_star));
-//
-//        SubActionButton menuSubBtnHome = lCSubBuilder.setContentView(mainActivityIcon).build();
-//        SubActionButton menuSubBtnInfo = lCSubBuilder.setContentView(participantsListIcon).build();
-//        SubActionButton menuSubBtnMisc = lCSubBuilder.setContentView(sessionsListIcon).build();
-//        SubActionButton menuSubBtnFavourites = lCSubBuilder.setContentView(sessionsListIcon).build();
-//
-//        // Button Action
-//        menuSubBtnHome.setOnClickListener(this);
-//        menuSubBtnInfo.setOnClickListener(this);
-//        menuSubBtnMisc.setOnClickListener(this);
-//        menuSubBtnFavourites.setOnClickListener(this);
-//
-//        // Create menu with MenuButton + SubItemsButtons
-//        mActionMenu = new FloatingActionMenu.Builder(this)
-//                .addSubActionView(menuSubBtnHome)
-//                .addSubActionView(menuSubBtnInfo)
-//                .addSubActionView(menuSubBtnMisc)
-//                .attachTo(actionButton)
-//                .build();
-//
-//        // Listen menu open and close events to animate the button content view
-//        mActionMenu.setStateChangeListener(this);
-//    }
-//
-//    private void closeMenu() {
-//        if(mActionMenu != null && mActionMenu.isOpen()){
-//            mActionMenu.close(true);
-//        }
-//    }
-//
-//    @Override
-//    public void onMenuOpened(FloatingActionMenu menu) {
-//        // Rotate the icon of rightLowerButton 45 degrees clockwise
-//        mMenuIcon.setRotation(0);
-//        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
-//        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
-//        animation.start();
-//    }
-//
-//    @Override
-//    public void onMenuClosed(FloatingActionMenu menu) {
-//        // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
-//        mMenuIcon.setRotation(45);
-//        PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
-//        ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(mMenuIcon, pvhR);
-//        animation.start();
-//    }
 
     //********************************** Debug/Dummy methods **********************************//
     //********************************** Debug/Dummy methods **********************************//
