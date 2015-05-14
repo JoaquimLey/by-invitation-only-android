@@ -78,5 +78,9 @@
     <string name="title_activity_bookmarked_list">Bookmarked List</string>
     <string name="title_create_your_profile">Create your profile</string>
     <string name="error_user_data">There was a error with your user data</string>
+    <string name="text_confirm_contact_user">Are you sure you want to contact the selected user?</string>
+    <string name="text_refresh_interval">Refresh Interval</string>
+    <string name="action_check_in">Check In</string>
+    <string name="refresh_interval_tv_label">Choose the refresh interval:</string>
 
 </resources>

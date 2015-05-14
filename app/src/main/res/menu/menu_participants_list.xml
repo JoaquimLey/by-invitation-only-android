@@ -20,8 +20,23 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.joaquimley.byinvitationonly.activities.ParticipantsListActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never">
+
+        <menu>
+            <item
+                android:id="@+id/action_refresh_interval"
+                android:orderInCategory="99"
+                android:title="@string/text_refresh_interval"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
 </menu>

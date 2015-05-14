@@ -29,6 +29,7 @@ public class Session {
 
     private String mId;
     private String mTitle;
+    private String mTrack;
     private String mPresenter;
     private String mAbstract;
     private String mRoom;
@@ -43,21 +44,51 @@ public class Session {
         // No args constructor
     }
 
-    public Session(String title, String presenter, String sessionAbstract, String room,
-                   String date, String startHour, String endHour, String imageUrl) {
+//    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title) {
+//
+//        mTitle = title;
+//        mPresenter = presenter;
+//        mAbstract = sessionAbstract;
+//        mRoom = room;
+//        mDate = date;
+//        mStartHour = startHour;
+//        mEndHour = endHour;
+//
+//        mTrack = "";
+//        mIsBookmark = false;
+//        mFeedback = 0;
+//    }
+
+    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title, String track) {
 
         mTitle = title;
         mPresenter = presenter;
         mAbstract = sessionAbstract;
         mRoom = room;
         mDate = date;
+        mTrack = track;
         mStartHour = startHour;
         mEndHour = endHour;
 
-        mImageUrl = imageUrl;
         mIsBookmark = false;
         mFeedback = 0;
     }
+
+//    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title, String track, String imageUrl) {
+//
+//        mTitle = title;
+//        mPresenter = presenter;
+//        mAbstract = sessionAbstract;
+//        mRoom = room;
+//        mDate = date;
+//        mTrack = track;
+//        mStartHour = startHour;
+//        mEndHour = endHour;
+//
+//        mImageUrl = imageUrl;
+//        mIsBookmark = false;
+//        mFeedback = 0;
+//    }
 
    @Override
     public String toString() {
@@ -67,6 +98,7 @@ public class Session {
                 "Abstract='" + mAbstract + '\'' +
                 "Room='" + mRoom + '\'' +
                 "Date='" + mDate + '\'' +
+                "Track='" + mTrack + '\'' +
                 "StartHour='" + mStartHour + '\'' +
                 "EndHour='" + mEndHour + '\'' +
                 "Bookmarked='" + mIsBookmark + '\'' +
@@ -160,5 +192,13 @@ public class Session {
 
     public void setBookmarked(boolean isBookmark) {
         mIsBookmark = isBookmark;
+    }
+
+    public String getTrack() {
+        return mTrack;
+    }
+
+    public void setTrack(String track) {
+        mTrack = track;
     }
 }

@@ -21,7 +21,6 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,18 +35,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
+import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.model.User;
+import com.joaquimley.byinvitationonly.util.CommonUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
 import com.squareup.picasso.Picasso;
 
-public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener {
+public class EditUserDetailsActivity extends BaseActivity implements View.OnClickListener, Firebase.CompletionListener {
     public static final int RESULT_GALLERY = 0;
+    public static final String TAG = EditUserDetailsActivity.class.getSimpleName();
 
+    private Firebase mUsersRef;
     private SharedPreferences mSharedPreferences;
-    private User mUser;
     private EditText mEtName;
     private EditText mEtEmail;
     private EditText mEtDescription;
@@ -59,7 +64,6 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         init();
 
         if(mUser == null){
@@ -73,6 +77,9 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void init() {
+        Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
+
         mEtName = ((EditText) findViewById(R.id.et_edit_user_details_name));
         mEtEmail = ((EditText) findViewById(R.id.et_edit_user_details_email));
         mEtDescription = ((EditText) findViewById(R.id.et_edit_user_details_description));
@@ -91,8 +98,12 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
         (findViewById(R.id.btn_cancel)).setOnClickListener(this);
     }
 
+    /**
+     * Loads current user's information to be edited
+     */
     private void loadProfileInfo() {
-        mImageUri = Uri.parse(getString(R.string.shared_pref_user_details_photo_uri));
+
+        mImageUri = Uri.parse(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_photo_uri), ""));
         mEtName.setText(mUser.getName());
         mEtEmail.setText(String.valueOf(mUser.getEmail()));
         mEtDescription.setText(mUser.getDescription());
@@ -105,7 +116,7 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                         .into(mIvUserPhoto);
             } else {
                 Picasso.with(this)
-                        .load(FileHelper.decodeBase64ToFile(this, mUser.getPhotoBase64()))
+                        .load(R.drawable.image_placeholder)
                         .transform(new ImageCircleTransform())
                         .into(mIvUserPhoto);
             }
@@ -135,51 +146,96 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
 
             case R.id.btn_save:
 
+                /**
+                 * Assert all required fields have text
+                 */
                 if (mEtName.getText().length() <= 0 || mEtEmail.getText().length() <= 0 || mEtDescription.getText().length() < 0) {
                     Toast.makeText(this, getString(R.string.error_fill_required_fields), Toast.LENGTH_LONG).show();
                     return;
                 }
 
+                /**
+                 * If current user is null (creating profile), then create a new (current) User.
+                 */
                 if (mUser == null) {
                     mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
                             String.valueOf(mEtDescription.getText()), "", false);
 
                 } else {
+                    // If user exists, update information
                     mUser.setName(String.valueOf(mEtName.getText()));
                     mUser.setEmail(String.valueOf(mEtEmail.getText()));
                     mUser.setDescription(String.valueOf(mEtDescription.getText()));
                 }
 
                 if(mImageChangedFlag && mImageUri != null) {
+                    // If image was changed, update both the imageUri and the Base64 encoding
                     mUser.setPhotoBase64(FileHelper.encodeUriToBase64(this, mImageUri));
                 }
 
-                FileHelper.updateUserDataToSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this), mUser);
-                Toast.makeText(this, getString(R.string.text_profile_updated), Toast.LENGTH_SHORT).show();
+                if(!CommonUtils.isOnline(this)){
+                    mUser.setVisible(false);
+                    FileHelper.updateUserDataToSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this), mUser);
+                    Toast.makeText(this, getString(R.string.text_profile_updated), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("Share");
                 alertDialogBuilder
+                        .setTitle("Share")
                         .setMessage("Do you wish to share your info now?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                setResult(Activity.RESULT_OK, IntentHelper.createParticipantsListIntent(getApplicationContext()));
+                                mUser.setVisible(true);
+                                callChangeAvailability(true);
+                                startActivity(IntentHelper.createParticipantsListIntent(getApplicationContext()));
                                 dialog.dismiss();
-                                finish();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                setResult(Activity.RESULT_CANCELED, IntentHelper.createParticipantsListIntent(getApplicationContext()));
+                                mUser.setVisible(false);
+                                mUser.setId("");
+                                callChangeAvailability(false);
                                 dialog.dismiss();
-                                finish();
                             }
                         })
                         .create().show();
                 break;
 
             case R.id.btn_cancel:
+                AlertDialog.Builder cancelAlertDialogBuilder = new AlertDialog.Builder(this);
+                cancelAlertDialogBuilder
+                        .setTitle("Cancel")
+                        .setMessage("Are you sure you wish to cancel? All changes will be lost")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
+        }
+    }
+
+    private void callChangeAvailability(boolean answer){
+        BioApp.getInstance().setCurrentUser(mUser);
+        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
+        if(answer) {
+            if (!mUser.isVisible()) {
+                FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
                 finish();
+            }
+        }
+
+        if(mUser.isVisible() && mUser.getId() != null){
+            FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
+            finish();
         }
     }
 
@@ -212,5 +268,10 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
+    }
+
+    @Override
+    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        finish();
     }
 }

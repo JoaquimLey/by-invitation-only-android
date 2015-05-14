@@ -31,10 +31,8 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 
-import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Conference;
-import com.joaquimley.byinvitationonly.model.Session;
 import com.joaquimley.byinvitationonly.model.User;
 
 import java.io.BufferedReader;
@@ -182,58 +180,58 @@ public class FileHelper {
         return new Conference(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4),
                 values.get(5), values.get(6));
     }
-
-    /**
-     * Recursive method to read each row of "SessionsData.csv" creating "Session" objects, adding these
-     * to sessions @param
-     *
-     * @param context   self explanatory
-     * @param skipLines number of lines to skip (0 for null)
-     */
-    public static void importSessionDataFromFile(Context context, ArrayList<Session> sessions, int skipLines) {
-
-        ArrayList<String> values = getValuesFromCsvFile(
-                getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data)),
-                0, '|', skipLines);
-
-        Log.e(TAG, "skipLines: " + skipLines);
-
-        if (values == null || values.isEmpty()) {
-            Log.e(TAG, "No values to import");
-            return;
-        }
-        sessions.add(new Session(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4),
-                values.get(5), values.get(6), values.get(7)));
-        // Recursive
-        skipLines++;
-        importSessionDataFromFile(context, sessions, skipLines);
-    }
-
-    public static void exportSessions(Context context, Firebase firebaseChildRef) {
-
-        BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
-        if (bufferedReader == null) {
-            Log.e(TAG, "exportSessions(): Csv file not found");
-            return;
-        }
-
-        String[] values;
-        try {
-            values = bufferedReader.readLine().split(context.getString(R.string.csv_split));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                Firebase item = firebaseChildRef.push();
-
-                String[] parts = line.split("\\|", -1);
-                for (int i = 0; i < values.length; i++) {
-                    item.child(values[i]).setValue(parts[i]);
-                }
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
-            e.printStackTrace();
-        }
-    }
+//
+//    /**
+//     * Recursive method to read each row of "SessionsData.csv" creating "Session" objects, adding these
+//     * to sessions @param
+//     *
+//     * @param context   self explanatory
+//     * @param skipLines number of lines to skip (0 for null)
+//     */
+//    public static void importSessionDataFromFile(Context context, ArrayList<Session> sessions, int skipLines) {
+//
+//        ArrayList<String> values = getValuesFromCsvFile(
+//                getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data)),
+//                0, '|', skipLines);
+//
+//        Log.e(TAG, "skipLines: " + skipLines);
+//
+//        if (values == null || values.isEmpty()) {
+//            Log.e(TAG, "No values to import");
+//            return;
+//        }
+//        sessions.add(new Session(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4),
+//                values.get(5), values.get(6), values.get(7), values.get(8)));
+//        // Recursive
+//        skipLines++;
+//        importSessionDataFromFile(context, sessions, skipLines);
+//    }
+//
+//    public static void exportSessions(Context context, Firebase firebaseChildRef) {
+//
+//        BufferedReader bufferedReader = FileHelper.getBufferedReaderFromAssets(context, context.getString(R.string.file_sessions_data));
+//        if (bufferedReader == null) {
+//            Log.e(TAG, "exportSessions(): Csv file not found");
+//            return;
+//        }
+//
+//        String[] values;
+//        try {
+//            values = bufferedReader.readLine().split(context.getString(R.string.csv_split));
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                Firebase item = firebaseChildRef.push();
+//
+//                String[] parts = line.split("\\|", -1);
+//                for (int i = 0; i < values.length; i++) {
+//                    item.child(values[i]).setValue(parts[i]);
+//                }
+//            }
+//        } catch (IOException e) {
+//            Log.e(TAG, "exportSessions(): Couldn't get bufferedReader");
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Decodes base64String given by @param and returns the image file's uri

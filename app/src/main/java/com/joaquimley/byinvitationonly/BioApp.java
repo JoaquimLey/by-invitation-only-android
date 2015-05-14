@@ -40,8 +40,8 @@ import java.util.ArrayList;
 
 public class BioApp extends Activity {
 
+    protected static int sRefreshInterval = 1000 * 60; // Default 1 minutes
     protected static final String TAG = BioApp.class.getSimpleName();
-
     protected static BioApp sInstance = null;
     protected static ArrayList<Session> sSessionsList = null;
     protected static ArrayList<User> sUsersList = null;
@@ -61,6 +61,7 @@ public class BioApp extends Activity {
         sSessionsList = null;
         sCurrentUser = null;
     }
+
 
     /**
      * Create if not exist, singleton instance of "BioApp"
@@ -115,6 +116,14 @@ public class BioApp extends Activity {
         sConference = conference;
     }
 
+    public int getRefreshInterval() {
+        return sRefreshInterval;
+    }
+
+    public void setRefreshInterval(int refreshInterval) {
+        sRefreshInterval = refreshInterval;
+    }
+
     //********************************** Debug/Dummy methods **********************************//
     //********************************** Debug/Dummy methods **********************************//
     //********************************** Debug/Dummy methods **********************************//
@@ -160,33 +169,33 @@ public class BioApp extends Activity {
         users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg", true));
         return users;
     }
-
-    /**
-     * Push sessions into Firebase cloud
-     *
-     * @param context     self explanatory
-     * @param sessionsRef self explanatory
-     */
-    public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
-
-        if (!CommonUtils.isOnline(context)) {
-            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ArrayList<Session> sessions = createDummySessions();
-        Firebase newSessionRef;
-        for (Session session : sessions) {
-            newSessionRef = sessionsRef.push();
-            session.setId(newSessionRef.getKey());
-            newSessionRef.setValue(session);
-        }
-    }
-
-    public static ArrayList<Session> createDummySessions() {
-        ArrayList<Session> sessions = new ArrayList<>();
-//        sessions.add(new Session())
-        return sessions;
-    }
+//
+//    /**
+//     * Push sessions into Firebase cloud
+//     *
+//     * @param context     self explanatory
+//     * @param sessionsRef self explanatory
+//     */
+//    public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
+//
+//        if (!CommonUtils.isOnline(context)) {
+//            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        ArrayList<Session> sessions = createDummySessions();
+//        Firebase newSessionRef;
+//        for (Session session : sessions) {
+//            newSessionRef = sessionsRef.push();
+//            session.setId(newSessionRef.getKey());
+//            newSessionRef.setValue(session);
+//        }
+//    }
+//
+//    public static ArrayList<Session> createDummySessions() {
+//        ArrayList<Session> sessions = new ArrayList<>();
+////        sessions.add(new Session())
+//        return sessions;
+//    }
 
 }

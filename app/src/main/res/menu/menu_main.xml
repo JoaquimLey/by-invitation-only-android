@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ GNU GENERAL PUBLIC LICENSE
   ~                        Version 3, 29 June 2007
@@ -24,26 +25,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
-    <!--<item android:id="@+id/ic_menu_group"-->
-        <!--android:title="@string/title_activity_participants_list"-->
-        <!--android:orderInCategory="98"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_action_group"/>-->
+    <item android:id="@+id/ib_user_status"
+        android:title="@string/action_check_in"
+        android:icon="@drawable/status_selector"
+        android:orderInCategory="99"
+        app:showAsAction="ifRoom" />
 
-    <!--<item android:id="@+id/ic_menu_favorite"-->
-        <!--android:title="@string/title_bookmark"-->
-        <!--android:orderInCategory="99"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_star_selected"/>-->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never">
 
-    <!--<item android:id="@+id/ic_menu_session"-->
-        <!--android:title="@string/title_sessions"-->
-        <!--android:orderInCategory="99"-->
-        <!--app:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_keynote"/>-->
+    <menu>
+        <item
+            android:id="@+id/edit_user_details"
+            android:orderInCategory="98"
+            android:title="@string/title_activity_edit_user_details"
+            app:showAsAction="ifRoom" />
 
-    <!--<item android:id="@+id/action_settings"-->
-        <!--android:title="@string/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="ifRoom" />-->
+        <item
+            android:id="@+id/action_refresh_interval"
+            android:orderInCategory="99"
+            android:title="@string/text_refresh_interval"
+            app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
 </menu>

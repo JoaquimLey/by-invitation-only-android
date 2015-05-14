@@ -21,6 +21,8 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -50,23 +52,27 @@ import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks,
-        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener, ChildEventListener {
+        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener, ChildEventListener, Firebase.CompletionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int EDIT_USER_DETAILS = 0;
+    private static final int PARTICIPANTS_ACTIVITY = 1;
+    private static final int BOOKMARKS_ACTIVITY = 2;
 
     private Firebase mSessionsRef;
+    private Firebase mUsersRef;
     private PullRefreshLayout mPullRefreshLayout;
     private SharedPreferences mSharedPreferences;
     private CustomSessionListAdapter mCustomAdapter;
     private ListView mList;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setTitle(getString(R.string.text_welcome_to) + " " + BioApp.getInstance().getConference().getAcronym());
+        setTitle(BioApp.getInstance().getConference().getAcronym());
         init();
     }
 
@@ -81,6 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private void init() {
         // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
+        mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
         mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_sessions));
         if (mSessionsRef != null) {
             mSessionsRef.addChildEventListener(this);
@@ -91,8 +98,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         mList = (ListView) findViewById(R.id.list);
         mList.setOnItemClickListener(this);
         mList.setItemsCanFocus(true);
-        mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.getInstance().getSessionsList(), this);
-        mList.setAdapter(mCustomAdapter);
+        if(mCustomAdapter == null){
+            mCustomAdapter = new CustomSessionListAdapter(MainActivity.this, BioApp.getInstance().getSessionsList(), this);
+            mList.setAdapter(mCustomAdapter);
+        }
     }
 
     @Override
@@ -106,13 +115,28 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 break;
 
             case 1:
-                if (mUser == null) {
-                    Log.w(TAG, "User is null");
+                if (!CommonUtils.isOnline(this)) {
+                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (!CommonUtils.isOnline(this)) {
-                    Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                if (mUser == null) {
+                    AlertDialog.Builder checkoutAlertDialog = new AlertDialog.Builder(this);
+                    checkoutAlertDialog
+                            .setTitle("New Profile")
+                            .setMessage("You must create your profile first, do you wish to create now?")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    callCreateProfile();
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create().show();
                     return;
                 }
 
@@ -121,11 +145,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                     return;
                 }
 
-                if (FileHelper.getUserFromSharedPreferences(this, mSharedPreferences) == null) {
-                    Toast.makeText(this, this.getString(R.string.error_create_user_profile_first), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                startActivity(IntentHelper.createParticipantsListIntent(this));
+                startActivityForResult(IntentHelper.createParticipantsListIntent(this), PARTICIPANTS_ACTIVITY);
                 break;
 
             case 2:
@@ -134,6 +154,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
             default:
         }
+    }
+
+    /**
+     * Creates a user details activity, here to use the caller activity as context.
+     */
+    private void callCreateProfile() {
+        startActivityForResult(IntentHelper.createUserDetailsActivityIntent(this, null), EDIT_USER_DETAILS);
     }
 
     @Override
@@ -166,10 +193,12 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
      */
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Session session = dataSnapshot.getValue(Session.class);
-        if (!BioApp.getInstance().getSessionsList().contains(session)) {
-            BioApp.getInstance().getSessionsList().add(session);
-        }
+        Log.w(TAG, "onChildAdded session: " + dataSnapshot.getValue());
+//        Session session = dataSnapshot.getValue(Session.class);
+//        if (!BioApp.getInstance().getSessionsList().contains(session)) {
+//            BioApp.getInstance().getSessionsList().add(session);
+//            mCustomAdapter.notifyDataSetChanged();
+//        }
     }
 
     @Override
@@ -183,7 +212,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+        mCustomAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -200,11 +229,15 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        mUser = BioApp.getInstance().getCurrentUser();
         switch (requestCode) {
-            case MainActivity.EDIT_USER_DETAILS:
-                if (data != null) {
-                    Toast.makeText(this, getString(R.string.text_profile_updated), Toast.LENGTH_SHORT).show();
+            case MainActivity.PARTICIPANTS_ACTIVITY:
+                if (mUser.isVisible()) {
+                    mMenu.findItem(R.id.ib_user_status).setIcon(R.drawable.ic_status_green);
+                } else {
+                    mMenu.findItem(R.id.ib_user_status).setIcon(R.drawable.ic_status_red);
                 }
+                // TODO: Handle
                 break;
 
             default:
@@ -215,21 +248,50 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle menu item selection
         switch (item.getItemId()) {
-            /**
-             * case R.id.XPTO:
-             *  doStuff()
-             *  break;
-             */
-
+            case R.id.ib_user_status:
+                if (mUser == null) {
+                    AlertDialog.Builder checkoutAlertDialog = new AlertDialog.Builder(this);
+                    checkoutAlertDialog
+                            .setTitle("New Profile")
+                            .setMessage("You must create your profile first, do you wish to create now?")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    callCreateProfile();
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create().show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * Firebase listener
+     */
+    @Override
+    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        if (firebaseError != null) {
+            Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
+        CommonUtils.changeMenuItemIcon(mUser, mMenu.findItem(R.id.ib_user_status));
+        Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        mMenu = menu;
+        CommonUtils.changeMenuItemIcon(mUser, mMenu.findItem(R.id.ib_user_status));
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**

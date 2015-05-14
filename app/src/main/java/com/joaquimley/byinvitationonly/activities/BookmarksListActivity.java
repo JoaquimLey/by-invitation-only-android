@@ -40,6 +40,7 @@ import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.adapter.CustomUserListAdapter;
 import com.joaquimley.byinvitationonly.helper.FileHelper;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
+import com.joaquimley.byinvitationonly.helper.NavigationDrawerHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 import com.joaquimley.byinvitationonly.util.ImageCircleTransform;
@@ -67,7 +68,7 @@ public class BookmarksListActivity extends BaseActivity implements PullRefreshLa
     }
 
     private void init() {
-
+        NavigationDrawerHelper.loadProfileInfo(this, mSharedPreferences, mNavigationDrawerFragment);
         User user = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
         if (user == null) {
             CommonUtils.createAlertDialog(this, "Error", "There was a error with your user data");

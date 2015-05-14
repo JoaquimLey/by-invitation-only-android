@@ -21,17 +21,18 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -65,19 +66,14 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
     private CustomUserListAdapter mCustomAdapter;
     private Firebase mUsersRef;
     private ImageButton mBtnStatus;
-    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
-        if (mUser == null) {
-            CommonUtils.createAlertDialog(this, "Error", getString(R.string.error_user_data));
+        if(!mUser.isVisible()){
             finish();
         }
-
         init();
     }
 
@@ -87,12 +83,20 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
     }
 
     private void init() {
+        if (mUser == null) {
+            CommonUtils.createAlertDialog(this, "Error", getString(R.string.error_user_data));
+            finish();
+        }
+
+        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mPullRefreshLayout.setOnRefreshListener(this);
+        // Firebase
         Firebase firebaseRef = FirebaseHelper.initiateFirebase(this);
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, getString(R.string.firebase_child_users));
         if (mUsersRef != null) {
             mUsersRef.addChildEventListener(this);
+            mPullRefreshLayout.setRefreshing(true);
         }
-
         // UI
         loadProfileInfo();
         findViewById(R.id.ib_user_edit).setOnClickListener(this);
@@ -100,15 +104,18 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         mBtnStatus.setOnClickListener(this);
         CommonUtils.changeStatusIcon(mUser, mBtnStatus);
         // List
-        mPullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mPullRefreshLayout.setOnRefreshListener(this);
-        ListView mList = (ListView) findViewById(R.id.list);
-        mList.setOnItemClickListener(this);
-        mList.setItemsCanFocus(true);
-        mCustomAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
-        mList.setAdapter(mCustomAdapter);
+        ListView list = (ListView) findViewById(R.id.list);
+        list.setOnItemClickListener(this);
+        list.setItemsCanFocus(true);
+        if(mCustomAdapter == null){
+            mCustomAdapter = new CustomUserListAdapter(this, BioApp.getInstance().getUsersList());
+            list.setAdapter(mCustomAdapter);
+        }
     }
 
+    /**
+     * Populate the "Profile frame" with current user info
+     */
     private void loadProfileInfo() {
         mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         if (mUser != null) {
@@ -132,32 +139,33 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         }
     }
 
+//    Handler mHandler;
+//
+//    Runnable mHandlerTask = new Runnable() {
+//        @Override
+//        public void run() {
+//            mCustomAdapter.notifyDataSetChanged();
+//            mHandler.postDelayed(mHandlerTask, BioApp.REFRESH_INTERVAL);
+//        }
+//    };
+//
+//    public void startRepeatingTask() {
+//        mHandlerTask.run();
+//    }
+//
+//    public void stopRepeatingTask() {
+//        mHandler.removeCallbacks(mHandlerTask);
+//    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
         switch (requestCode) {
             case ParticipantsListActivity.EDIT_USER_DETAILS:
-                if (data != null) {
-                    if (resultCode == Activity.RESULT_OK) {
-                        FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
-                    } else if (resultCode == Activity.RESULT_CANCELED) {
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                        alertDialogBuilder.setTitle("Check in");
-                        alertDialogBuilder
-                                .setMessage("You must be checked in to see other participants")
-                                .setCancelable(false)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        dialog.dismiss();
-                                        finish();
-                                    }
-                                });
-                    }
+                if(mUser == null || mUser.getId() == null || mUser.getId().isEmpty() || !mUser.isVisible()){
+                    finish();
                 }
-                break;
 
             default:
         }
@@ -171,14 +179,30 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
                     startActivityForResult(IntentHelper.createUserDetailsActivityIntent(this, null), EDIT_USER_DETAILS);
                     return;
                 }
-                startActivity(IntentHelper.createUserDetailsActivityIntent(this, mUser));
+                startActivityForResult(IntentHelper.createUserDetailsActivityIntent(this, mUser), EDIT_USER_DETAILS);
                 break;
 
             case R.id.ib_user_status:
                 if (mUser != null) {
-                    FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
+                    AlertDialog.Builder checkoutAlertDialog = new AlertDialog.Builder(this);
+                    checkoutAlertDialog
+                            .setTitle("Check-out")
+                            .setMessage("If you check out you will return to the home screen, are you sure?")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    callChangeAvailability();
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            })
+                            .create().show();
                 } else {
-                    Toast.makeText(this, getString(R.string.error_no_user_details), Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 break;
 
@@ -186,21 +210,12 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Create Session details activity (getItemAtPosition(position))
-        Toast.makeText(this, "List Click", Toast.LENGTH_SHORT).show();
-
-    }
-
     /**
-     * PullRefreshLayout.OnRefreshListener
+     * Calls FirebaseHelper.callChangeAvailability(), here to have the activity act as listener;
+     * called from a AlterDialog listener
      */
-    @Override
-    public void onRefresh() {
-        mCustomAdapter.setItems(BioApp.getInstance().getUsersList());
-        mCustomAdapter.notifyDataSetChanged();
-        mPullRefreshLayout.setRefreshing(false);
+    private void callChangeAvailability() {
+        FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
     }
 
     /**
@@ -216,15 +231,64 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
     }
 
+    @Override
+    public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+        if(!CommonUtils.isOnline(this)){
+            Toast.makeText(this, getString(R.string.error_no_internet),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder contactUserAlertDialog = new AlertDialog.Builder(this);
+        contactUserAlertDialog
+                .setTitle("Contact User")
+                .setMessage("Are you sure you want to contact " + ((User) parent.getItemAtPosition(position)).getName() + "?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                callCreateContactUserIntent(((User) parent.getItemAtPosition(position)).getEmail());
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
+    }
+
+    /**
+     * Calls the createEmailIntent() here to have the activity act as listener;
+     * called from a AlterDialog listener
+     *
+     * @param destinationEmail intent parses the destination email
+     */
+    private void callCreateContactUserIntent(String destinationEmail) {
+        IntentHelper.createEmailIntent(this, destinationEmail);
+    }
+
+    /**
+     * PullRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+        mCustomAdapter.setItems(BioApp.getInstance().getUsersList());
+        mCustomAdapter.notifyDataSetChanged();
+        mPullRefreshLayout.setRefreshing(false);
+    }
+
     /**
      * ChildEventListener
      */
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        mPullRefreshLayout.setRefreshing(true);
         User user = dataSnapshot.getValue(User.class);
         if (!user.getId().equals(mSharedPreferences.getString(getString(R.string.shared_pref_user_details_id), ""))) {
             BioApp.getInstance().getUsersList().add(dataSnapshot.getValue(User.class));
+            mCustomAdapter.notifyDataSetChanged();
         }
+        mPullRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -262,6 +326,34 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.action_refresh_interval:
+
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View promptView = layoutInflater.inflate(R.layout.custom_dialog_input, null);
+                final EditText input = (EditText) promptView.findViewById(R.id.et_refresh_interval);
+
+                AlertDialog.Builder contactUserAlertDialog = new AlertDialog.Builder(this);
+                contactUserAlertDialog
+                        .setView(promptView)
+                        .setTitle("Choose refresh Interval")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                BioApp.getInstance().setRefreshInterval(Integer.valueOf(String.valueOf(input.getText())));
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create().show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

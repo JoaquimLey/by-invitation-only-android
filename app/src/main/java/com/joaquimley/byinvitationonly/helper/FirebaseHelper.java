@@ -29,7 +29,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.joaquimley.byinvitationonly.BioApp;
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
@@ -121,23 +120,31 @@ public class FirebaseHelper {
             return;
         }
 
-        usersRef.child(BioApp.getInstance().getCurrentUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        if(user.getId() == null || user.getId().isEmpty() || user.getId().equals("") || !user.isVisible()){
+            Firebase newUserRef = usersRef.push();
+            user.setId(newUserRef.getKey());
+            user.setVisible(!user.isVisible());
+            newUserRef.setValue(user, listener);
+            return;
+        }
+
+        usersRef.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null && user.getId() != null && user.isVisible()) {
                     usersRef.child(user.getId()).removeValue(listener);
-                    BioApp.getInstance().getCurrentUser().setId("");
+                    user.setId("");
                     user.setVisible(!user.isVisible());
-                    // TODO: Go to participants list Activity
 
-                } else if (!user.isVisible()) {
-                    Firebase newUserRef = usersRef.push();
-                    BioApp.getInstance().getCurrentUser().setId(newUserRef.getKey());
-                    user.setVisible(true);
-                    newUserRef.setValue(user, listener);
-                    // TODO: Go to participants list Activity
-
-                } else {
+                }
+//                else if (user.getId().isEmpty() || user.getId().equals("") || !user.isVisible()) {
+//                    Firebase newUserRef = usersRef.push();
+//                    user.setId(newUserRef.getKey());
+//                    user.setVisible(!user.isVisible());
+//                    newUserRef.setValue(user, listener);
+//
+//                }
+                else {
                     user.setVisible(!user.isVisible());
                     Toast.makeText(context, "Server synchronization error, please try again", Toast.LENGTH_LONG).show();
                 }
@@ -145,6 +152,7 @@ public class FirebaseHelper {
 
             @Override
             public void onCancelled(FirebaseError arg0) {
+                Toast.makeText(context, "Error contacting server: " + arg0, Toast.LENGTH_SHORT).show();
             }
         });
     }

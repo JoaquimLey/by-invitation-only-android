@@ -27,7 +27,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.joaquimley.byinvitationonly.R;
 import com.joaquimley.byinvitationonly.model.Session;
@@ -46,25 +48,55 @@ public class CommonUtils {
     /**
      * Changes icon background - Red Checked out, Green checked in
      *
-     * @param user    to be considered
-     * @param btnView view to have background refreshed
+     * @param user        to be considered
+     * @param imageButton view to have background refreshed
      */
-    public static void changeStatusIcon(User user, View btnView) {
+    public static void changeStatusIcon(User user, View imageButton) {
+        if(imageButton == null){
+            Log.e(TAG, "changeStatusIcon(): ImageButton is null");
+            return;
+        }
+
         if (user == null) {
             Log.e(TAG, "changeStatusIcon(): User is null");
             return;
         }
+
         if (user.isVisible()) {
-            btnView.setBackgroundResource(R.drawable.ic_status_green);
+            imageButton.setBackgroundResource(R.drawable.ic_status_green);
             return;
         }
-        btnView.setBackgroundResource(R.drawable.ic_status_red);
+        imageButton.setBackgroundResource(R.drawable.ic_status_red);
+    }
+
+    /**
+     * Changes MenuItem icon - Red Checked out, Green checked in
+     *
+     * @param user        to be considered
+     * @param menuItem view to have background refreshed
+     */
+    public static void changeMenuItemIcon(User user, MenuItem menuItem){
+        if(menuItem == null){
+            Log.e(TAG, "changeMenuItemIcon(): MenuItem is null");
+            return;
+        }
+
+        if (user == null) {
+            Log.e(TAG, "changeStatusIcon(): User is null");
+            return;
+        }
+
+        if (user.isVisible()) {
+            menuItem.setIcon(R.drawable.ic_status_green);
+            return;
+        }
+        menuItem.setIcon(R.drawable.ic_status_red);
     }
 
     /**
      * Changes icon background - Red Checked out, Green checked in
      *
-     * @param session    to be considered
+     * @param session to be considered
      * @param btnView view to have background refreshed
      */
     public static void changeBookmarkIcon(Session session, View btnView) {
@@ -90,7 +122,7 @@ public class CommonUtils {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             return cm.getActiveNetworkInfo().isConnectedOrConnecting();
         } catch (Exception e) {
-            Log.e(TAG, "isOnline(): Unable to fetch device connection status", e);
+            Toast.makeText(context, "Unable to fetch device connection status, please try again",Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -105,14 +137,14 @@ public class CommonUtils {
         int removeUserIndex = 0;
         boolean removeUserFlag = false;
 
-        for(int i = 0; i < usersList.size(); i++){
+        for (int i = 0; i < usersList.size(); i++) {
             if (user.getId().equals(usersList.get(i).getId())) {
                 removeUserIndex = i;
                 removeUserFlag = true;
             }
         }
 
-        if(removeUserFlag){
+        if (removeUserFlag) {
             usersList.remove(removeUserIndex);
         }
         return removeUserFlag;
@@ -128,14 +160,14 @@ public class CommonUtils {
         int removeSessionIndex = 0;
         boolean removeUserFlag = false;
 
-        for(int i = 0; i < sessionsList.size(); i++){
+        for (int i = 0; i < sessionsList.size(); i++) {
             if (session.getId().equals(sessionsList.get(i).getId())) {
                 removeSessionIndex = i;
                 removeUserFlag = true;
             }
         }
 
-        if(removeUserFlag){
+        if (removeUserFlag) {
             sessionsList.remove(removeSessionIndex);
         }
         return removeUserFlag;
