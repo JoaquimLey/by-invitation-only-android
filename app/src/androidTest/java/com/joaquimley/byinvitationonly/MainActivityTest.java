@@ -74,7 +74,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo = new Solo(getInstrumentation());
         setActivityInitialTouchMode(true);
         mActivity = getActivity();
-        mUser = mActivity.getUser();
+        mUser = BioApp.getInstance().getCurrentUser();
         init();
     }
 
@@ -152,7 +152,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnText(solo.getString(R.string.text_save));
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
 
-        mUser = ((MainActivity) solo.getCurrentActivity()).getUser();
+        mUser = BioApp.getInstance().getCurrentUser();
 
         assertTrue(mUser.getName().equals(newName));
         assertTrue(mUser.getEmail().equals(newEmail));
@@ -242,7 +242,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * Tests if the is user is ABLE to see other participants while visible
      */
     @MediumTest
-    public void test06_UserDetailsEdited() {
+    public void test06_Us4UserDetailsEdited() {
         // Goes to "Edit Details activity first"
         solo.clickOnImageButton(0);
         assertTrue(solo.waitForActivity(EditUserDetailsActivity.class));
@@ -265,7 +265,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnText(solo.getString(R.string.text_save));
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
 
-        mUser = ((MainActivity) solo.getCurrentActivity()).getUser();
+        mUser = BioApp.getInstance().getCurrentUser();
 
         assertTrue(mUser.getName().equals(newName));
         assertTrue(mUser.getEmail().equals(newEmail));
