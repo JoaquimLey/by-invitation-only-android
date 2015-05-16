@@ -207,7 +207,7 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                 AlertDialog.Builder cancelAlertDialogBuilder = new AlertDialog.Builder(this);
                 cancelAlertDialogBuilder
                         .setTitle("Cancel")
-                        .setMessage("Are you sure you wish to cancel? All changes will be lost")
+                        .setMessage(getString(R.string.error_confirm_cancel))
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();

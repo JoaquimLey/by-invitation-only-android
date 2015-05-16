@@ -131,7 +131,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         }
 
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnImageButton(0);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
         solo.waitForActivity(EditUserDetailsActivity.class);
 
         String newName = "Joaquim Ley";
@@ -169,11 +169,17 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * de confirmação da activação desta funcionalidade.
      */
     @SmallTest
-    public void test01_Us4NoUserProfileCheckIn() {
-        clearUserProfile();
-        solo.clickOnImageButton(0);
-        assertTrue("ERROR: User was able to check-in profile created",
-                solo.searchText(mActivity.getString(R.string.error_no_user_details)));
+    public void test01_Us4ShareDetails() {
+        init();
+        reCreateUserProfile(false);
+        Drawable previousIcon = mActivity.findViewById(R.id.ib_user_status).getBackground();
+        boolean prevStatus = mUser.isVisible();
+
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForText(mActivity.getString(R.string.text_status_updated));
+        assertTrue("User didn't change checked-in status", prevStatus != mUser.isVisible());
+        assertTrue("User profile not present on server", BioApp.getInstance().getUsersList().contains(mUser));
+        assertTrue(mActivity.findViewById(R.id.ib_user_status).getBackground() != previousIcon);
     }
 
     /**
@@ -183,17 +189,27 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * o estado activo.
      */
     @SmallTest
-    public void test02_Us4ShareDetails() {
+    public void test02_Us4NoUserProfileCheckIn() {
         init();
         reCreateUserProfile(false);
-        Drawable previousIcon = mActivity.findViewById(R.id.ib_user_status).getBackground();
-        boolean prevStatus = mUser.isVisible();
 
-        solo.clickOnImageButton(1);
-        solo.waitForActivity(mUser.getName() + " has checked in");
-        assertTrue("User didn't change checked-in status", prevStatus != mUser.isVisible());
-        assertTrue("User profile info not present on server", BioApp.getInstance().getUsersList().contains(mUser));
-        assertTrue(mActivity.findViewById(R.id.ib_user_status).getBackground() != previousIcon);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForText(mActivity.getString(R.string.text_status_updated));
+        assertTrue("No status icon changed", mActivity.getMenu().getItem(0).getIcon() ==
+                mActivity.getResources().getDrawable(R.drawable.ic_status_green));
+    }
+
+    /**
+     * Dado que estou na aplicação, Quando pressiono o botão "I'm here" e as informações do meu
+     * contacto não estão preenchidas (pelo menos nome e email), Então deve ser-me exibida uma
+     * mensagem perguntando se pretendo preencher as informações do meu contacto ou cancelar a acção.
+     */
+    @SmallTest
+    public void test03_Us4CreateProfileMessage(){
+        clearUserProfile();
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        assertTrue(solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first)));
     }
 
     /**
@@ -202,11 +218,98 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * preenchimento de detalhes do meu contacto.
      */
     @MediumTest
-    public void test03_Us4CreateOrEditUserProfile() {
+    public void test04_Us4CreateOrEditUserProfile() {
+        clearUserProfile();
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnImageButton(0);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+        solo.clickOnText("Yes");
         solo.waitForActivity(EditUserDetailsActivity.class);
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+    }
+
+    /**
+     * Dado que estou a visualizar a mensagem perguntando se pretendo preencher as informações do
+     * meu contacto, Quando selecciono "Não", Então deve ser exibido o ecrã inicial mantendo-se a
+     * funcionalidade "I'm here" desactivada.
+     */
+    @MediumTest
+    public void test05_Us4NoCreateProfile(){
+        clearUserProfile();
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+        solo.clickOnText("No");
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+    }
+
+
+
+    /**
+     * Dado que estou no ecrã de preenchimento de detalhes do meu contacto, Quando termino o
+     * preenchimento dos dados, pressiono o botão de back, e tenho as informações do meu contacto
+     * preenchidas (pelo menos nome e email), Então deve-me ser exibida uma mensagem de confirmação
+     * da activação desta funcionalidade.
+     */
+    @MediumTest
+    public void test06_Us5CancelCreateProfile(){
+        clearUserProfile();
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+        solo.clickOnText("Yes");
+        solo.waitForActivity(EditUserDetailsActivity.class);
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+
+        solo.clickOnText("Cancel");
+        assertTrue(solo.waitForText(mActivity.getString(R.string.error_confirm_cancel)));
+    }
+
+    /**
+     * Dado que estou no ecrã de preenchimento de detalhes do meu contacto, Quando termino o
+     * preenchimento dos dados, pressiono o botão de back, e não tenho as informações do meu
+     * contacto preenchidas (pelo menos nome e email), Então deve ser exibido o ecrã inicial
+     * mantendo-se a funcionalidade "I'm here" desactivada.
+     */
+    @MediumTest
+    public void test07_Us4PressBackOnProfileCreate(){
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.waitForActivity(EditUserDetailsActivity.class);
+
+        String newName = "Joaquim Ley";
+        String newEmail = "me@joaquimley.com";
+        String newDescription = "Android Developer\nGraphic Designer";
+
+        init();
+        // Name
+        solo.clearEditText(mEditTestUserName);
+        solo.typeText(mEditTestUserName, newName);
+        // Email
+        solo.clearEditText(mEditTestUserEmail);
+        solo.typeText(mEditTestUserEmail, newEmail);
+        // Description
+        solo.clearEditText(mEditTestUserDescription);
+        solo.typeText(mEditTestUserDescription, newDescription);
+
+        solo.goBack();
+        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
+        assertTrue(mActivity.getMenu().getItem(0).getIcon() == mActivity.getResources().getDrawable(R.drawable.ic_status_red));
+    }
+
+    /**
+     * Dado que estou na mensagem de confirmação da funcionalidade "I'm here", Quando pressiono no
+     * botão "Sim" e não tenho rede, Então deve-me ser apresentada uma mensagem informativa a
+     * indicar a falta de rede.
+     */
+    @SmallTest
+    public void test08_Us4CheckInNoConnection(){
+        solo.setWiFiData(false);
+        if(mUser.isVisible()){
+            solo.clickOnImageButton(1);
+        }
+        solo.clickOnImageButton(1);
+        solo.waitForText(mActivity.getString(R.string.error_no_internet));
     }
 
     /**
@@ -216,26 +319,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * da activação desta funcionalidade.
      */
     @MediumTest
-    public void test04_Us4ProfileUpdateConfirmation() {
+    public void test09_Us6ProfileUpdateConfirmation() {
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
         reCreateUserProfile(true);
         solo.waitForText(mActivity.getString(R.string.text_profile_updated));
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class));
-    }
-
-    /**
-     * Dado que estou na mensagem de confirmação da funcionalidade "I'm here", Quando pressiono no
-     * botão "Sim" e não tenho rede, Então deve-me ser apresentada uma mensagem informativa a
-     * indicar a falta de rede.
-      */
-    @SmallTest
-    public void test05_Us4CheckInNoConnection(){
-        solo.setWiFiData(false);
-        if(mUser.isVisible()){
-            solo.clickOnImageButton(1);
-        }
-        solo.clickOnImageButton(1);
-        solo.waitForText(mActivity.getString(R.string.error_no_internet));
     }
 
     /**

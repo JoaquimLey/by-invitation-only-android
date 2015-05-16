@@ -2,6 +2,7 @@ package com.joaquimley.byinvitationonly.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import com.joaquimley.byinvitationonly.R;
@@ -25,7 +26,7 @@ public class NavigationDrawerHelper {
             return;
         }
 
-        String photoUri = sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_uri), "");
+        Uri photoUri = Uri.parse(sharedPreferences.getString(context.getString(R.string.shared_pref_user_details_photo_uri), ""));
         if(photoUri != null){
             Picasso.with(context).load(photoUri).transform(new ImageCircleTransform()).into(navigationDrawerFragment.getUserAvatar());
         } else {

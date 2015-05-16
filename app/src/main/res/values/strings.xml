@@ -82,5 +82,9 @@
     <string name="text_refresh_interval">Refresh Interval</string>
     <string name="action_check_in">Check In</string>
     <string name="refresh_interval_tv_label">Choose the refresh interval:</string>
+    <string name="text_status_updated">Status updated</string>
+    <string name="error_must_create_profile_first">You must create your profile first, do you wish to create now?</string>
+    <string name="error_confirm_cancel">Are you sure you wish to cancel? All changes will be lost</string>
+    <string name="please_wait">Please wait...</string>
 
 </resources>

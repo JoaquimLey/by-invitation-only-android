@@ -58,6 +58,13 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-afd6b68f2c02b84f06a76041b977a632cbabc4c5.jar" />
     </item>
     <item
+        jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.1.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e0b0c35d02308b270015a74cada4887e2e49b889">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-c639aab8da14ddf5fc93630bebbb8f8f4c99c15f.jar" />
+    </item>
+    <item
         jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.jayway.android.robotium\robotium-solo\5.3.1\e6e664ab1b59d2504c3529f128747c13487f96ca\robotium-solo-5.3.1.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -184,13 +191,6 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-8e41f2384380e07aaa226f6d98d6b455c3239030.jar" />
     </item>
     <item
-        jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="c6d79137693d494dee16372d3921f919eb724ced">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-497a1d3eb4756b1d5317bdae124d89a8cbb01836.jar" />
-    </item>
-    <item
         jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -275,6 +275,13 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-android-4.48-a97cc85b7cf0b72648880ec588e16e6faa7e0b29.jar" />
     </item>
     <item
+        jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.afollestad\material-dialogs\0.7.4.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d255a721dd229574dfec5056df3764036c338dbe">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-56bac0a7d385bbf81a55c0bbe2bc5b50b82c857f.jar" />
+    </item>
+    <item
         jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-jdbc\4.48\b915ebd2c4b901eec32e4df44e5503752e92ce38\ormlite-jdbc-4.48.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -301,13 +308,6 @@
         revision="22.0.0"
         sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-core-4.48-08a4f64c98f78350b1c383d67e4df0b904519fae.jar" />
-    </item>
-    <item
-        jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c6d79137693d494dee16372d3921f919eb724ced">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-497a1d3eb4756b1d5317bdae124d89a8cbb01836.jar" />
     </item>
     <item
         jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"

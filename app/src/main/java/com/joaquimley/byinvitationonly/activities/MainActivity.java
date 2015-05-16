@@ -35,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.baoyz.widget.PullRefreshLayout;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private CustomSessionListAdapter mCustomAdapter;
     private ListView mList;
     private Menu mMenu;
+    private MaterialDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +207,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         if (CommonUtils.removeSessionFromList(dataSnapshot.getValue(Session.class),
                 BioApp.getInstance().getSessionsList())) {
-
             mCustomAdapter.notifyDataSetChanged();
         }
     }
@@ -253,7 +254,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                     AlertDialog.Builder checkoutAlertDialog = new AlertDialog.Builder(this);
                     checkoutAlertDialog
                             .setTitle("New Profile")
-                            .setMessage("You must create your profile first, do you wish to create now?")
+                            .setMessage(getString(R.string.error_must_create_profile_first))
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.dismiss();
@@ -266,7 +267,15 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                                 }
                             })
                             .create().show();
+                    return true;
                 }
+                mProgressDialog = new MaterialDialog.Builder(this)
+                        .title("Connecting")
+                        .content(getString(R.string.please_wait))
+                        .progress(true, 0)
+                        .show();
+                FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -283,7 +292,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         }
         FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
         CommonUtils.changeMenuItemIcon(mUser, mMenu.findItem(R.id.ib_user_status));
-        Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
+        mProgressDialog.dismiss();
+        Toast.makeText(this, getString(R.string.text_status_updated), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -303,5 +313,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
     public void setSessionsChildRef(Firebase talksChildRef) {
         mSessionsRef = talksChildRef;
+    }
+
+    public Menu getMenu() {
+        return mMenu;
+    }
+
+    public void setMenu(Menu menu) {
+        mMenu = menu;
     }
 }
