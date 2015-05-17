@@ -30,6 +30,10 @@ android:
 notifications:
   email: false
 
+before_install:
+  - cd application
+  - chmod +x gradlew
+
 script:
   "./gradlew build"
 
