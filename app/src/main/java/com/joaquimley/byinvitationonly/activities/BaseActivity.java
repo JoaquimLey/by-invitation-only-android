@@ -87,4 +87,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     }
 
     protected abstract int getLayoutResource();
+
+    public NavigationDrawerFragment getNavigationDrawerFragment() {
+        return mNavigationDrawerFragment;
+    }
+
+    public void setNavigationDrawerFragment(NavigationDrawerFragment navigationDrawerFragment) {
+        mNavigationDrawerFragment = navigationDrawerFragment;
+    }
 }

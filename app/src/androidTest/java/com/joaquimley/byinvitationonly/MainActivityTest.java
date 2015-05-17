@@ -34,6 +34,7 @@ import android.widget.ImageButton;
 import com.firebase.client.Firebase;
 import com.joaquimley.byinvitationonly.activities.EditUserDetailsActivity;
 import com.joaquimley.byinvitationonly.activities.MainActivity;
+import com.joaquimley.byinvitationonly.activities.ParticipantsListActivity;
 import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.robotium.solo.Solo;
@@ -124,7 +125,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * Recreates user profile simulating user behavior
      */
     public void reCreateUserProfile(boolean forceUpdate) {
-        if(!forceUpdate){
+        if (!forceUpdate) {
             if (mUser != null || !mUser.getName().isEmpty()) {
                 return;
             }
@@ -205,7 +206,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * mensagem perguntando se pretendo preencher as informações do meu contacto ou cancelar a acção.
      */
     @SmallTest
-    public void test03_Us4CreateProfileMessage(){
+    public void test03_Us4CreateProfileMessage() {
         clearUserProfile();
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
         solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
@@ -234,7 +235,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * funcionalidade "I'm here" desactivada.
      */
     @MediumTest
-    public void test05_Us4NoCreateProfile(){
+    public void test05_Us4NoCreateProfile() {
         clearUserProfile();
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
         solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
@@ -244,7 +245,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
 
-
     /**
      * Dado que estou no ecrã de preenchimento de detalhes do meu contacto, Quando termino o
      * preenchimento dos dados, pressiono o botão de back, e tenho as informações do meu contacto
@@ -252,7 +252,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * da activação desta funcionalidade.
      */
     @MediumTest
-    public void test06_Us5CancelCreateProfile(){
+    public void test06_Us5CancelCreateProfile() {
         clearUserProfile();
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
         solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
@@ -272,7 +272,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * mantendo-se a funcionalidade "I'm here" desactivada.
      */
     @MediumTest
-    public void test07_Us4PressBackOnProfileCreate(){
+    public void test07_Us4PressBackOnProfileCreate() {
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
         solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
         solo.waitForActivity(EditUserDetailsActivity.class);
@@ -303,9 +303,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * indicar a falta de rede.
      */
     @SmallTest
-    public void test08_Us4CheckInNoConnection(){
+    public void test08_Us4CheckInNoConnection() {
         solo.setWiFiData(false);
-        if(mUser.isVisible()){
+        if (mUser.isVisible()) {
             solo.clickOnImageButton(1);
         }
         solo.clickOnImageButton(1);
@@ -327,36 +327,99 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * Tests if the is user is ABLE to see other participants while visible
+     * Dado que estou no ecrã da lista de participantes, quando faço "pull to refresh" e tenho
+     * rede, a lista de participantes deve ser actualizada.
+     */
+    @SmallTest
+    public void test10_Us6PullToRefreshParticipantsUi() {
+        if(!mUser.isVisible()){
+            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        }
+
+        mActivity.getNavigationDrawerFragment().openDrawer();
+        solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+        assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
+        solo.clickLongInList(1, 4, 111);
+    }
+
+    /**
+     * Dado que estou no ecrã da lista de participantes, Quando não tenho rede, ao fazer
+     * "pulltorefresh", deverá aparecer uma mensagem a dizer que não está conectado à rede.
+     * A lista de participantes deve permanecer sem alterações.
      */
     @MediumTest
-    public void test06_Us4UserDetailsEdited() {
-        // Goes to "Edit Details activity first"
-        solo.clickOnImageButton(0);
-        assertTrue(solo.waitForActivity(EditUserDetailsActivity.class));
+    public void test11_Us4UserDetailsEdited() {
+        if(!mUser.isVisible()){
+            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        }
 
-        String newName = "new name";
-        String newEmail = "new@email.com";
-        String newDescription = "new description";
+        mActivity.getNavigationDrawerFragment().openDrawer();
+        solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+        assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
+        solo.setWiFiData(false);
+        solo.clickLongInList(1, 4, 111);
+        assertTrue(solo.waitForText(mActivity.getString(R.string.error_no_internet)));
+    }
 
-        init();
-        // Name
-        solo.clearEditText(mEditTestUserName);
-        solo.typeText(mEditTestUserName, newName);
-        // Email
-        solo.clearEditText(mEditTestUserEmail);
-        solo.typeText(mEditTestUserEmail, newEmail);
-        // Description
-        solo.clearEditText(mEditTestUserDescription);
-        solo.typeText(mEditTestUserDescription, newDescription);
+    /**
+     * Dado que estou no ecrã da lista de participantes, Quando escolho um participante para
+     * contactar, Então deve ser-me exibida uma mensagem de confirmação de contacto a esse
+     * participante.
+     */
+    @SmallTest
+    public void test12_Us6ConfirmContactUser(){
+        if(!mUser.isVisible()){
+            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        }
 
-        solo.clickOnText(solo.getString(R.string.text_save));
-        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
+        mActivity.getNavigationDrawerFragment().openDrawer();
+        solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+        assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
+        solo.clickInList(2);
+        assertTrue(solo.waitForText(mActivity.getString(R.string.text_confirm_contact_user)));
+    }
+    /**
+     * Dado que estou na mensagem de confirmação de contacto a um participante, Quando pressiono o
+     * botão "Sim" e não tenho rede, Então deve-me ser apresentada uma mensagem informativa a
+     * indicar a falta de rede.
+     */
+    @SmallTest
+    public void test13_Us6NoWifiContactUser(){
+        if(!mUser.isVisible()){
+            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        }
 
-        mUser = BioApp.getInstance().getCurrentUser();
+        mActivity.getNavigationDrawerFragment().openDrawer();
+        solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+        assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
+        solo.setWiFiData(false);
+        solo.clickInList(2);
+        assertTrue(solo.waitForText(mActivity.getString(R.string.error_no_internet)));
+    }
 
-        assertTrue(mUser.getName().equals(newName));
-        assertTrue(mUser.getEmail().equals(newEmail));
-        assertTrue(mUser.getDescription().equals(newDescription));
+    /**
+     * Dado que estou na mensagem de confirmação de contacto a um participante, Quando pressiono o
+     * botão "Não", Então deve ser exibido o ecrã da lista de participantes.
+     */
+    @SmallTest
+    public void test14_Us6NoConfirmContactUser(){
+        if(!mUser.isVisible()){
+            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        }
+
+        mActivity.getNavigationDrawerFragment().openDrawer();
+        solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+        assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
+        solo.setWiFiData(false);
+        solo.clickInList(2);
+        assertTrue(solo.waitForText(mActivity.getString(R.string.text_confirm_contact_user)));
+        solo.clickOnText("No");
+        solo.waitForDialogToClose();
+        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, ParticipantsListActivity.class);
     }
 }
