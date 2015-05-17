@@ -23,4 +23,17 @@ android:
     - sys-img-armeabi-v7a-android-22
     - sys-img-x86-android-22
 
-    script: ./gradlew connectedAndroidTest
+  notifications:email: false
+
+  before_install:
+
+      # for gradle output style
+      - export TERM=dumb
+
+      # environment info
+      - ./gradlew -v
+      - uname -a
+
+  # Let's try to build...
+  script: ./gradlew clean build
+  script: ./gradlew connectedAndroidTest
