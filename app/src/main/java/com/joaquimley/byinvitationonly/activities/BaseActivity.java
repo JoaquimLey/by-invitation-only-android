@@ -95,4 +95,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     public void setNavigationDrawerFragment(NavigationDrawerFragment navigationDrawerFragment) {
         mNavigationDrawerFragment = navigationDrawerFragment;
     }
+
+
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
+    }
+
+    public void setSharedPreferences(SharedPreferences sharedPreferences) {
+        mSharedPreferences = sharedPreferences;
+    }
 }

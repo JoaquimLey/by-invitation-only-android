@@ -229,14 +229,13 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
         if(answer) {
             if (!mUser.isVisible()) {
                 FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
-                finish();
             }
         }
 
         if(mUser.isVisible() && mUser.getId() != null){
             FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
-            finish();
         }
+        finish();
     }
 
     @Override
@@ -272,6 +271,8 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
+        BioApp.getInstance().setCurrentUser(mUser);
         finish();
     }
 }

@@ -252,8 +252,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
             case R.id.ib_user_status:
                 if (mUser == null) {
 
-
-
                     AlertDialog.Builder checkoutAlertDialog = new AlertDialog.Builder(this);
                     checkoutAlertDialog
                             .setTitle("New Profile")

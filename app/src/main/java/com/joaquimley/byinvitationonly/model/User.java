@@ -142,4 +142,31 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (mIsVisible != user.mIsVisible) return false;
+        if (!mId.equals(user.mId)) return false;
+        if (!mName.equals(user.mName)) return false;
+        if (!mEmail.equals(user.mEmail)) return false;
+        if (!mDescription.equals(user.mDescription)) return false;
+        return !(mPhotoBase64 != null ? !mPhotoBase64.equals(user.mPhotoBase64) : user.mPhotoBase64 != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mId.hashCode();
+        result = 31 * result + mName.hashCode();
+        result = 31 * result + mEmail.hashCode();
+        result = 31 * result + mDescription.hashCode();
+        result = 31 * result + (mPhotoBase64 != null ? mPhotoBase64.hashCode() : 0);
+        result = 31 * result + (mIsVisible ? 1 : 0);
+        return result;
+    }
 }

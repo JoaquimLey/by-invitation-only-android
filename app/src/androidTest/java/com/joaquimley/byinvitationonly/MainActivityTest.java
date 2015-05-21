@@ -22,11 +22,10 @@
 package com.joaquimley.byinvitationonly;
 
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,9 +38,10 @@ import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.model.User;
 import com.robotium.solo.Solo;
 
-
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
     protected static final String TAG = MainActivityTest.class.getSimpleName();
+    private static final long DEFAULT_WAIT_TIME = 5000;
     protected static final String NO_MSG_ERROR = "No error message displayed";
     protected static final String WRONG_ACTIVITY_ERROR = "ERROR: Not expected activity showing";
 
@@ -75,8 +75,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo = new Solo(getInstrumentation());
         setActivityInitialTouchMode(true);
         mActivity = getActivity();
+        mSharedPreferences = mActivity.getSharedPreferences();
+
         mUser = BioApp.getInstance().getCurrentUser();
-        init();
+        if (mUser == null) {
+            reCreateUserProfile(true, false);
+        }
+
+//        init();
     }
 
     /**
@@ -98,11 +104,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mSessionsRef = FirebaseHelper.getChildRef(firebaseRef, mActivity.getString(R.string.firebase_child_sessions));
         mUsersRef = FirebaseHelper.getChildRef(firebaseRef, mActivity.getString(R.string.firebase_child_users));
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        mEditTestUserName = (EditText) mActivity.findViewById(R.id.et_edit_user_details_name);
-        mEditTestUserEmail = (EditText) mActivity.findViewById(R.id.et_edit_user_details_email);
-        mEditTestUserDescription = (EditText) mActivity.findViewById(R.id.et_edit_user_details_description);
-        preConditions();
+        mEditTestUserName = (EditText) getActivity().findViewById(R.id.et_edit_user_details_name);
+        mEditTestUserEmail = (EditText) getActivity().findViewById(R.id.et_edit_user_details_email);
+        mEditTestUserDescription = (EditText) getActivity().findViewById(R.id.et_edit_user_details_description);
+//        preConditions();
     }
 
     /**
@@ -110,29 +115,40 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void preConditions() {
         assertNotNull(mActivity);
-        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
+//        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
     }
 
     /**
      * Clears all sharedPreferences information on device, sets mUser to NULL
      */
-    private void clearUserProfile() {
-        mSharedPreferences.edit().clear().apply();
-        mUser = null;
+    private boolean clearUserProfile(long waitTime) {
+        if (mActivity.getSharedPreferences().edit().clear().commit()) {
+            Log.i(TAG, "clearUserProfile(): " + mActivity.getSharedPreferences().edit().clear().commit());
+            mUser = null;
+            BioApp.getInstance().setCurrentUser(null);
+            return true;
+        }
+        return false;
     }
 
     /**
      * Recreates user profile simulating user behavior
      */
-    public void reCreateUserProfile(boolean forceUpdate) {
+    public void reCreateUserProfile(boolean forceUpdate, boolean shareInfo) {
         if (!forceUpdate) {
-            if (mUser != null || !mUser.getName().isEmpty()) {
+            if (mUser != null && mUser.getName() != null && !mUser.getName().isEmpty()) {
                 return;
             }
         }
 
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        if (clearUserProfile(DEFAULT_WAIT_TIME)) {
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        }
+
+        solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+        if (solo.waitForText("New Profile")) {
+            solo.clickOnText("Yes");
+        }
         solo.waitForActivity(EditUserDetailsActivity.class);
 
         String newName = "Joaquim Ley";
@@ -141,23 +157,26 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         init();
         // Name
-        solo.clearEditText(mEditTestUserName);
-        solo.typeText(mEditTestUserName, newName);
+        solo.clearEditText(0);
+        solo.typeText(0, newName);
         // Email
-        solo.clearEditText(mEditTestUserEmail);
-        solo.typeText(mEditTestUserEmail, newEmail);
+        solo.clearEditText(1);
+        solo.typeText(1, newEmail);
         // Description
-        solo.clearEditText(mEditTestUserDescription);
-        solo.typeText(mEditTestUserDescription, newDescription);
+        solo.clearEditText(2);
+        solo.typeText(2, newDescription);
 
         solo.clickOnText(solo.getString(R.string.text_save));
-        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
+
+        solo.waitForDialogToOpen();
+        if (shareInfo) {
+            solo.clickOnText("Yes");
+        } else {
+            solo.clickOnText("No");
+        }
 
         mUser = BioApp.getInstance().getCurrentUser();
-
-        assertTrue(mUser.getName().equals(newName));
-        assertTrue(mUser.getEmail().equals(newEmail));
-        assertTrue(mUser.getDescription().equals(newDescription));
+        assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
     }
 
     // -------------------------------------------------------------------------------------- //
@@ -171,16 +190,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @SmallTest
     public void test01_Us4ShareDetails() {
-        init();
-        reCreateUserProfile(false);
-        Drawable previousIcon = mActivity.findViewById(R.id.ib_user_status).getBackground();
-        boolean prevStatus = mUser.isVisible();
 
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
         solo.waitForText(mActivity.getString(R.string.text_status_updated));
-        assertTrue("User didn't change checked-in status", prevStatus != mUser.isVisible());
-        assertTrue("User profile not present on server", BioApp.getInstance().getUsersList().contains(mUser));
-        assertTrue(mActivity.findViewById(R.id.ib_user_status).getBackground() != previousIcon);
+        mUser = BioApp.getInstance().getCurrentUser();
+        assertTrue("User didn't change checked-in status", mUser.isVisible());
+        assertTrue(getActivity().findViewById(R.id.ib_user_status) != null);
     }
 
     /**
@@ -190,14 +205,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * o estado activo.
      */
     @SmallTest
-    public void test02_Us4NoUserProfileCheckIn() {
+    public void test02_Us4CheckInConfirm() {
         init();
-        reCreateUserProfile(false);
-
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
         solo.waitForText(mActivity.getString(R.string.text_status_updated));
-        assertTrue("No status icon changed", mActivity.getMenu().getItem(0).getIcon() ==
-                mActivity.getResources().getDrawable(R.drawable.ic_status_green));
+        assertTrue("No status icon changed", getActivity().findViewById(R.id.ib_user_status) != null);
     }
 
     /**
@@ -207,10 +219,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @SmallTest
     public void test03_Us4CreateProfileMessage() {
-        clearUserProfile();
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
-        assertTrue(solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first)));
+        if(mUser.isVisible()){
+            solo.clickOnView(getActivity().findViewById(R.id.ib_user_status));
+            solo.waitForText(mActivity.getString(R.string.text_profile_updated));
+        }
+
+        if(clearUserProfile(DEFAULT_WAIT_TIME)){
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+            assertTrue(solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first)));
+        }
     }
 
     /**
@@ -220,13 +238,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @MediumTest
     public void test04_Us4CreateOrEditUserProfile() {
-        clearUserProfile();
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
-        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
-        solo.clickOnText("Yes");
-        solo.waitForActivity(EditUserDetailsActivity.class);
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+        if(clearUserProfile(DEFAULT_WAIT_TIME)){
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+            solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+            solo.clickOnText("Yes");
+            solo.waitForActivity(EditUserDetailsActivity.class);
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+        }
     }
 
     /**
@@ -236,12 +255,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @MediumTest
     public void test05_Us4NoCreateProfile() {
-        clearUserProfile();
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
-        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
-        solo.clickOnText("No");
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        if(clearUserProfile(DEFAULT_WAIT_TIME)){
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+            solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+            solo.clickOnText("No");
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+        }
     }
 
 
@@ -253,16 +273,18 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @MediumTest
     public void test06_Us5CancelCreateProfile() {
-        clearUserProfile();
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
-        solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
-        solo.clickOnText("Yes");
-        solo.waitForActivity(EditUserDetailsActivity.class);
-        solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+        if(clearUserProfile(DEFAULT_WAIT_TIME)){
 
-        solo.clickOnText("Cancel");
-        assertTrue(solo.waitForText(mActivity.getString(R.string.error_confirm_cancel)));
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+            solo.waitForText(mActivity.getString(R.string.error_must_create_profile_first));
+            solo.clickOnText("Yes");
+            solo.waitForActivity(EditUserDetailsActivity.class);
+            solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, EditUserDetailsActivity.class);
+
+            solo.clickOnText("Cancel");
+            assertTrue(solo.waitForText(mActivity.getString(R.string.error_confirm_cancel)));
+        }
     }
 
     /**
@@ -294,7 +316,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         solo.goBack();
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class.getSimpleName()));
-        assertTrue(mActivity.getMenu().getItem(0).getIcon() == mActivity.getResources().getDrawable(R.drawable.ic_status_red));
+        assertTrue(getActivity().findViewById(R.id.ib_user_status) != null);
     }
 
     /**
@@ -306,9 +328,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void test08_Us4CheckInNoConnection() {
         solo.setWiFiData(false);
         if (mUser.isVisible()) {
-            solo.clickOnImageButton(1);
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
         }
-        solo.clickOnImageButton(1);
+        solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
         solo.waitForText(mActivity.getString(R.string.error_no_internet));
     }
 
@@ -321,7 +343,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @MediumTest
     public void test09_Us6ProfileUpdateConfirmation() {
         solo.assertCurrentActivity(WRONG_ACTIVITY_ERROR, MainActivity.class);
-        reCreateUserProfile(true);
+        reCreateUserProfile(true, false);
         solo.waitForText(mActivity.getString(R.string.text_profile_updated));
         assertTrue(WRONG_ACTIVITY_ERROR, solo.waitForActivity(MainActivity.class));
     }
@@ -332,9 +354,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @SmallTest
     public void test10_Us6PullToRefreshParticipantsUi() {
-        if(!mUser.isVisible()){
-            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
-            solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
+        if (!mUser.isVisible()) {
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
+            solo.waitForText(mActivity.getString(R.string.text_status_updated));
         }
 
         mActivity.getNavigationDrawerFragment().openDrawer();
@@ -350,8 +372,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     @MediumTest
     public void test11_Us4UserDetailsEdited() {
-        if(!mUser.isVisible()){
-            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+        if (!mUser.isVisible()) {
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
             solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
         }
 
@@ -369,9 +391,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * participante.
      */
     @SmallTest
-    public void test12_Us6ConfirmContactUser(){
-        if(!mUser.isVisible()){
-            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+    public void test12_Us6ConfirmContactUser() {
+        if (!mUser.isVisible()) {
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
             solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
         }
 
@@ -381,20 +403,22 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickInList(2);
         assertTrue(solo.waitForText(mActivity.getString(R.string.text_confirm_contact_user)));
     }
+
     /**
      * Dado que estou na mensagem de confirmação de contacto a um participante, Quando pressiono o
      * botão "Sim" e não tenho rede, Então deve-me ser apresentada uma mensagem informativa a
      * indicar a falta de rede.
      */
     @SmallTest
-    public void test13_Us6NoWifiContactUser(){
-        if(!mUser.isVisible()){
-            solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
+    public void test13_Us6NoWifiContactUser() {
+        if (!mUser.isVisible()) {
+            solo.clickOnView(mActivity.findViewById(R.id.ib_user_status));
             solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
         }
 
         mActivity.getNavigationDrawerFragment().openDrawer();
         solo.clickOnText(mActivity.getString(R.string.title_activity_participants_list));
+
         assertTrue(solo.waitForActivity(ParticipantsListActivity.class));
         solo.setWiFiData(false);
         solo.clickInList(2);
@@ -406,8 +430,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * botão "Não", Então deve ser exibido o ecrã da lista de participantes.
      */
     @SmallTest
-    public void test14_Us6NoConfirmContactUser(){
-        if(!mUser.isVisible()){
+    public void test14_Us6NoConfirmContactUser() {
+        if (!mUser.isVisible()) {
             solo.clickOnMenuItem(mActivity.getString(R.string.action_check_in));
             solo.waitForActivity(mActivity.getString(R.string.text_status_updated));
         }

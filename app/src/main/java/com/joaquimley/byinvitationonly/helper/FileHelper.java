@@ -101,13 +101,22 @@ public class FileHelper {
      * @param sharedPreferences self explanatory
      * @param user              which will be used to fill the details
      */
-    public static void updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), user.getId()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
-        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64()).apply();
-        sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
+    public static boolean updateUserDataToSharedPreferences(Context context, SharedPreferences sharedPreferences, User user) {
+        return sharedPreferences.edit()
+                .putString(context.getString(R.string.shared_pref_user_details_id), user.getId())
+                .putString(context.getString(R.string.shared_pref_user_details_name), user.getName())
+                .putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail())
+                .putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription())
+                .putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64())
+                .putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).commit();
+
+
+//        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_id), user.getId()).commit();
+//        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_name), user.getName()).apply();
+//        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_email), user.getEmail()).apply();
+//        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_description), user.getDescription()).apply();
+//        sharedPreferences.edit().putString(context.getString(R.string.shared_pref_user_details_photo_base64), user.getPhotoBase64()).apply();
+//        sharedPreferences.edit().putBoolean(context.getString(R.string.shared_pref_user_details_availability), user.isVisible()).apply();
     }
 
     /**
