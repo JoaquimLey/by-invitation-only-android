@@ -76,8 +76,8 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
         super.onCreate(savedInstanceState);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setupRefreshTimer();
-
-        if (!mUser.isVisible()) {
+        mUser = BioApp.getInstance().getCurrentUser();
+        if (mUser != null && !mUser.isVisible()) {
             finish();
         }
         init();
@@ -281,6 +281,11 @@ public class ParticipantsListActivity extends BaseActivity implements PullRefres
      */
     @Override
     public void onRefresh() {
+        if(!CommonUtils.isOnline(this)){
+            Toast.makeText(this, getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+            mPullRefreshLayout.setRefreshing(false);
+            return;
+        }
         mCustomAdapter.setItems(BioApp.getInstance().getUsersList());
         mCustomAdapter.notifyDataSetChanged();
         mPullRefreshLayout.setRefreshing(false);

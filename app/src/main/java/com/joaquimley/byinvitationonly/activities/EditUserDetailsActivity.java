@@ -271,8 +271,9 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-        FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
-        BioApp.getInstance().setCurrentUser(mUser);
-        finish();
+        if(FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser)){
+            BioApp.getInstance().setCurrentUser(mUser);
+            finish();
+        }
     }
 }

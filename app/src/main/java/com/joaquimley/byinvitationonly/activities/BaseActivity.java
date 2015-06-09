@@ -21,9 +21,9 @@
 
 package com.joaquimley.byinvitationonly.activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -50,8 +50,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUser = FileHelper.getUserFromSharedPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
+
+        mSharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_WORLD_WRITEABLE);
+        mUser = FileHelper.getUserFromSharedPreferences(this, mSharedPreferences);
 
         setupSystemUi();
         if (mUser != null) {

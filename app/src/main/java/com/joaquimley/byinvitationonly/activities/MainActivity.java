@@ -230,7 +230,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mUser = BioApp.getInstance().getCurrentUser();
         switch (requestCode) {
             case MainActivity.PARTICIPANTS_ACTIVITY:
                 if (mUser.isVisible()) {
@@ -270,6 +269,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                             .create().show();
                     return true;
                 }
+
                 mProgressDialog = new MaterialDialog.Builder(this)
                         .title("Connecting")
                         .content(getString(R.string.please_wait))

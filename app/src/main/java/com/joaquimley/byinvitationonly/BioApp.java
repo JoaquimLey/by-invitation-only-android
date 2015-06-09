@@ -79,8 +79,19 @@ public class BioApp extends Activity {
 
     public User getCurrentUser() {
         if(sCurrentUser == null){
-            sCurrentUser = FileHelper.getUserFromSharedPreferences(this,
+            User user = FileHelper.getUserFromSharedPreferences(this,
                     PreferenceManager.getDefaultSharedPreferences(this));
+            if(user != null){
+                sCurrentUser = user;
+            }
+        }
+        return sCurrentUser;
+    }
+
+    public User getCurrentUser(Context context) {
+        if(sCurrentUser == null){
+            sCurrentUser = FileHelper.getUserFromSharedPreferences(context,
+                    PreferenceManager.getDefaultSharedPreferences(context));
         }
         return sCurrentUser;
     }
@@ -166,6 +177,7 @@ public class BioApp extends Activity {
      * @return list with dummy users
      */
     public static ArrayList<User> createDummyUsers() {
+        // TODO: remove usage before production
         ArrayList<User> users = new ArrayList<>();
         users.add(new User("Evan Spiegel", "e.spiegel@snapchat.com", "CEO", "http://static5.businessinsider.com/image/539b5f6eeab8ea0266b8bbce-480/snapchat-evan-spiegel.jpg", true));
         users.add(new User("Travis Cordell", "travis@uber.com", "Entrepreneur", "https://s3.amazonaws.com/chicago_ideas_production/portraits/medium/61.jpg?1326134159", true));
