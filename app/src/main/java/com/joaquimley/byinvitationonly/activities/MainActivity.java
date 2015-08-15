@@ -78,8 +78,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
         setTitle(BioApp.getInstance().getConference().getAcronym());
         init();
 
-        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
-        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
+//        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
+//        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
     }
 
     @Override

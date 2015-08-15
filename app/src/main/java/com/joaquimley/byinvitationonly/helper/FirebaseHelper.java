@@ -134,8 +134,7 @@ public class FirebaseHelper {
                 if (snapshot.getValue() != null && user.getId() != null && user.isVisible()) {
                     usersRef.child(user.getId()).removeValue(listener);
                     user.setId("");
-                    user.setVisible(!user.isVisible());
-
+                    user.setVisible(false);
                 } else {
                     user.setVisible(!user.isVisible());
                     Toast.makeText(context, "Server synchronization error, please try again", Toast.LENGTH_LONG).show();
