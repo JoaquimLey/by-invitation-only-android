@@ -48,6 +48,7 @@ import com.joaquimley.byinvitationonly.helper.FirebaseHelper;
 import com.joaquimley.byinvitationonly.helper.IntentHelper;
 import com.joaquimley.byinvitationonly.interfaces.FavoriteChangeListener;
 import com.joaquimley.byinvitationonly.model.Session;
+import com.joaquimley.byinvitationonly.model.User;
 import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
@@ -63,7 +64,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     private Firebase mSessionsRef;
     private Firebase mUsersRef;
     private PullRefreshLayout mPullRefreshLayout;
-    private SharedPreferences mSharedPreferences;
     private CustomSessionListAdapter mCustomAdapter;
     private ListView mList;
     private Menu mMenu;
@@ -72,14 +72,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUser = BioApp.getInstance().getCurrentUser(this);
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUser = BioApp.getInstance().getCurrentUser(this);
         setTitle(BioApp.getInstance().getConference().getAcronym());
         init();
 
-//        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
-//        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
+        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
+        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
     }
 
     @Override
@@ -288,13 +287,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
      */
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        mProgressDialog.dismiss();
         if (firebaseError != null) {
             Toast.makeText(this, getString(R.string.error_contacting_server) + firebaseError.getMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
         FileHelper.updateUserDataToSharedPreferences(this, mSharedPreferences, mUser);
         CommonUtils.changeMenuItemIcon(mUser, mMenu.findItem(R.id.ib_user_status));
-        mProgressDialog.dismiss();
         Toast.makeText(this, getString(R.string.text_status_updated), Toast.LENGTH_SHORT).show();
     }
 
