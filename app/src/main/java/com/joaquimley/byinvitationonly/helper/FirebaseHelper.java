@@ -136,15 +136,7 @@ public class FirebaseHelper {
                     user.setId("");
                     user.setVisible(!user.isVisible());
 
-                }
-//                else if (user.getId().isEmpty() || user.getId().equals("") || !user.isVisible()) {
-//                    Firebase newUserRef = usersRef.push();
-//                    user.setId(newUserRef.getKey());
-//                    user.setVisible(!user.isVisible());
-//                    newUserRef.setValue(user, listener);
-//
-//                }
-                else {
+                } else {
                     user.setVisible(!user.isVisible());
                     Toast.makeText(context, "Server synchronization error, please try again", Toast.LENGTH_LONG).show();
                 }

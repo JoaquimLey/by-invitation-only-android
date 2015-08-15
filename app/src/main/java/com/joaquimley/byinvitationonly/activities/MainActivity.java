@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +52,8 @@ import com.joaquimley.byinvitationonly.ui.NavigationDrawerCallbacks;
 import com.joaquimley.byinvitationonly.util.CommonUtils;
 
 public class MainActivity extends BaseActivity implements NavigationDrawerCallbacks,
-        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener, ChildEventListener, Firebase.CompletionListener {
+        PullRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, FavoriteChangeListener,
+        ChildEventListener, Firebase.CompletionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int EDIT_USER_DETAILS = 0;
@@ -72,10 +72,14 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUser = BioApp.getInstance().getCurrentUser(this);
         BioApp.getInstance().setConference(FileHelper.importConferenceDataFromFile(this));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTitle(BioApp.getInstance().getConference().getAcronym());
         init();
+
+        BioApp.pushDummySessionsToFirebase(this, mSessionsRef);
+        BioApp.pushDummyUsersToFirebase(this, mUsersRef);
     }
 
     @Override
@@ -195,12 +199,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
      */
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Log.w(TAG, "onChildAdded session: " + dataSnapshot.getValue());
-//        Session session = dataSnapshot.getValue(Session.class);
-//        if (!BioApp.getInstance().getSessionsList().contains(session)) {
-//            BioApp.getInstance().getSessionsList().add(session);
-//            mCustomAdapter.notifyDataSetChanged();
-//        }
+        Session session = dataSnapshot.getValue(Session.class);
+        if (!BioApp.getInstance().getSessionsList().contains(session)) {
+            BioApp.getInstance().getSessionsList().add(session);
+            mCustomAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -218,12 +221,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
 
     @Override
     public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
     }
 
     @Override
     public void onCancelled(FirebaseError firebaseError) {
-
     }
 
     @Override
@@ -237,7 +238,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                 } else {
                     mMenu.findItem(R.id.ib_user_status).setIcon(R.drawable.ic_status_red);
                 }
-                // TODO: Handle
                 break;
 
             default:
@@ -277,6 +277,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerCallba
                         .show();
                 FirebaseHelper.changeAvailabilityState(this, mUsersRef, mUser, this);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -2,25 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-core-4.48-08a4f64c98f78350b1c383d67e4df0b904519fae.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-jdbc\4.48\b915ebd2c4b901eec32e4df44e5503752e92ce38\ormlite-jdbc-4.48.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="b915ebd2c4b901eec32e4df44e5503752e92ce38">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-jdbc-4.48-32ec0280767106bd06bb92aa518fc715459219c4.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.2.3\e787a02a644f2681e4af82cdc88dd2f69877692b\firebase-client-jvm-2.2.3.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="e787a02a644f2681e4af82cdc88dd2f69877692b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-2.2.3-850cb2e6cdb5f66ff608c01b548bca70669cbb24.jar" />
+        revision="22.0.1"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-7ef0df884bffd4e848f7411ce9ad07b95cb9c527.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
@@ -28,27 +14,6 @@
         revision="22.0.1"
         sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-104e4f762d52917a0e0286407e01ea3a69694426.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\tubesock-0.0.11-e40ba985bff51999a47958ad268c43ff871e488e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\net.sf.opencsv\opencsv\2.3\c23708cdb9e80a144db433e23344a788a1fd6599\opencsv-2.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c23708cdb9e80a144db433e23344a788a1fd6599">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\opencsv-2.3-a891775e5761070038dddfdc26de1b0ce73c30dc.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.2.3\682d0a8dce58e47bde57316aac7d6bb5618dee6b\firebase-client-android-2.2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="682d0a8dce58e47bde57316aac7d6bb5618dee6b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-769b88be8b7e5c2cb72778d541a6cf80c4768ddf.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
@@ -65,11 +30,11 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-c639aab8da14ddf5fc93630bebbb8f8f4c99c15f.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.jayway.android.robotium\robotium-solo\5.3.1\e6e664ab1b59d2504c3529f128747c13487f96ca\robotium-solo-5.3.1.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="e6e664ab1b59d2504c3529f128747c13487f96ca">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\robotium-solo-5.3.1-5b5b47f8048659e9edc69222b24c72380359d2b3.jar" />
+        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\tubesock-0.0.11-c127e39a340fc326f2eda8094e4ee7d843c7ccce.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.baoyz.pullrefreshlayout\library\1.0.1\classes.jar"
@@ -77,13 +42,6 @@
         revision="22.0.0"
         sha1="1b44f6e5da89d2f3ac9bef7e9c20a76ebf8b62c4">
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-27ba0f7b8c3367a4bb7a74bd3d24c3ce891631fd.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.2.3\e787a02a644f2681e4af82cdc88dd2f69877692b\firebase-client-jvm-2.2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e787a02a644f2681e4af82cdc88dd2f69877692b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-2.2.3-850cb2e6cdb5f66ff608c01b548bca70669cbb24.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
@@ -93,39 +51,11 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-245e6b2acd05ea44449fb517739fddd57e60669a.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.0\7ff0e000d1e27e356567f56c92af3b8ab912636f\picasso-2.5.0.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.2.3\682d0a8dce58e47bde57316aac7d6bb5618dee6b\firebase-client-android-2.2.3.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="7ff0e000d1e27e356567f56c92af3b8ab912636f">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\picasso-2.5.0-19c0cf2a961e9365d75df209f342340dae58d6b1.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="afa06f539a4026c10b247386312aa67404b80a16">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-android-4.48-a97cc85b7cf0b72648880ec588e16e6faa7e0b29.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.jayway.android.robotium\robotium-solo\5.3.1\e6e664ab1b59d2504c3529f128747c13487f96ca\robotium-solo-5.3.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e6e664ab1b59d2504c3529f128747c13487f96ca">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\robotium-solo-5.3.1-5b5b47f8048659e9edc69222b24c72380359d2b3.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-jdbc\4.48\b915ebd2c4b901eec32e4df44e5503752e92ce38\ormlite-jdbc-4.48.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="b915ebd2c4b901eec32e4df44e5503752e92ce38">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-jdbc-4.48-32ec0280767106bd06bb92aa518fc715459219c4.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-51074f3b9e35f9e28dfe6e16f0614da26805203e.jar" />
+        sha1="682d0a8dce58e47bde57316aac7d6bb5618dee6b">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-6a811a5063578e3d2051ec4a8916ee391756895d.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.baoyz.pullrefreshlayout\library\1.0.1\classes.jar"
@@ -135,81 +65,32 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-27ba0f7b8c3367a4bb7a74bd3d24c3ce891631fd.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="afa06f539a4026c10b247386312aa67404b80a16">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-android-4.48-a97cc85b7cf0b72648880ec588e16e6faa7e0b29.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-8e41f2384380e07aaa226f6d98d6b455c3239030.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-core-4.48-08a4f64c98f78350b1c383d67e4df0b904519fae.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-51074f3b9e35f9e28dfe6e16f0614da26805203e.jar" />
-    </item>
-    <item
-        jar="C:\Program Files (x86)\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-fc86b50f370ecbec08e324c10881a2634272ac80.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-e66ee20159fa941a2fc1b82cf43dc20d1832e0cb.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.2.3\682d0a8dce58e47bde57316aac7d6bb5618dee6b\firebase-client-android-2.2.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="682d0a8dce58e47bde57316aac7d6bb5618dee6b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-769b88be8b7e5c2cb72778d541a6cf80c4768ddf.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-8e41f2384380e07aaa226f6d98d6b455c3239030.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\tubesock-0.0.11-e40ba985bff51999a47958ad268c43ff871e488e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.2.3\e787a02a644f2681e4af82cdc88dd2f69877692b\firebase-client-jvm-2.2.3.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.2.3\e787a02a644f2681e4af82cdc88dd2f69877692b\firebase-client-jvm-2.2.3.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e787a02a644f2681e4af82cdc88dd2f69877692b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-2.2.3-850cb2e6cdb5f66ff608c01b548bca70669cbb24.jar" />
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-2.2.3-fa80ab0743747330abe62c22ded19af6d3fd83f3.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\net.sf.opencsv\opencsv\2.3\c23708cdb9e80a144db433e23344a788a1fd6599\opencsv-2.3.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.0\7ff0e000d1e27e356567f56c92af3b8ab912636f\picasso-2.5.0.jar"
         jumboMode="false"
-        revision="22.0.0"
-        sha1="c23708cdb9e80a144db433e23344a788a1fd6599">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\opencsv-2.3-a891775e5761070038dddfdc26de1b0ce73c30dc.jar" />
+        revision="22.0.1"
+        sha1="7ff0e000d1e27e356567f56c92af3b8ab912636f">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\picasso-2.5.0-01ed367c01b5cf475d13a9a1b5bedfc370dd2942.jar" />
+    </item>
+    <item
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-d527e711157004eaf4bd696c148f034ef4e38590.jar" />
+    </item>
+    <item
+        jar="C:\Users\Joaquim Ley\Documents\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-bc51e7f298a5afc72ee6c8dcc66d370f432a15ea.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
@@ -219,13 +100,6 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-104e4f762d52917a0e0286407e01ea3a69694426.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-e66ee20159fa941a2fc1b82cf43dc20d1832e0cb.jar" />
-    </item>
-    <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -233,18 +107,11 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-afd6b68f2c02b84f06a76041b977a632cbabc4c5.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.jayway.android.robotium\robotium-solo\5.3.1\e6e664ab1b59d2504c3529f128747c13487f96ca\robotium-solo-5.3.1.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.jayway.android.robotium\robotium-solo\5.3.1\e6e664ab1b59d2504c3529f128747c13487f96ca\robotium-solo-5.3.1.jar"
         jumboMode="false"
-        revision="22.0.0"
+        revision="22.0.1"
         sha1="e6e664ab1b59d2504c3529f128747c13487f96ca">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\robotium-solo-5.3.1-5b5b47f8048659e9edc69222b24c72380359d2b3.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.0\7ff0e000d1e27e356567f56c92af3b8ab912636f\picasso-2.5.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="7ff0e000d1e27e356567f56c92af3b8ab912636f">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\picasso-2.5.0-19c0cf2a961e9365d75df209f342340dae58d6b1.jar" />
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\robotium-solo-5.3.1-f5d848db9bdc72b3a39d96eb8b5243da8df85630.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.baoyz.pullrefreshlayout\library\1.0.1\classes.jar"
@@ -254,13 +121,6 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-27ba0f7b8c3367a4bb7a74bd3d24c3ce891631fd.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-8e41f2384380e07aaa226f6d98d6b455c3239030.jar" />
-    </item>
-    <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -268,11 +128,11 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-245e6b2acd05ea44449fb517739fddd57e60669a.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\net.sf.opencsv\opencsv\2.3\c23708cdb9e80a144db433e23344a788a1fd6599\opencsv-2.3.jar"
         jumboMode="false"
-        revision="22.0.0"
-        sha1="afa06f539a4026c10b247386312aa67404b80a16">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-android-4.48-a97cc85b7cf0b72648880ec588e16e6faa7e0b29.jar" />
+        revision="22.0.1"
+        sha1="c23708cdb9e80a144db433e23344a788a1fd6599">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\opencsv-2.3-2cabb6763001f1c9df2ac2353e5b83c145aba4c1.jar" />
     </item>
     <item
         jar="C:\Git\by-invitation-only-android\app\build\intermediates\exploded-aar\com.afollestad\material-dialogs\0.7.4.1\classes.jar"
@@ -282,67 +142,32 @@
         <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\classes-56bac0a7d385bbf81a55c0bbe2bc5b50b82c857f.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-jdbc\4.48\b915ebd2c4b901eec32e4df44e5503752e92ce38\ormlite-jdbc-4.48.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="afa06f539a4026c10b247386312aa67404b80a16">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-android-4.48-0a199892322d074c82ba708a7d6a825597524a55.jar" />
+    </item>
+    <item
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-jdbc\4.48\b915ebd2c4b901eec32e4df44e5503752e92ce38\ormlite-jdbc-4.48.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="b915ebd2c4b901eec32e4df44e5503752e92ce38">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-jdbc-4.48-32ec0280767106bd06bb92aa518fc715459219c4.jar" />
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-jdbc-4.48-df1d93fba4039b57a27aaa3d3705c4715f00e6be.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.0\7ff0e000d1e27e356567f56c92af3b8ab912636f\picasso-2.5.0.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
         jumboMode="false"
-        revision="22.0.0"
-        sha1="7ff0e000d1e27e356567f56c92af3b8ab912636f">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\picasso-2.5.0-19c0cf2a961e9365d75df209f342340dae58d6b1.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-51074f3b9e35f9e28dfe6e16f0614da26805203e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
-        jumboMode="false"
-        revision="22.0.0"
+        revision="22.0.1"
         sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-core-4.48-08a4f64c98f78350b1c383d67e4df0b904519fae.jar" />
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\ormlite-core-4.48-e89beceb649bbdcb994e0a36c9e3d7e54983811b.jar" />
     </item>
     <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jar="C:\Users\Joaquim Ley\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-e66ee20159fa941a2fc1b82cf43dc20d1832e0cb.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.2.3\682d0a8dce58e47bde57316aac7d6bb5618dee6b\firebase-client-android-2.2.3.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="682d0a8dce58e47bde57316aac7d6bb5618dee6b">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\firebase-client-android-2.2.3-769b88be8b7e5c2cb72778d541a6cf80c4768ddf.jar" />
-    </item>
-    <item
-        jar="C:\Program Files (x86)\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-fc86b50f370ecbec08e324c10881a2634272ac80.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.11\d37cb67277928cf59344b4196af8d9cee1f1a27c\tubesock-0.0.11.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\tubesock-0.0.11-e40ba985bff51999a47958ad268c43ff871e488e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Ley\.gradle\caches\modules-2\files-2.1\net.sf.opencsv\opencsv\2.3\c23708cdb9e80a144db433e23344a788a1fd6599\opencsv-2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c23708cdb9e80a144db433e23344a788a1fd6599">
-        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\opencsv-2.3-a891775e5761070038dddfdc26de1b0ce73c30dc.jar" />
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="C:\Git\by-invitation-only-android\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-d05d636aff69bdeb76f60f1c1209051ae9a06b9f.jar" />
     </item>
 
 </items>

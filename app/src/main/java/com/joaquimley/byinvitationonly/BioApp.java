@@ -42,7 +42,7 @@ import java.util.ArrayList;
 
 public class BioApp extends Activity {
 
-    protected static int sRefreshInterval = 1000 * 60; // Default 1 minutes
+    protected static int sRefreshInterval = 1000 * 60; // Default 1 minute(s)
     protected static final String TAG = BioApp.class.getSimpleName();
     protected static BioApp sInstance = null;
     protected static ArrayList<Session> sSessionsList = null;
@@ -187,33 +187,36 @@ public class BioApp extends Activity {
         users.add(new User("Sean Parker", "sean@napster.com", "Not so rich because of lawsuits has-been", "http://static.trustedreviews.com/94/000025f9d/143d_orh350w620/Napster-Logo.jpg", true));
         return users;
     }
-//
-//    /**
-//     * Push sessions into Firebase cloud
-//     *
-//     * @param context     self explanatory
-//     * @param sessionsRef self explanatory
-//     */
-//    public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
-//
-//        if (!CommonUtils.isOnline(context)) {
-//            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        ArrayList<Session> sessions = createDummySessions();
-//        Firebase newSessionRef;
-//        for (Session session : sessions) {
-//            newSessionRef = sessionsRef.push();
-//            session.setId(newSessionRef.getKey());
-//            newSessionRef.setValue(session);
-//        }
-//    }
-//
-//    public static ArrayList<Session> createDummySessions() {
-//        ArrayList<Session> sessions = new ArrayList<>();
-////        sessions.add(new Session())
-//        return sessions;
-//    }
+
+    /**
+     * Push sessions into Firebase cloud
+     *
+     * @param context     self explanatory
+     * @param sessionsRef self explanatory
+     */
+    public static void pushDummySessionsToFirebase(Context context, Firebase sessionsRef) {
+
+        if (!CommonUtils.isOnline(context)) {
+            Toast.makeText(context, context.getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<Session> sessions = createDummySessions();
+        Firebase newSessionRef;
+        for (Session session : sessions) {
+            newSessionRef = sessionsRef.push();
+            session.setId(newSessionRef.getKey());
+            newSessionRef.setValue(session);
+        }
+    }
+
+    public static ArrayList<Session> createDummySessions() {
+        ArrayList<Session> sessions = new ArrayList<>();
+        sessions.add(new Session("Self-paced Code Labs", "Get hands on with self-paced workshops showcasing Google mobile, wearable, and Cloud technologies. We provide the workstations and tablets - just bring yourself any time during the day! We can also help you set up your own machine and device.","May 28", "8", "9","Code Labs", "A", "Development", "https://s-media-cache-ak0.pinimg.com/236x/43/90/d6/4390d61a417bb1373ee94b24ec4ad98b.jpg"));
+        sessions.add(new Session("Rapid paper prototyping with design experts", "In this session, you'll get a chance to work one on one with a UX/UI Expert on your new idea or existing design challenge. You'll learn user research, design sprint and paper prototyping techniques and will walk away with a recording of your prototype in action. Each session lasts 1 hour and there are limited spaces remaining, so come sign up early on the second floor in the Earn & Engage Sandbox.","May 28", "9", "10","Larry Page", "A", "Design", "http://blog.juntoo.co/wp-content/uploads/2015/02/rapid-prototyping-for-web-design.jpg"));
+        sessions.add(new Session("Material Design Reviews", "Is your app adopting material design? This is your chance to participate in a UX review with members of the Material Design team. Appointments are on a first come, first serve basis, but we'll also have designers on hand for more casual questions.","May 28", "11", "12","Google", "A", "Design", "http://2.bp.blogspot.com/-7qGy2TTYf5I/U6oIH2Wy_zI/AAAAAAAAAeo/THXAbnJe5LU/s1600/layering.png"));
+        sessions.add(new Session("Mobile app quality leaps to the cloud", "See how you can improve your app’s ratings by testing early, broader and often. With nearly unlimited resources of the cloud and significant automation, this is achievable for even the most constrained app development teams. Want to access the latest (and old) Android and iOS devices that your app might need to run on? Wish you could run hundreds of tests in parallel on every combination for every commit? Want to improve quality without even writing tests? Join us to see how all three can be achieved. We will use a Google Cloud test service to illustrate some of the key practices that you can incorporate in your app development. (Note: This Sandbox talk will be offered twice throughout the event. Check the schedule to confirm timings.)","May 28", "14", "15","Google Design", "A", "Design", "https://d13yacurqjgara.cloudfront.net/users/239075/screenshots/2030765/npad-app-icon-800.png"));
+        return sessions;
+    }
 
 }

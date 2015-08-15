@@ -44,22 +44,7 @@ public class Session {
         // No args constructor
     }
 
-//    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title) {
-//
-//        mTitle = title;
-//        mPresenter = presenter;
-//        mAbstract = sessionAbstract;
-//        mRoom = room;
-//        mDate = date;
-//        mStartHour = startHour;
-//        mEndHour = endHour;
-//
-//        mTrack = "";
-//        mIsBookmark = false;
-//        mFeedback = 0;
-//    }
-
-    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title, String track) {
+    public Session(String title, String sessionAbstract, String date, String startHour, String endHour, String presenter, String room, String track, String imageUrl) {
 
         mTitle = title;
         mPresenter = presenter;
@@ -69,26 +54,11 @@ public class Session {
         mTrack = track;
         mStartHour = startHour;
         mEndHour = endHour;
+        mImageUrl = imageUrl;
 
         mIsBookmark = false;
         mFeedback = 0;
     }
-
-//    public Session(String sessionAbstract, String date, String endHour, String presenter, String room, String startHour, String title, String track, String imageUrl) {
-//
-//        mTitle = title;
-//        mPresenter = presenter;
-//        mAbstract = sessionAbstract;
-//        mRoom = room;
-//        mDate = date;
-//        mTrack = track;
-//        mStartHour = startHour;
-//        mEndHour = endHour;
-//
-//        mImageUrl = imageUrl;
-//        mIsBookmark = false;
-//        mFeedback = 0;
-//    }
 
    @Override
     public String toString() {

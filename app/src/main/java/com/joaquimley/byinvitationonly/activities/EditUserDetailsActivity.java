@@ -160,7 +160,6 @@ public class EditUserDetailsActivity extends BaseActivity implements View.OnClic
                 if (mUser == null) {
                     mUser = new User(String.valueOf(mEtName.getText()), String.valueOf(mEtEmail.getText()),
                             String.valueOf(mEtDescription.getText()), "", false);
-
                 } else {
                     // If user exists, update information
                     mUser.setName(String.valueOf(mEtName.getText()));
