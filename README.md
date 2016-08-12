@@ -1,4 +1,6 @@
-# By Invitation Only
+## DEPRECATED: Will remake with new Firebase, probably under the same name but different repository
+
+#By Invitation Only
 
 ## Part of "**School Source Code**" project
 +info: [joaquimley.com/school](http://www.joaquimley.com/school)
